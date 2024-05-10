@@ -38,6 +38,9 @@
 	"passphrase-text": "Créez un mot de passe fort pour sécuriser votre portefeuille. Il doit contenir au moins 8 caractères.",
 	"passphrase-placeholder": "Entrez votre mot de passe",
 	
+	"wallet-title": "Configuration du Portefeuille",
+	"wallet-text": "Voulez-vous restaurer un portefeuille crypto existant ou en créer un nouveau ? Sélectionnez \"Restaurer\" pour récupérer un portefeuille en utilisant votre phrase de récupération ou une sauvegarde, ou choisissez \"Créer\" pour générer un nouveau portefeuille avec une phrase de récupération sécurisée.",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",

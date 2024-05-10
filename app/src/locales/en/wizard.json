@@ -38,6 +38,9 @@
 	"passphrase-text": "Create a strong password to secure your wallet. It must contain at least 8 characters.",
 	"passphrase-placeholder": "Enter your password",
 	
+	"wallet-title": "Wallet Configuration",
+	"wallet-text": "Would you like to restore an existing crypto wallet or create a new one?  Select \"Restore\" to recover a wallet using your seed phrase or backup,  or choose \"Create\" to generate a new wallet with a secure seed phrase.",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",

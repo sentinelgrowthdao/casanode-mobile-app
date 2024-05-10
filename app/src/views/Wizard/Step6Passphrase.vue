@@ -16,7 +16,7 @@ import { IonPage, IonContent, IonButton, IonList, IonItem, IonInput } from '@ion
 					</ion-list>
 				</div>
 				<div class="submit right">
-					<ion-button :router-link="{ name: 'Wizard7Configuration' }" router-direction="forward">
+					<ion-button :router-link="{ name: 'Wizard7Wallet' }" router-direction="forward">
 						{{ $t('wizard.button-next') }}
 					</ion-button>
 				</div>
