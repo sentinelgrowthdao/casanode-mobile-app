@@ -10,7 +10,8 @@ import { IonPage, IonContent, IonButton, IonList, IonItem, IonInput } from '@ion
 					<p class="text">{{ $t('wizard.passphrase-text') }}</p>
 					<ion-list class="input">
 						<ion-item>
-							<ion-input aria-label="Passphrase" :placeholder="$t('wizard.passphrase-placeholder')" />
+							<ion-input aria-label="Passphrase" type="password"
+								:placeholder="$t('wizard.passphrase-placeholder')" />
 						</ion-item>
 					</ion-list>
 				</div>
