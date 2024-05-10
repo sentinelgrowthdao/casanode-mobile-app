@@ -1,43 +1,36 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 
-import HomePage from '@views/HomePage.vue';
-import Wizard1Page from '@views/Wizard/Step1Welcome.vue';
-import Wizard2Page from '@views/Wizard/Step2Moniker.vue';
-import Wizard3Page from '@views/Wizard/Step3Location.vue';
-import Wizard4Page from '@/views/Wizard/Step4Protocol.vue';
-import Wizard5Page from '@/views/Wizard/Step5Network.vue';
-
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
 		name: 'Home',
-		component: HomePage
+		component: () => import('@views/HomePage.vue')
 	},
 	{
 		path: '/wizard/welcome',
 		name: 'Wizard1Welcome',
-		component: Wizard1Page
+		component: () => import('@views/Wizard/Step1Welcome.vue')
 	},
 	{
 		path: '/wizard/moniker',
 		name: 'Wizard2Moniker',
-		component: Wizard2Page
+		component: () => import('@views/Wizard/Step2Moniker.vue')
 	},
 	{
 		path: '/wizard/location',
 		name: 'Wizard3Location',
-		component: Wizard3Page
+		component: () => import('@views/Wizard/Step3Location.vue')
 	},
 	{
 		path: '/wizard/protocol',
 		name: 'Wizard4Protocol',
-		component: Wizard4Page
+		component: () => import('@views/Wizard/Step4Protocol.vue')
 	},
 	{
 		path: '/wizard/network',
 		name: 'Wizard5Network',
-		component: Wizard5Page
+		component: () => import('@views/Wizard/Step5Network.vue')
 	}
 ]
 
