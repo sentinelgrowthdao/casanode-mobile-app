@@ -1,0 +1,7 @@
+{
+  "name": "casanode-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}

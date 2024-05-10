@@ -1,0 +1,26 @@
+{
+	"welcome-title": "Welcome to Casanode!",
+	"welcome-text": "This wizard will guide you through the setup process step by step,  ensuring a smooth and easy configuration.",
+	"welcome-next": "Click \"Next\" to begin your  journey to decentralized internet access!",
+	
+	"moniker-title": "Set Your Node's Moniker",
+	"moniker-text": "Give your node a unique name to identify it within the decentralized VPN  network.",
+	"moniker-explain": "This name will represent your node to others, so choose a  moniker that is memorable and distinctive.",
+	"moniker-placeholder": "Enter your moniker",
+	
+	"location-title": "Select Node Location",
+	"location-text": "Choose the type of environment where your node is hosted. This helps configure network settings for optimal performance.",
+	"location-residential": "Residential",
+	"location-datacenter": "Datacenter",
+	"location-residential-desc": "Residential: If your node is hosted in a home or personal space.",
+	"location-datacenter-desc": "Datacenter: If your node is hosted in a datacenter or server facility.",
+	"location-placeholder": "Choose location",
+	
+	"button-next": "Next",
+	"button-yes": "Yes",
+	"button-no": "No",
+	"button-create": "Create",
+	"button-restore": "Restore",
+	"button-test-ports": "Test Ports",
+	"button-finish": "Finish"
+}

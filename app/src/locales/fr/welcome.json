@@ -1,0 +1,8 @@
+{
+	"start-title": "Bon retour !",
+	"start-text": "Pour commencer à vous connecter à votre nœud, veuillez scanner le code QR situé sur votre appareil.",
+	"start-button": "Scanner le code QR",
+	"get-node-title": "Vous n'avez pas encore votre nœud ?",
+	"get-node-text": "Visitez notre site web pour découvrir comment en obtenir un !",
+	"get-node-button": "Obtenez votre nœud"
+}

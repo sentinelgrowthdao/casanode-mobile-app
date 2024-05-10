@@ -1,0 +1,47 @@
+
+.wizard
+{
+	margin: var(--content-margin);
+	padding: var(--content-padding);
+	width: var(--content-width);
+	max-width: var(--content-max-width);
+	
+	h1
+	{
+		font-size:2.5rem;
+	}
+	
+	p.text
+	{
+		margin:0 0 1rem;
+		font-size:1.125rem;
+		line-height:1.5rem;
+	}
+	
+	p.nav-buttons
+	{
+		
+		&.right
+		{
+			text-align:right;
+		}
+	}
+	
+	ul
+	{
+		margin:0;
+		padding: 0 0 0 1rem;
+		
+		&> li
+		{
+			margin: 0 0 1rem;
+			font-size: 1.125rem;
+			line-height: 1.5rem;
+		}
+	}
+	
+	&> .input
+	{
+	}
+	
+}

@@ -1,0 +1,55 @@
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+
+:root
+{
+	/* Set the background of the entire app */
+	--ion-background-color: #000610;
+	
+	/* Set the font family of the entire app */
+	--ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+	
+	/* Customes colors */
+	--app-background-color-navbar: #191E31;
+	--app-background-color-footer: #181E31;
+	--app-background-color-secondary: #262F4C;
+	--app-background-color-secondary-alt: rgba(24, 30, 49, 0.60);
+	--app-background-color-block: #0D1F39;
+	
+	/* Margin and padding */
+	--content-margin: 0 auto;
+	--content-padding: 1rem;
+	--content-radius: 0.75rem;
+	--content-width: 85%;
+	--content-max-width: 20rem;
+	
+	
+	/* Wizard */
+	--wizard-margin: 0 auto;
+	--wizard-padding: 1rem;
+	--wizard-width: 80%;
+	--wizard-max-width: 20rem;
+}
+
+/* Set text color of the entire app for iOS only */
+:root.ios
+{
+	--ion-text-color: #fff;
+}
+
+/* Set text color of the entire app for Material Design only */
+:root.md
+{
+	--ion-text-color: #fff;
+}
+
+/* Set the color on all ion-button elements */
+ion-button:not([fill]), ion-button[fill="solid"], ion-button[fill="default"]
+{
+	--background: #0157FC;
+	--color: #fff;
+}
+ion-button[fill="clear"]
+{
+	--color: #0184FC;
+}
