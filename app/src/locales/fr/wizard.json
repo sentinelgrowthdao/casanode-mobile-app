@@ -24,6 +24,13 @@
 	"protocol-v2ray-desc": "Un protocole polyvalent prenant en charge plusieurs fonctionnalités, idéal pour contourner la censure sur Internet.",
 	"protocol-placeholder": "Choisissez le protocole",
 	
+	"network-title": "Configurer le réseau",
+	"network-text": "Fournissez les informations suivantes pour configurer le réseau de votre nœud :",
+	"network-public-ip": "Adresse IP Publique",
+	"network-api-port": "Port de l'API",
+	"network-wireguard-port": "Port WireGuard",
+	"network-v2ray-port": "Port V2Ray",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",

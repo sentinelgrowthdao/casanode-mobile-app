@@ -24,6 +24,13 @@
 	"protocol-v2ray-desc": "A versatile protocol supporting multiple features, ideal for bypassing internet censorship.",
 	"protocol-placeholder": "Choose protocol",
 	
+	"network-title": "Configure Network Settings",
+	"network-text": "Provide the following information to set up your node's network:",
+	"network-public-ip": "Public IP",
+	"network-api-port": "API Port",
+	"network-wireguard-port": "WireGuard Port",
+	"network-v2ray-port": "V2Ray Port",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",
