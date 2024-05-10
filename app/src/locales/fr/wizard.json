@@ -3,17 +3,17 @@
 	"welcome-text": "Cet assistant vous guidera tout au long du processus d'installation étape par étape, pour garantir une configuration simple et fluide.",
 	"welcome-next": "Cliquez sur \"Suivant\" pour commencer votre voyage vers un accès Internet décentralisé !",
 	
-	"moniker-title": "Définissez le Moniker de Votre Nœud",
+	"moniker-title": "Définissez le moniker de votre nœud",
 	"moniker-text": "Donnez à votre nœud un nom unique pour l'identifier au sein du réseau VPN décentralisé.",
 	"moniker-explain": "Ce nom représentera votre nœud auprès des autres, alors choisissez un moniker mémorable et distinctif.",
 	"moniker-placeholder": "Entrez votre moniker",
 	
-	"location-title": "Sélectionnez l'Emplacement du Nœud",
+	"location-title": "Sélectionnez l'emplacement du nœud",
 	"location-text": "Choisissez le type d'environnement dans lequel votre nœud est hébergé. Cela aide à configurer les paramètres réseau pour des performances optimales.",
 	"location-residential": "Résidentiel",
 	"location-datacenter": "Datacenter",
-	"location-residential-desc": "Résidentiel : Si votre nœud est hébergé dans une maison ou un espace personnel.",
-	"location-datacenter-desc": "Datacenter : Si votre nœud est hébergé dans un centre de données ou une installation serveur.",
+	"location-residential-desc": "Résidentiel : Si votre nœud est hébergé dans une maison ou un espace personnel.",
+	"location-datacenter-desc": "Datacenter : Si votre nœud est hébergé dans un centre de données ou une installation serveur.",
 	"location-placeholder": "Choisissez l'emplacement",
 	
 	"button-next": "Suivant",
