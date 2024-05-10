@@ -5,18 +5,20 @@ import { IonPage, IonContent, IonButton, IonList, IonItem, IonInput } from '@ion
 	<ion-page>
 		<ion-content :fullscreen="true">
 			<div class="wizard">
-				<h1>{{ $t('wizard.passphrase-title') }}</h1>
-				<p class="text">{{ $t('wizard.passphrase-text') }}</p>
-				<ion-list class="input">
-					<ion-item>
-						<ion-input aria-label="Passphrase" :placeholder="$t('wizard.passphrase-placeholder')" />
-					</ion-item>
-				</ion-list>
-				<p class="nav-buttons right">
+				<div class="form">
+					<h1>{{ $t('wizard.passphrase-title') }}</h1>
+					<p class="text">{{ $t('wizard.passphrase-text') }}</p>
+					<ion-list class="input">
+						<ion-item>
+							<ion-input aria-label="Passphrase" :placeholder="$t('wizard.passphrase-placeholder')" />
+						</ion-item>
+					</ion-list>
+				</div>
+				<div class="submit right">
 					<ion-button :router-link="{ name: 'Wizard7Configuration' }" router-direction="forward">
 						{{ $t('wizard.button-next') }}
 					</ion-button>
-				</p>
+				</div>
 			</div>
 		</ion-content>
 	</ion-page>
