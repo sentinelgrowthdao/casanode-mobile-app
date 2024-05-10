@@ -18,7 +18,7 @@ http://ionicframework.com/docs/theming/ */
 	
 	/* Margin and padding */
 	--content-margin: 0 auto;
-	--content-padding: 1rem;
+	--content-padding: 1rem 0;
 	--content-radius: 0.75rem;
 	--content-width: 85%;
 	--content-max-width: 20rem;
