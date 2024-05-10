@@ -31,6 +31,13 @@
 	"network-wireguard-port": "Port WireGuard",
 	"network-v2ray-port": "Port V2Ray",
 	
+	"protection-title": "Protection du portefeuille",
+	"protection-text": "Souhaitez-vous protéger votre portefeuille avec une phrase secrète ? Cela améliorera la sécurité, mais la phrase secrète sera nécessaire chaque fois que le nœud redémarre.",
+	
+	"passphrase-title": "Mot de passe du portefeuille",
+	"passphrase-text": "Créez un mot de passe fort pour sécuriser votre portefeuille. Il doit contenir au moins 8 caractères.",
+	"passphrase-placeholder": "Entrez votre mot de passe",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",

@@ -31,6 +31,16 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/wizard/network',
 		name: 'Wizard5Network',
 		component: () => import('@views/Wizard/Step5Network.vue')
+	},
+	{
+		path: '/wizard/protection',
+		name: 'Wizard6Protection',
+		component: () => import('@views/Wizard/Step6Protection.vue')
+	},
+	{
+		path: '/wizard/passphrase',
+		name: 'Wizard6Passphrase',
+		component: () => import('@views/Wizard/Step6Passphrase.vue')
 	}
 ]
 

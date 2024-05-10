@@ -31,6 +31,13 @@
 	"network-wireguard-port": "WireGuard Port",
 	"network-v2ray-port": "V2Ray Port",
 	
+	"protection-title": "Wallet Protection",
+	"protection-text": "Do you wish to protect your wallet with a passphrase? This will enhance security, but the passphrase will be required every time the node restarts.",
+	
+	"passphrase-title": "Enter Wallet Password",
+	"passphrase-text": "Create a strong password to secure your wallet. It must contain at least 8 characters.",
+	"passphrase-placeholder": "Enter your password",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",
