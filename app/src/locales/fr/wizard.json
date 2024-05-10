@@ -16,6 +16,14 @@
 	"location-datacenter-desc": "Datacenter : Si votre nœud est hébergé dans un centre de données ou une installation serveur.",
 	"location-placeholder": "Choisissez l'emplacement",
 	
+	"protocol-title": "Sélectionnez votre protocole VPN",
+	"protocol-text": "Choisissez le protocole qui correspond le mieux à vos besoins :",
+	"protocol-wireguard": "WireGuard",
+	"protocol-wireguard-desc": "Un protocole VPN rapide et moderne, connu pour sa simplicité et son cryptage robuste.",
+	"protocol-v2ray": "V2Ray",
+	"protocol-v2ray-desc": "Un protocole polyvalent prenant en charge plusieurs fonctionnalités, idéal pour contourner la censure sur Internet.",
+	"protocol-placeholder": "Choisissez le protocole",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",

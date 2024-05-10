@@ -5,6 +5,7 @@ import HomePage from '@views/HomePage.vue';
 import Wizard1Page from '@views/Wizard/Step1Welcome.vue';
 import Wizard2Page from '@views/Wizard/Step2Moniker.vue';
 import Wizard3Page from '@views/Wizard/Step3Location.vue';
+import Wizard4Page from '@/views/Wizard/Step4Protocol.vue';
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -26,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/wizard/location',
 		name: 'Wizard3Location',
 		component: Wizard3Page
+	},
+	{
+		path: '/wizard/protocol',
+		name: 'Wizard4Protocol',
+		component: Wizard4Page
 	}
 ]
 

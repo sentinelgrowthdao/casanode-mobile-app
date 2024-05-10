@@ -16,6 +16,14 @@
 	"location-datacenter-desc": "Datacenter: If your node is hosted in a datacenter or server facility.",
 	"location-placeholder": "Choose location",
 	
+	"protocol-title": "Select Your VPN Protocol",
+	"protocol-text": "Choose the protocol that best suits your needs:",
+	"protocol-wireguard": "WireGuard",
+	"protocol-wireguard-desc": "A fast and modern VPN protocol known for its simplicity and strong encryption.",
+	"protocol-v2ray": "V2Ray",
+	"protocol-v2ray-desc": "A versatile protocol supporting multiple features, ideal for bypassing internet censorship.",
+	"protocol-placeholder": "Choose protocol",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",
