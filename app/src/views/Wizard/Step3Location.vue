@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { IonPage, IonContent, IonButton, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/vue';
+import {
+	IonPage, IonContent, IonButton,
+	IonGrid, IonRow, IonCol,
+	IonList, IonItem,
+	IonSelect, IonSelectOption
+} from '@ionic/vue';
 </script>
 <template>
 	<ion-page>
@@ -25,10 +30,17 @@ import { IonPage, IonContent, IonButton, IonList, IonItem, IonSelect, IonSelectO
 						</ion-item>
 					</ion-list>
 				</div>
-				<div class="submit right">
-					<ion-button :router-link="{ name: 'Wizard4Protocol' }" router-direction="forward">
-						{{ $t('wizard.button-next') }}
-					</ion-button>
+				<div class="submit">
+					<ion-grid>
+						<ion-row>
+							<ion-col size="6" offset="6">
+								<ion-button expand="block" :router-link="{ name: 'Wizard4Protocol' }"
+									router-direction="forward">
+									{{ $t('wizard.button-next') }}
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</ion-grid>
 				</div>
 			</div>
 		</ion-content>

@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import {
+	IonPage, IonContent, IonButton,
+	IonGrid, IonRow, IonCol
+} from '@ionic/vue';
 
 </script>
 
@@ -12,10 +15,17 @@ import { IonPage, IonContent, IonButton } from '@ionic/vue';
 					<p class="text">{{ $t('wizard.welcome-text') }}</p>
 					<p class="text">{{ $t('wizard.welcome-next') }}</p>
 				</div>
-				<div class="submit right">
-					<ion-button :router-link="{ name: 'Wizard2Moniker' }" router-direction="forward">
-						{{ $t('wizard.button-next') }}
-					</ion-button>
+				<div class="submit">
+					<ion-grid>
+						<ion-row>
+							<ion-col size="6" offset="6">
+								<ion-button expand="block" :router-link="{ name: 'Wizard2Moniker' }"
+									router-direction="forward">
+									{{ $t('wizard.button-next') }}
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</ion-grid>
 				</div>
 			</div>
 		</ion-content>
