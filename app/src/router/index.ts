@@ -8,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@views/HomePage.vue')
 	},
 	{
+		path: '/dashboard',
+		name: 'Dashboard',
+		component: () => import('@views/DashboardPage.vue')
+	},
+	{
 		path: '/wizard/welcome',
 		name: 'Wizard1Welcome',
 		component: () => import('@views/Wizard/Step1Welcome.vue')
