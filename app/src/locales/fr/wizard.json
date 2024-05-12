@@ -63,6 +63,10 @@
 	"ports-v2ray": "Port V2Ray :",
 	"ports-more": "Pour des instructions plus détaillées, veuillez consulter notre documentation.",
 	
+	"congratulations-title": "Félicitations, votre nœud est en ligne !",
+	"congratulations-text": "Votre nœud dVPN est installé avec succès et entièrement opérationnel, accessible depuis Internet.",
+	"congratulations-next": "Veuillez attendre quelques heures pour que votre nœud devienne visible sur le réseau et que les premiers utilisateurs commencent à se connecter.",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",

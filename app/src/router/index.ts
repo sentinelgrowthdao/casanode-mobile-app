@@ -66,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/wizard/ports',
 		name: 'Wizard9Ports',
 		component: () => import('@views/Wizard/Step9Ports.vue')
+	},
+	{
+		path: '/wizard/congratulations',
+		name: 'Wizard10Congratulations',
+		component: () => import('@views/Wizard/Step10Congratulations.vue')
 	}
 ]
 

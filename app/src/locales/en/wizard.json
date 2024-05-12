@@ -63,6 +63,10 @@
 	"ports-v2ray": "V2Ray Port:",
 	"ports-more": "For more detailed guidance, please refer to our documentation.",
 	
+	"congratulations-title": "Congratulations, Your Node is Live!",
+	"congratulations-text": "Your dVPN node is successfully installed and fully operational, accessible from the Internet.",
+	"congratulations-next": "Please allow a few hours for your node to  become visible on the network and for the first users to start connecting.",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",
