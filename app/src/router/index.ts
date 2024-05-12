@@ -46,6 +46,21 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/wizard/wallet',
 		name: 'Wizard7Wallet',
 		component: () => import('@views/Wizard/Step7Wallet.vue')
+	},
+	{
+		path: '/wizard/wallet/recover',
+		name: 'Wizard7Restore',
+		component: () => import('@views/Wizard/Step7Restore.vue')
+	},
+	{
+		path: '/wizard/wallet/create',
+		name: 'Wizard7Create',
+		component: () => import('@views/Wizard/Step7Create.vue')
+	},
+	{
+		path: '/wizard/wallet/fund',
+		name: 'Wizard8Fund',
+		component: () => import('@views/Wizard/Step8Fund.vue')
 	}
 ]
 

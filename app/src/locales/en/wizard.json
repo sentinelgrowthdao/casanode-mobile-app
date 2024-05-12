@@ -41,6 +41,21 @@
 	"wallet-title": "Wallet Configuration",
 	"wallet-text": "Would you like to restore an existing crypto wallet or create a new one?  Select \"Restore\" to recover a wallet using your seed phrase or backup,  or choose \"Create\" to generate a new wallet with a secure seed phrase.",
 	
+	"wallet-restore-title": "Restore Existing Wallet",
+	"wallet-restore-text": "Please enter your recovery mnemonic phrase below to restore your wallet  address. Ensure that the words are entered in the correct order, and  each word is separated by a space.",
+	"wallet-restore-placeholder": "Enter or Paste your recovery phrase",
+	"wallet-restore-warning": "Your mnemonic phrase is sensitive  information, so handle it securely and never share it with anyone.",
+	
+	"wallet-create-title": "Create New Wallet",
+	"wallet-create-text": "Your recovery mnemonic for the node wallet is as follows:",
+	"wallet-create-backup-title": "Backup your mnemonic securely",
+	"wallet-create-backup-text": "It's essential for recovering your wallet if you lose access or forget your passphrase. Loss of this phrase means permanent loss of access to your funds and dVPN node. Store it privately and in multiple safe places.",
+	
+	"wallet-fund-title": "Fund Your Node Wallet",
+	"wallet-fund-text": "Please deposit at least 10 $DVPN to your wallet at the address below to proceed with starting the node:",
+	"wallet-fund-next": "Once you have transferred the funds, select “Next” to continue.",
+	"wallet-fund-copied": "Copied to clipboard",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",

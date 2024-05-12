@@ -41,6 +41,21 @@
 	"wallet-title": "Configuration du Portefeuille",
 	"wallet-text": "Voulez-vous restaurer un portefeuille crypto existant ou en créer un nouveau ? Sélectionnez \"Restaurer\" pour récupérer un portefeuille en utilisant votre phrase de récupération ou une sauvegarde, ou choisissez \"Créer\" pour générer un nouveau portefeuille avec une phrase de récupération sécurisée.",
 	
+	"wallet-restore-title": "Restaurer un portefeuille existant",
+	"wallet-restore-text": "Veuillez saisir votre phrase mnémonic de récupération ci-dessous pour restaurer votre adresse de portefeuille. Assurez-vous que les mots sont entrés dans le bon ordre et que chaque mot est séparé par un espace.",
+	"wallet-restore-placeholder": "Entrez ou collez votre phrase de récupération",
+	"wallet-restore-warning": "Votre phrase mnémonic est une information sensible, manipulez-la en toute sécurité et ne la partagez jamais avec quiconque.",
+	
+	"wallet-create-title": "Créer un nouveau portefeuille",
+	"wallet-create-text": "Votre phrase mnémonic pour le portefeuille de nœud est la suivante :",
+	"wallet-create-backup-title": "Sauvegardez votre phrase mnémonic en toute sécurité",
+	"wallet-create-backup-text": "C'est essentiel pour récupérer votre portefeuille si vous perdez l'accès ou oubliez votre mot de passe. Perdre cette phrase signifie une perte permanente de l'accès à vos fonds et au nœud dVPN. Conservez-la en privé et dans plusieurs endroits sûrs.",
+	
+	"wallet-fund-title": "Alimentez votre portefeuille de nœud",
+	"wallet-fund-text": "Veuillez déposer au moins 10 $DVPN sur votre portefeuille à l'adresse ci-dessous pour continuer le lancement du nœud :",
+	"wallet-fund-next": "Une fois que vous avez transféré les fonds, sélectionnez « Suivant » pour continuer.",
+	"wallet-fund-copied": "Copié dans le presse-papiers",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",
