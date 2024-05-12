@@ -61,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/wizard/wallet/fund',
 		name: 'Wizard8Fund',
 		component: () => import('@views/Wizard/Step8Fund.vue')
+	},
+	{
+		path: '/wizard/ports',
+		name: 'Wizard9Ports',
+		component: () => import('@views/Wizard/Step9Ports.vue')
 	}
 ]
 

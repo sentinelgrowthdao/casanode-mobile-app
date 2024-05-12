@@ -56,6 +56,13 @@
 	"wallet-fund-next": "Une fois que vous avez transféré les fonds, sélectionnez « Suivant » pour continuer.",
 	"wallet-fund-copied": "Copié dans le presse-papiers",
 	
+	"ports-title": "Configurer le transfert de port",
+	"ports-text": "Pour permettre l'accès externe à votre nœud, veuillez vous assurer que les ports appropriés sont transférés dans les paramètres de votre routeur.",
+	"ports-node": "Port du nœud :",
+	"ports-wireguard": "Port WireGuard :",
+	"ports-v2ray": "Port V2Ray :",
+	"ports-more": "Pour des instructions plus détaillées, veuillez consulter notre documentation.",
+	
 	"button-next": "Suivant",
 	"button-yes": "Oui",
 	"button-no": "Non",

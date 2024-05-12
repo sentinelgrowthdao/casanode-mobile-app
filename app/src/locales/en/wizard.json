@@ -56,6 +56,13 @@
 	"wallet-fund-next": "Once you have transferred the funds, select “Next” to continue.",
 	"wallet-fund-copied": "Copied to clipboard",
 	
+	"ports-title": "Configure Port Forwarding",
+	"ports-text": "To enable external access to your node, please ensure the appropriate ports are forwarded in your router settings.",
+	"ports-node": "Node Port:",
+	"ports-wireguard": "WireGuard Port:",
+	"ports-v2ray": "V2Ray Port:",
+	"ports-more": "For more detailed guidance, please refer to our documentation.",
+	
 	"button-next": "Next",
 	"button-yes": "Yes",
 	"button-no": "No",
