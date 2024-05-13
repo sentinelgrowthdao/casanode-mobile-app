@@ -1,3 +1,9 @@
 {
-	"name": "Casanode"
+	"name": "Casanode",
+	
+	"tab-dashboard": "Tableau de bord",
+	"tab-settings": "Paramètres",
+	"tab-wallet": "Portefeuille",
+	"tab-actions": "Actions",
+	"tab-about": "À propos"
 }

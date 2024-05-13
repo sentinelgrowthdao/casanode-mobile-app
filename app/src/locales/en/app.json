@@ -1,3 +1,9 @@
 {
-	"name": "Casanode"
+	"name": "Casanode",
+	
+	"tab-dashboard": "Dashboard",
+	"tab-settings": "Settings",
+	"tab-wallet": "Wallet",
+	"tab-actions": "Actions",
+	"tab-about": "About"
 }

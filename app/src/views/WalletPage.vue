@@ -7,8 +7,8 @@ import AppTabs from '@/components/AppTabs.vue';
 	<ion-page>
 		<app-toolbar />
 		<ion-content :fullscreen="true">
-			<div class="dashboard">
-				Dashboard
+			<div class="wallet">
+				Wallet
 			</div>
 		</ion-content>
 		<app-tabs />

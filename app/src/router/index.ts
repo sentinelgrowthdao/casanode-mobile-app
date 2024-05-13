@@ -13,6 +13,26 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@views/DashboardPage.vue')
 	},
 	{
+		path: '/settings',
+		name: 'Settings',
+		component: () => import('@views/SettingsPage.vue')
+	},
+	{
+		path: '/wallet',
+		name: 'Wallet',
+		component: () => import('@views/WalletPage.vue')
+	},
+	{
+		path: '/actions',
+		name: 'Actions',
+		component: () => import('@views/ActionsPage.vue')
+	},
+	{
+		path: '/about',
+		name: 'About',
+		component: () => import('@views/AboutPage.vue')
+	},
+	{
 		path: '/wizard/welcome',
 		name: 'Wizard1Welcome',
 		component: () => import('@views/Wizard/Step1Welcome.vue')
