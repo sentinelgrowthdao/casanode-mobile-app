@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import NodeManager from '@views/NodePage.vue';
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -8,29 +9,34 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@views/HomePage.vue')
 	},
 	{
-		path: '/dashboard',
-		name: 'Dashboard',
-		component: () => import('@views/DashboardPage.vue')
-	},
-	{
-		path: '/settings',
-		name: 'Settings',
-		component: () => import('@views/SettingsPage.vue')
-	},
-	{
-		path: '/wallet',
-		name: 'Wallet',
-		component: () => import('@views/WalletPage.vue')
-	},
-	{
-		path: '/actions',
-		name: 'Actions',
-		component: () => import('@views/ActionsPage.vue')
-	},
-	{
-		path: '/about',
-		name: 'About',
-		component: () => import('@views/AboutPage.vue')
+		path: '/node',
+		component: NodeManager,
+		children: [
+			{
+				path: '',
+				redirect: '/node/dashboard',
+			},
+			{
+				path: '/node/dashboard',
+				component: () => import('@views/Node/DashboardPage.vue'),
+			},
+			{
+				path: 'settings',
+				component: () => import('@views/Node/SettingsPage.vue'),
+			},
+			{
+				path: 'wallet',
+				component: () => import('@views/Node/WalletPage.vue'),
+			},
+			{
+				path: 'actions',
+				component: () => import('@views/Node/ActionsPage.vue'),
+			},
+			{
+				path: 'about',
+				component: () => import('@/views/Node/AboutPage.vue')
+			},
+		],
 	},
 	{
 		path: '/wizard/welcome',

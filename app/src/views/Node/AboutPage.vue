@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { IonPage, IonContent } from '@ionic/vue';
+import { IonPage, IonContent, IonHeader } from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
-import AppTabs from '@/components/AppTabs.vue';
 </script>
 <template>
 	<ion-page>
-		<app-toolbar />
-		<ion-content :fullscreen="true">
-			<div class="wallet">
-				Wallet
+		<ion-header>
+			<app-toolbar />
+		</ion-header>
+		<ion-content>
+			<div class="about">
+				About
 			</div>
 		</ion-content>
-		<app-tabs />
 	</ion-page>
 </template>
 <style lang="scss" scoped>

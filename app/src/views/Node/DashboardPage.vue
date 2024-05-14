@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import {
-	IonPage, IonContent,
+	IonPage, IonContent, IonHeader,
 	IonGrid, IonRow, IonCol,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/vue';
 import { ref } from 'vue';
 import AppToolbar from '@/components/AppToolbar.vue';
-import AppTabs from '@/components/AppTabs.vue';
 
 const connectedUsers = ref<number>(0);
 
@@ -15,8 +14,10 @@ const connectedUsers = ref<number>(0);
 </script>
 <template>
 	<ion-page>
-		<app-toolbar />
-		<ion-content :fullscreen="true">
+		<ion-header>
+			<app-toolbar />
+		</ion-header>
+		<ion-content>
 			<div class="dashboard">
 				<ion-card class="container bg-blue">
 					<ion-card-content>
@@ -68,7 +69,6 @@ const connectedUsers = ref<number>(0);
 				</ion-card>
 			</div>
 		</ion-content>
-		<app-tabs />
 	</ion-page>
 </template>
 <style lang="scss" scoped>
