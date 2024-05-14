@@ -10,30 +10,36 @@ const routes: Array<RouteRecordRaw> = [
 	},
 	{
 		path: '/node',
+		name: 'Node',
 		component: NodeManager,
 		children: [
 			{
-				path: '',
+				path: '/node',
 				redirect: '/node/dashboard',
 			},
 			{
 				path: '/node/dashboard',
+				name: 'NodeDashboard',
 				component: () => import('@views/Node/DashboardPage.vue'),
 			},
 			{
 				path: 'settings',
+				name: 'NodeSettings',
 				component: () => import('@views/Node/SettingsPage.vue'),
 			},
 			{
 				path: 'wallet',
+				name: 'NodeWallet',
 				component: () => import('@views/Node/WalletPage.vue'),
 			},
 			{
 				path: 'actions',
+				name: 'NodeActions',
 				component: () => import('@views/Node/ActionsPage.vue'),
 			},
 			{
 				path: 'about',
+				name: 'NodeAbout',
 				component: () => import('@/views/Node/AboutPage.vue')
 			},
 		],
