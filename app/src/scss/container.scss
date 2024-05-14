@@ -1,13 +1,12 @@
 .container
 {
 	--background:var(--container-bg-color-default);
-
-
+	
 	&.bg-blue
 	{
 		--background:var(--container-bg-color-blue);
 	}
-
+	
 	ion-card-content
 	{
 		display: flex;
@@ -28,6 +27,38 @@
 				font-weight:400;
 				color:var(--container-label-color);
 			}
+		}
+		
+		&> ion-grid
+		{
+			width:100%;
+			
+			&> ion-row
+			{
+				&> ion-col.item
+				{
+					&> .label
+					{
+						margin:0;
+						font-size:1rem;
+						line-height:1.4rem;
+						color:var(--ion-text-color);
+					}
+					&> .value
+					{
+						margin:0;
+						font-size:2rem;
+						line-height: 2.4rem;
+						color:var(--ion-text-color);
+					}
+					
+					&.right
+					{
+						text-align:right;
+					}
+				}
+			}
+			
 		}
 	}
 	

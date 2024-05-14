@@ -4,12 +4,19 @@ import {
 	IonGrid, IonRow, IonCol,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
+
+// Import the useI18n composable function.
+const { t } = useI18n();
 
 const connectedUsers = ref<number>(0);
 
-
+const nodeStatus = computed(() =>
+{
+	return t('dashboard.status-running');
+});
 
 </script>
 <template>
@@ -23,11 +30,11 @@ const connectedUsers = ref<number>(0);
 					<ion-card-content>
 						<ion-grid>
 							<ion-row>
-								<ion-col class="item" size="6">
+								<ion-col class="item">
 									<p class="label">{{ $t('dashboard.status-title') }}</p>
-									<p class="value"></p>
+									<p class="value">{{ nodeStatus }}</p>
 								</ion-col>
-								<ion-col class="item" size="6">
+								<ion-col class="item right">
 									<p class="label">{{ $t('dashboard.status-users') }}</p>
 									<p class="value">{{ connectedUsers }}</p>
 								</ion-col>
