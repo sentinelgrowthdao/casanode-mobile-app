@@ -1,7 +1,7 @@
 {
 	"status-title": "Statut du nœud",
 	"status-users": "Utilisateurs",
-	"status-running": "En cours d'exécution",
+	"status-running": "Actif",
 
 	"node-title": "Informations",
 	"node-address": "Adresse IP :",
