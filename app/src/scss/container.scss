@@ -7,6 +7,16 @@
 		--background:var(--container-bg-color-blue);
 	}
 	
+	ion-card-header
+	{
+		ion-card-title
+		{
+			font-size:1.6rem;
+			line-height:2rem;
+			color:var(--container-label-color);
+		}
+	}
+	
 	ion-card-content
 	{
 		display: flex;
