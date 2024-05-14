@@ -1,0 +1,17 @@
+{
+	"app-information-title": "App Information",
+	"app-version-label": "App Version:",
+	"app-release-date-label": "Release Date:",
+
+	"system-information-title": "System Information",
+	"casanode-version-label": "Casanode Version:",
+	"operating-system-label": "Operating System:",
+	"kernel-version-label": "Kernel Version:",
+	"architecture-label": "Architecture:",
+	"docker-image-label": "Docker Image:",
+	"uptime-label": "Uptime:",
+
+	"legal-title": "Legal",
+	"terms-of-service": "Terms of Services",
+	"privacy-policy": "Privacy Policy"
+}

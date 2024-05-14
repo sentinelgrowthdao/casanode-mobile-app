@@ -6,12 +6,14 @@ import AppEn from '@locales/en/app.json';
 import WelcomeEn from '@locales/en/welcome.json';
 import WizardEn from '@locales/en/wizard.json';
 import DashboardEn from '@locales/en/dashboard.json';
+import AboutEn from '@locales/en/about.json';
 
 // French
 import AppFr from '@locales/fr/app.json';
 import WelcomeFr from '@locales/fr/welcome.json';
 import WizardFr from '@locales/fr/wizard.json';
 import DashboardFr from '@locales/fr/dashboard.json';
+import AboutFr from '@locales/fr/about.json';
 
 interface Option
 {
@@ -38,6 +40,7 @@ const messages : MessageFile =
 		"welcome": WelcomeEn,
 		"wizard": WizardEn,
 		"dashboard": DashboardEn,
+		"about": AboutEn,
 	},
 	fr:
 	{
@@ -45,6 +48,7 @@ const messages : MessageFile =
 		"welcome": WelcomeFr,
 		"wizard": WizardFr,
 		"dashboard": DashboardFr,
+		"about": AboutFr,
 	},
 };
 
