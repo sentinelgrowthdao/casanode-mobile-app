@@ -1,0 +1,10 @@
+{
+	"node-balance-label": "Node Balance",
+	"public-address-label": "Public address",
+	"node-address-label": "Node address",
+	"latest-transactions-label": "Latest transactions",
+	"update-status-label": "Update Status",
+	"update-details-label": "Update Details",
+	"receive-label": "Receive",
+	"delete-wallet-label": "Delete wallet"
+}

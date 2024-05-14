@@ -1,0 +1,10 @@
+{
+	"node-balance-label": "Solde du nœud",
+	"public-address-label": "Adresse publique",
+	"node-address-label": "Adresse du nœud",
+	"latest-transactions-label": "Dernières transactions",
+	"update-status-label": "Mettre à jour le statut",
+	"update-details-label": "Mettre à jour les détails",
+	"receive-label": "Recevoir",
+	"delete-wallet-label": "Supprimer le portefeuille"
+}

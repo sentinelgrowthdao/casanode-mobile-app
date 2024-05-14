@@ -7,6 +7,11 @@
 		--background:var(--container-bg-color-blue);
 	}
 	
+	&.nobg
+	{
+		--background:transparent;
+	}
+	
 	ion-card-header
 	{
 		ion-card-title
