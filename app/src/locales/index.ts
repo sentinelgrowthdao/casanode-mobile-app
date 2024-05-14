@@ -5,11 +5,13 @@ import { Device } from '@capacitor/device';
 import AppEn from '@locales/en/app.json';
 import WelcomeEn from '@locales/en/welcome.json';
 import WizardEn from '@locales/en/wizard.json';
+import DashboardEn from '@locales/en/dashboard.json';
 
 // French
 import AppFr from '@locales/fr/app.json';
 import WelcomeFr from '@locales/fr/welcome.json';
 import WizardFr from '@locales/fr/wizard.json';
+import DashboardFr from '@locales/fr/dashboard.json';
 
 interface Option
 {
@@ -35,12 +37,14 @@ const messages : MessageFile =
 		"app": AppEn,
 		"welcome": WelcomeEn,
 		"wizard": WizardEn,
+		"dashboard": DashboardEn,
 	},
 	fr:
 	{
 		"app": AppFr,
 		"welcome": WelcomeFr,
 		"wizard": WizardFr,
+		"dashboard": DashboardFr,
 	},
 };
 

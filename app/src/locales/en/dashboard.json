@@ -1,0 +1,18 @@
+{
+
+	"status-title": "Node Status",
+	"status-users": "Connected Users",
+	"status-running": "Running",
+
+	"node-title": "Node Information",
+	"node-address": "IP Address:",
+	"node-location": "Location:",
+	"node-vpn": "VPN Type:",
+	"node-port": "API Port:",
+	"node-wg-port": "Wireguard Port:",
+	"node-v2ray-port": "V2Ray Port:",
+	"node-ssl-expiry": "SSL Certificate Expiry:",
+	"node-upload-speed": "Upload Speed:",
+	"node-download-speed": "Download Speed:"
+
+}

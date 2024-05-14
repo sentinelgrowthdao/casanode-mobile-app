@@ -1,0 +1,35 @@
+.container
+{
+	--background:var(--container-bg-color-default);
+
+
+	&.bg-blue
+	{
+		--background:var(--container-bg-color-blue);
+	}
+
+	ion-card-content
+	{
+		display: flex;
+		gap: 1rem;
+		flex-direction: column;
+
+		&> .item
+		{
+			font-size:1.2rem;
+			line-height:1.6rem;
+			color:var(--ion-text-color);
+
+			&> strong
+			{
+				display:block;
+				font-size:0.9rem;
+				line-height:1.1rem;
+				font-weight:400;
+				color:var(--container-label-color);
+			}
+		}
+	}
+	
+
+}
