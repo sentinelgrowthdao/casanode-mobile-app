@@ -18,7 +18,7 @@ import {
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" :router-link="{ name: 'Dashboard' }"
+								<ion-button expand="block" :router-link="{ name: 'NodeDashboard' }"
 									router-direction="forward">
 									{{ $t('wizard.button-finish') }}
 								</ion-button>
