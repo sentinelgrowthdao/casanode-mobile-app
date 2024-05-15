@@ -29,17 +29,17 @@ const transactions = ref([
 		<ion-content>
 			<div class="wallet">
 				<!-- Node Balance -->
-				<ion-card class="container bg-blue">
+				<ion-card class="container header bg-blue">
 					<ion-card-content>
 						<ion-grid>
 							<ion-row>
-								<ion-col size="8">
+								<ion-col size="9">
 									<p class="label">{{ $t('wallet.node-balance-label') }}</p>
 									<p class="value">1,432.45 DVPN</p>
 								</ion-col>
-								<ion-col size="4">
-									<ion-button fill="clear">
-										<ion-icon :icon="refresh"></ion-icon>
+								<ion-col size="3" class="ion-text-right">
+									<ion-button fill="clear" size="large" class="refresh-button">
+										<ion-icon :icon="refresh" size="large" aria-label="{{ $t('wallet.balance-refresh') }}" />
 									</ion-button>
 								</ion-col>
 							</ion-row>
@@ -48,27 +48,29 @@ const transactions = ref([
 				</ion-card>
 
 				<!-- Public and Node Address -->
-				<ion-card class="container">
+				<ion-card class="container addresses">
 					<ion-card-content>
-						<p class="item">
-							<strong>{{ $t('wallet.public-address-label') }}</strong>
-							<span class="value">sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw</span>
-							<ion-button fill="clear" size="small">
-								<ion-icon :icon="copy"></ion-icon>
-							</ion-button>
-						</p>
-						<p class="item">
-							<strong>{{ $t('wallet.node-address-label') }}</strong>
-							<span class="value">sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g6a6fkc</span>
-							<ion-button fill="clear" size="small">
-								<ion-icon :icon="copy"></ion-icon>
-							</ion-button>
-						</p>
+						<ion-button class="item" fill="clear">
+							<div class="content">
+								<p class="label">
+									{{ $t('wallet.public-address-label') }}<ion-icon :icon="copy" class="icon-right" />
+								</p>
+								<p class="value">sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw</p>
+							</div>
+						</ion-button>
+						<ion-button class="item" fill="clear">
+							<div class="content">
+								<p class="label">
+									{{ $t('wallet.node-address-label') }}<ion-icon :icon="copy" class="icon-right" />
+								</p>
+								<p class="value">sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g6a6fkc</p>
+							</div>
+						</ion-button>
 					</ion-card-content>
 				</ion-card>
 
 				<!-- Latest Transactions -->
-				<ion-card class="container">
+				<ion-card class="container list">
 					<ion-card-header>
 						<ion-card-title>{{ $t('wallet.latest-transactions-label') }}</ion-card-title>
 					</ion-card-header>
@@ -79,7 +81,7 @@ const transactions = ref([
 								<span>{{ transaction.amount }}</span>
 								<span>{{ transaction.id }}</span>
 								<ion-button fill="clear" size="large">
-									<ion-icon :icon="link"></ion-icon>
+									<ion-icon :icon="link" size="large"></ion-icon>
 								</ion-button>
 							</div>
 						</ion-item>
@@ -102,6 +104,71 @@ const transactions = ref([
 <style lang="scss" scoped>
 @import "@scss/container.scss";
 
+
+.container
+{
+	&.header
+	{
+		&> ion-card-content > ion-grid > ion-row > ion-col
+		{
+			&> .label
+			{
+				font-size: 0.8rem;
+				color: var(--ion-text-color);
+			}
+			&> .value
+			{
+				font-size: 1.5rem;
+				color: var(--ion-text-color);
+			}
+			&> .refresh-button
+			{
+				--color: var(--ion-text-color);
+			}
+		}
+	}
+
+	&.addresses
+	{
+
+		.item
+		{
+			display: flex;
+			justify-content: flex-start;
+			align-items: flex-start;
+			--padding: 0;
+
+			&> .content
+			{
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				width:100%;
+				gap:0.5rem;
+
+				&> .label
+				{
+					display: flex;
+					margin:0;
+					align-items: flex-start;
+					color: var(--ion-text-color);
+					
+					ion-icon
+					{
+						--color: var(--ion-text-color);
+					}
+				}
+				&> .value
+				{
+					margin:0;
+					font-size: 0.7rem;
+					color: var(--ion-text-color);
+				}
+			}
+		}
+	}
+}
+
 .transaction-details
 {
 	display: flex;
@@ -112,4 +179,5 @@ const transactions = ref([
 		margin-right: 10px;
 	}
 }
+
 </style>

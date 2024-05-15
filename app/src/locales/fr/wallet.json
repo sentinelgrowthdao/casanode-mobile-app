@@ -1,5 +1,6 @@
 {
 	"node-balance-label": "Solde du nœud",
+	"balance-refresh": "Rafraîchir",
 	"public-address-label": "Adresse publique",
 	"node-address-label": "Adresse du nœud",
 	"latest-transactions-label": "Dernières transactions",

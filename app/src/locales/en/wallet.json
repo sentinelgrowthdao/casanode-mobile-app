@@ -1,5 +1,6 @@
 {
 	"node-balance-label": "Node Balance",
+	"balance-refresh": "Refresh",
 	"public-address-label": "Public address",
 	"node-address-label": "Node address",
 	"latest-transactions-label": "Latest transactions",
