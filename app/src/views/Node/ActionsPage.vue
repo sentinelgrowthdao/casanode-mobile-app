@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonHeader,
-	IonSegment, IonSegmentButton
+	IonSegment, IonSegmentButton,
+	IonCard, IonCardContent, IonButton
 } from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
 
@@ -44,7 +45,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.stop-node-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.stop-node-button') }}
+								{{ $t('actions.stop-node-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -54,7 +55,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.restart-node-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.restart-node-button') }}
+								{{ $t('actions.restart-node-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -64,7 +65,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.regenerate-ssl-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.regenerate-ssl-button') }}
+								{{ $t('actions.regenerate-ssl-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -76,7 +77,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.upgrade-system-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.upgrade-system-button') }}
+								{{ $t('actions.upgrade-system-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -86,7 +87,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.factory-reset-description') }}</p>
 							<ion-button expand="block" color="danger">
-							{{ $t('actions.factory-reset-button') }}
+								{{ $t('actions.factory-reset-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -98,7 +99,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.soft-reboot-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.soft-reboot-button') }}
+								{{ $t('actions.soft-reboot-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -108,7 +109,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.hard-reboot-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.hard-reboot-button') }}
+								{{ $t('actions.hard-reboot-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
@@ -118,7 +119,7 @@ const segmentChanged = (event: CustomEvent) =>
 						<ion-card-content>
 							<p>{{ $t('actions.shutdown-description') }}</p>
 							<ion-button expand="block" color="primary">
-							{{ $t('actions.shutdown-button') }}
+								{{ $t('actions.shutdown-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
