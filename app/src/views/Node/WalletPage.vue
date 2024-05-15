@@ -204,23 +204,10 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 .transaction
 {
 	display: flex;
-	align-items: center;
-	--background: transparent;
-	font-size: 1rem;
-
-	&>ion-label
-	{}
-
-	&>span
-	{}
-}
-
-.transaction
-{
-	display: flex;
 	flex-direction: column;
 	--padding-start: 0;
 	--inner-padding-end: 0;
+	--background: transparent;
 
 	ion-label
 	{
