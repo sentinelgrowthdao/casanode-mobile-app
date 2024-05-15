@@ -63,3 +63,19 @@ ion-button[fill="clear"]
 {
 	--color: #0184FC;
 }
+
+ion-segment
+{
+	--background: #0D1F39;
+
+}
+ion-segment-button
+{
+	--color-checked: #fff;
+	--indicator-color: #0184FC;
+}
+
+ion-segment-button:checked
+{
+	--background: #0184FC;
+}

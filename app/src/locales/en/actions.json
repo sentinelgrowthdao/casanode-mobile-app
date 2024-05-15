@@ -1,0 +1,29 @@
+{
+	"node-tab": "Node",
+	"maintenance-tab": "Maintenance",
+	"system-tab": "System",
+
+	"stop-node-description": "Halts all current activities and operations of the VPN, while keeping the device active.",
+	"stop-node-button": "Stop Node",
+
+	"restart-node-description": "Reboots the node, refreshing all processes without deleting any data.",
+	"restart-node-button": "Restart Node",
+
+	"regenerate-ssl-description": "Renews the node’s SSL certificate to maintain secure VPN connections before May 6, 2025.",
+	"regenerate-ssl-button": "Regenerate SSL Certificate",
+
+	"upgrade-system-description": "Applies the latest updates to both the operating system and the application. This ensures the system is optimized for performance, security, and new features.",
+	"upgrade-system-button": "Upgrade System",
+
+	"factory-reset-description": "Resets the node to its original factory settings, erasing all data and configurations to start afresh.",
+	"factory-reset-button": "Factory Reset",
+
+	"soft-reboot-description": "Restarts only the VPN service without fully rebooting the device, ideal for a quick refresh.",
+	"soft-reboot-button": "Soft Reboot",
+
+	"hard-reboot-description": "Fully restarts the device, which is equivalent to switching the hardware off and back on.",
+	"hard-reboot-button": "Hard Reboot",
+	
+	"shutdown-description": "Powers down the system completely, safely turning off all services and ensuring data isn't corrupted.",
+	"shutdown-button": "Shutdown"
+}

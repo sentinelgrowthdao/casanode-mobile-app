@@ -1,7 +1,22 @@
 <script lang="ts" setup>
-import { IonPage, IonContent, IonHeader } from '@ionic/vue';
+import { ref } from 'vue';
+import {
+	IonPage, IonContent, IonHeader,
+	IonSegment, IonSegmentButton
+} from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
+
+// Variable to store the selected segment
+const segment: Ref<string> = ref('node');
+
+// Segment change event
+const segmentChanged = (event: CustomEvent) =>
+{
+	segment.value = event.detail.value;
+};
+
 </script>
+
 <template>
 	<ion-page>
 		<ion-header>
@@ -9,11 +24,128 @@ import AppToolbar from '@/components/AppToolbar.vue';
 		</ion-header>
 		<ion-content>
 			<div class="actions">
-				Actions
+				<div class="segment-container ion-padding-top">
+					<ion-segment :value="segment" @ionChange="segmentChanged">
+						<ion-segment-button value="node">
+							{{ $t('actions.node-tab') }}
+						</ion-segment-button>
+						<ion-segment-button value="maintenance">
+							{{ $t('actions.maintenance-tab') }}
+						</ion-segment-button>
+						<ion-segment-button value="system">
+							{{ $t('actions.system-tab') }}
+						</ion-segment-button>
+					</ion-segment>
+				</div>
+
+				<div v-if="segment === 'node'">
+					<!-- Stop Node -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.stop-node-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.stop-node-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+
+					<!-- Restart Node -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.restart-node-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.restart-node-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+
+					<!-- Regenerate SSL Certificate -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.regenerate-ssl-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.regenerate-ssl-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+				</div>
+
+				<div v-if="segment === 'maintenance'">
+					<!-- Upgrade System -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.upgrade-system-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.upgrade-system-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+
+					<!-- Factory Reset -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.factory-reset-description') }}</p>
+							<ion-button expand="block" color="danger">
+							{{ $t('actions.factory-reset-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+				</div>
+
+				<div v-if="segment === 'system'">
+					<!-- Soft Reboot -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.soft-reboot-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.soft-reboot-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+
+					<!-- Hard Reboot -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.hard-reboot-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.hard-reboot-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+
+					<!-- Shutdown -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.shutdown-description') }}</p>
+							<ion-button expand="block" color="primary">
+							{{ $t('actions.shutdown-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+				</div>
+
+
 			</div>
 		</ion-content>
 	</ion-page>
 </template>
+
 <style lang="scss" scoped>
-@import "@scss/homepage.scss";
+@import "@scss/container.scss";
+
+.actions
+{
+	.segment-container
+	{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+
+		ion-segment
+		{
+			width: auto;
+		}
+	}
+}
 </style>
