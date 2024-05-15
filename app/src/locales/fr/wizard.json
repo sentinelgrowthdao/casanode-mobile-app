@@ -54,7 +54,7 @@
 	"wallet-fund-title": "Alimentez votre portefeuille de nœud",
 	"wallet-fund-text": "Veuillez déposer au moins 10 $DVPN sur votre portefeuille à l'adresse ci-dessous pour continuer le lancement du nœud :",
 	"wallet-fund-next": "Une fois que vous avez transféré les fonds, sélectionnez « Suivant » pour continuer.",
-	"wallet-fund-copied": "Copié dans le presse-papiers",
+	"wallet-fund-copied": "Copiée dans le presse-papiers",
 	
 	"ports-title": "Configurer le transfert de port",
 	"ports-text": "Pour permettre l'accès externe à votre nœud, veuillez vous assurer que les ports appropriés sont transférés dans les paramètres de votre routeur.",
