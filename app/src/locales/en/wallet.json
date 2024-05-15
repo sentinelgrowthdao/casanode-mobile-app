@@ -7,5 +7,6 @@
 	"update-status-label": "Update Status",
 	"update-details-label": "Update Details",
 	"receive-label": "Receive",
-	"delete-wallet-label": "Delete wallet"
+	"delete-wallet-label": "Delete wallet",
+	"clipboard-address": "Copied to clipboard"
 }

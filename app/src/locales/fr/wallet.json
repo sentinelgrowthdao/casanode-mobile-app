@@ -7,5 +7,6 @@
 	"update-status-label": "Mettre à jour le statut",
 	"update-details-label": "Mettre à jour les détails",
 	"receive-label": "Recevoir",
-	"delete-wallet-label": "Supprimer le portefeuille"
+	"delete-wallet-label": "Supprimer le portefeuille",
+	"clipboard-address": "Copiée dans le presse-papiers"
 }

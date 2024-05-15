@@ -1,12 +1,17 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonHeader,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent,
 	IonButton, IonIcon, IonGrid, IonRow, IonCol, IonItem, IonLabel
 } from '@ionic/vue';
 import { refresh, link, copy } from 'ionicons/icons';
+import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
+import { copyToClipboard } from '@/utils/clipboard';
+
+// Import the useI18n composable function.
+const { t } = useI18n();
 
 // Example of transactions
 const transactions = ref([
@@ -20,6 +25,11 @@ const transactions = ref([
 	{ type: 'update-details', amount: '-0.009804 DVPN', id: '3C83865A9A6...' },
 	{ type: 'receive', amount: '+50 DVPN', id: '3C83865A9A6...' }
 ]);
+
+// Public and Node Address
+const address_public: Ref<string> = ref('sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw')
+const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g6a6fkc')
+
 </script>
 <template>
 	<ion-page>
@@ -39,7 +49,8 @@ const transactions = ref([
 								</ion-col>
 								<ion-col size="3" class="ion-text-right">
 									<ion-button fill="clear" size="large" class="refresh-button">
-										<ion-icon :icon="refresh" size="large" aria-label="{{ $t('wallet.balance-refresh') }}" />
+										<ion-icon :icon="refresh" size="large"
+											aria-label="{{ $t('wallet.balance-refresh') }}" />
 									</ion-button>
 								</ion-col>
 							</ion-row>
@@ -50,20 +61,22 @@ const transactions = ref([
 				<!-- Public and Node Address -->
 				<ion-card class="container addresses">
 					<ion-card-content>
-						<ion-button class="item" fill="clear">
-							<div class="content">
+						<ion-button class="item" fill="clear"
+							@click="copyToClipboard(t('wallet.clipboard-address'), address_public)">
+							<div class=" content">
 								<p class="label">
 									{{ $t('wallet.public-address-label') }}<ion-icon :icon="copy" class="icon-right" />
 								</p>
-								<p class="value">sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw</p>
+								<p class="value">{{ address_public }}</p>
 							</div>
 						</ion-button>
-						<ion-button class="item" fill="clear">
+						<ion-button class="item" fill="clear"
+							@click="copyToClipboard(t('wallet.clipboard-address'), address_node)">
 							<div class="content">
 								<p class="label">
 									{{ $t('wallet.node-address-label') }}<ion-icon :icon="copy" class="icon-right" />
 								</p>
-								<p class="value">sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g6a6fkc</p>
+								<p class="value">{{ address_node }}</p>
 							</div>
 						</ion-button>
 					</ion-card-content>
@@ -109,19 +122,21 @@ const transactions = ref([
 {
 	&.header
 	{
-		&> ion-card-content > ion-grid > ion-row > ion-col
+		&>ion-card-content>ion-grid>ion-row>ion-col
 		{
-			&> .label
+			&>.label
 			{
 				font-size: 0.8rem;
 				color: var(--ion-text-color);
 			}
-			&> .value
+
+			&>.value
 			{
 				font-size: 1.5rem;
 				color: var(--ion-text-color);
 			}
-			&> .refresh-button
+
+			&>.refresh-button
 			{
 				--color: var(--ion-text-color);
 			}
@@ -138,29 +153,30 @@ const transactions = ref([
 			align-items: flex-start;
 			--padding: 0;
 
-			&> .content
+			&>.content
 			{
 				display: flex;
 				flex-direction: column;
 				align-items: flex-start;
-				width:100%;
-				gap:0.5rem;
+				width: 100%;
+				gap: 0.5rem;
 
-				&> .label
+				&>.label
 				{
 					display: flex;
-					margin:0;
+					margin: 0;
 					align-items: flex-start;
 					color: var(--ion-text-color);
-					
+
 					ion-icon
 					{
 						--color: var(--ion-text-color);
 					}
 				}
-				&> .value
+
+				&>.value
 				{
-					margin:0;
+					margin: 0;
 					font-size: 0.7rem;
 					color: var(--ion-text-color);
 				}
@@ -179,5 +195,4 @@ const transactions = ref([
 		margin-right: 10px;
 	}
 }
-
 </style>
