@@ -1,0 +1,17 @@
+{
+	"node-section-title": "Nœud",
+	"moniker-label": "Moniker",
+	"type-label": "Type",
+
+	"network-section-title": "Réseau",
+	"ip-address-label": "Adresse IP",
+	"node-port-label": "Port du nœud (TCP)",
+	"wireguard-port-label": "Port Wireguard (UDP)",
+	"v2ray-port-label": "Port V2Ray (TCP)",
+
+	"vpn-section-title": "VPN",
+	"maximum-peers-label": "Pairs maximum",
+	"vpn-type-label": "Type",
+
+	"save-button": "Sauvegarder et redémarrer le nœud"
+}

@@ -9,6 +9,7 @@ import DashboardEn from '@locales/en/dashboard.json';
 import AboutEn from '@locales/en/about.json';
 import WalletEn from '@locales/en/wallet.json';
 import ActionsEn from '@locales/en/actions.json';
+import SettingsEn from '@locales/en/settings.json';
 
 // French
 import AppFr from '@locales/fr/app.json';
@@ -18,6 +19,7 @@ import DashboardFr from '@locales/fr/dashboard.json';
 import AboutFr from '@locales/fr/about.json';
 import WalletFr from '@locales/fr/wallet.json';
 import ActionsFr from '@locales/fr/actions.json';
+import SettingsFr from '@locales/fr/settings.json';
 
 interface Option
 {
@@ -47,6 +49,7 @@ const messages : MessageFile =
 		"about": AboutEn,
 		"wallet": WalletEn,
 		"actions": ActionsEn,
+		"settings": SettingsEn,
 	},
 	fr:
 	{
@@ -57,6 +60,7 @@ const messages : MessageFile =
 		"about": AboutFr,
 		"wallet": WalletFr,
 		"actions": ActionsFr,
+		"settings": SettingsFr,
 	},
 };
 

@@ -1,0 +1,17 @@
+{
+	"node-section-title": "Node",
+	"moniker-label": "Moniker",
+	"type-label": "Type",
+
+	"network-section-title": "Network",
+	"ip-address-label": "IP Address",
+	"node-port-label": "Node Port (TCP)",
+	"wireguard-port-label": "Wireguard Port (UDP)",
+	"v2ray-port-label": "V2Ray Port (TCP)",
+
+	"vpn-section-title": "VPN",
+	"maximum-peers-label": "Maximum peers",
+	"vpn-type-label": "Type",
+
+	"save-button": "Save and Restart Node"
+}
