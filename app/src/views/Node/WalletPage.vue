@@ -172,11 +172,13 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 				{
 					display: flex;
 					margin: 0;
+					width: 100%;
 					align-items: flex-start;
 					color: var(--ion-text-color);
 
-					ion-icon
+					&>ion-icon
 					{
+						margin-left: auto;
 						--color: var(--ion-text-color);
 					}
 				}
@@ -184,8 +186,12 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 				&>.value
 				{
 					margin: 0;
+					width: 100%;
 					font-size: 0.7rem;
 					color: var(--ion-text-color);
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
 				}
 			}
 		}
