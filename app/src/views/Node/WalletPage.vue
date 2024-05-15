@@ -161,6 +161,10 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 			justify-content: flex-start;
 			align-items: flex-start;
 			--padding: 0;
+			--padding-start: 0;
+			--padding-end: 0;
+			--padding-top: 0;
+			--padding-bottom: 0;
 
 			&>.content
 			{
