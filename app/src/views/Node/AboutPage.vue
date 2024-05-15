@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { IonPage, IonContent, IonHeader } from '@ionic/vue';
+import {
+	IonPage, IonContent, IonHeader,
+	IonCard, IonCardHeader, IonCardTitle, IonCardContent,
+	IonIcon, IonButton
+} from '@ionic/vue';
 import { document } from 'ionicons/icons';
 import AppToolbar from '@/components/AppToolbar.vue';
 </script>
