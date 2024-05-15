@@ -45,7 +45,7 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 							<ion-row>
 								<ion-col size="9">
 									<p class="label">{{ $t('wallet.node-balance-label') }}</p>
-									<p class="value">1,432.45 DVPN</p>
+									<p class="amount">1,432.45<span class="unit">DVPN</span></p>
 								</ion-col>
 								<ion-col size="3" class="ion-text-right">
 									<ion-button fill="clear" size="large" class="refresh-button">
@@ -130,10 +130,17 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 				color: var(--ion-text-color);
 			}
 
-			&>.value
+			&>.amount
 			{
-				font-size: 1.5rem;
+				font-size: 1.8rem;
+				line-height: 1.8rem;
 				color: var(--ion-text-color);
+
+				&>.unit
+				{
+					display: block;
+					font-size: 0.8rem;
+				}
 			}
 
 			&>.refresh-button
