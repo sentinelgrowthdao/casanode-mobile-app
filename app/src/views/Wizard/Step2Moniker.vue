@@ -1,10 +1,26 @@
 <script lang="ts" setup>
-import {
+import { type Ref, ref } from 'vue';
+import
+{
 	IonPage, IonContent, IonButton,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 	IonInput
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
+import { useWizardStore } from '@stores/WizardStore';
+
+const wizardStore = useWizardStore();
+const router = useRouter();
+const moniker: Ref<string> = ref('');
+
+const setMonikerAndNavigate = () =>
+{
+	console.log('Moniker:', moniker.value)
+	wizardStore.setMoniker(moniker.value);
+	router.push({ name: 'Wizard3Location' });
+};
+
 </script>
 <template>
 	<ion-page>
@@ -16,7 +32,8 @@ import {
 					<p class="text">{{ $t('wizard.moniker-explain') }}</p>
 					<ion-list class="input">
 						<ion-item>
-							<ion-input aria-label="Moniker" :placeholder="$t('wizard.moniker-placeholder')" />
+							<ion-input aria-label="Moniker" :placeholder="$t('wizard.moniker-placeholder')"
+								v-model="moniker" />
 						</ion-item>
 					</ion-list>
 				</div>
@@ -24,8 +41,7 @@ import {
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard3Location' }"
-									router-direction="forward">
+								<ion-button expand="block" @click="setMonikerAndNavigate">
 									{{ $t('wizard.button-next') }}
 								</ion-button>
 							</ion-col>
