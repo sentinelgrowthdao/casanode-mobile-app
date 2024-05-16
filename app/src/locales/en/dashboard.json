@@ -9,7 +9,7 @@
 	"node-location": "Location:",
 	"node-vpn": "VPN Type:",
 	"node-port": "API Port:",
-	"node-wg-port": "Wireguard Port:",
+	"node-wireguard-port": "Wireguard Port:",
 	"node-v2ray-port": "V2Ray Port:",
 	"node-ssl-expiry": "SSL Certificate Expiry:",
 	"node-upload-speed": "Upload Speed:",
