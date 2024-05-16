@@ -28,6 +28,12 @@ Install `ionic`
 npm install -g @ionic/cli
 ```
 
+Generate the build information file for the application using the following command:
+
+```bash
+npm run prebuild
+```
+
 Launch the application
 
 ```bash
