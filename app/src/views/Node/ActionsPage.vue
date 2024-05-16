@@ -8,12 +8,12 @@ import {
 import AppToolbar from '@/components/AppToolbar.vue';
 
 // Variable to store the selected segment
-const segment: Ref<string> = ref('node');
+const segmentSelected: Ref<string> = ref('node');
 
 // Segment change event
 const segmentChanged = (event: CustomEvent) =>
 {
-	segment.value = event.detail.value;
+	segmentSelected.value = event.detail.value;
 };
 
 </script>
@@ -26,7 +26,7 @@ const segmentChanged = (event: CustomEvent) =>
 		<ion-content>
 			<div class="actions">
 				<div class="segment-container ion-padding-top">
-					<ion-segment :value="segment" @ionChange="segmentChanged">
+					<ion-segment :value="segmentSelected" @ionChange="segmentChanged">
 						<ion-segment-button value="node">
 							{{ $t('actions.node-tab') }}
 						</ion-segment-button>
@@ -39,7 +39,7 @@ const segmentChanged = (event: CustomEvent) =>
 					</ion-segment>
 				</div>
 
-				<div v-if="segment === 'node'">
+				<div v-if="segmentSelected === 'node'">
 					<!-- Stop Node -->
 					<ion-card class="container">
 						<ion-card-content>
@@ -71,7 +71,7 @@ const segmentChanged = (event: CustomEvent) =>
 					</ion-card>
 				</div>
 
-				<div v-if="segment === 'maintenance'">
+				<div v-if="segmentSelected === 'maintenance'">
 					<!-- Upgrade System -->
 					<ion-card class="container">
 						<ion-card-content>
@@ -93,7 +93,7 @@ const segmentChanged = (event: CustomEvent) =>
 					</ion-card>
 				</div>
 
-				<div v-if="segment === 'system'">
+				<div v-if="segmentSelected === 'system'">
 					<!-- Soft Reboot -->
 					<ion-card class="container">
 						<ion-card-content>
