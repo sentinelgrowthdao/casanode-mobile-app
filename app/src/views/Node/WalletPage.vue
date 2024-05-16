@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonHeader,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent,
@@ -9,26 +8,13 @@ import { refresh, link, copy } from 'ionicons/icons';
 import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
 import { copyToClipboard } from '@/utils/clipboard';
+import { useNodeStore } from '@stores/NodeStore';
 
 // Import the useI18n composable function.
 const { t } = useI18n();
 
-// Example of transactions
-const transactions = ref([
-	{ type: 'update-status', amount: '-0.009535 DVPN', hash: '3C83865A883865A883865A883865A83865A3865A9A6' },
-	{ type: 'update-status', amount: '-0.01 DVPN', hash: '3C83883865A65A883865A883865A88386583865AA9A6' },
-	{ type: 'update-status', amount: '-0.009645 DVPN', hash: '3C8386583A883865A883865A883865A883865865A83865AA9A6' },
-	{ type: 'update-status', amount: '-0.01 DVPN', hash: '3C838658386A883865A883865A8838655AA9A6' },
-	{ type: 'update-details', amount: '-0.009542 DVPN', hash: '3C83883865A83865A83A883865A883865865A65A9A6' },
-	{ type: 'update-status', amount: '-0.009531 DVPN', hash: '3C8386583865A83A883865A883865A883865865A83865AA9A6' },
-	{ type: 'update-status', amount: '-0.009742 DVPN', hash: '3C83865838683865A883865A883865A883865A83865A5AA9A6' },
-	{ type: 'update-details', amount: '-0.009804 DVPN', hash: '3C83865A9A83A883865A883865A883865865A83865A83865A6' },
-	{ type: 'receive', amount: '+50 DVPN', hash: '3C65A65A9838665A65A965A883865A883865A883865A65A95A9A6' }
-]);
-
-// Public and Node Address
-const address_public: Ref<string> = ref('sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw')
-const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g6a6fkc')
+// Import the useNodeStore composable function.
+const nodeStore = useNodeStore();
 
 </script>
 <template>
@@ -62,21 +48,21 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 				<ion-card class="container addresses">
 					<ion-card-content>
 						<ion-button class="item" fill="clear"
-							@click="copyToClipboard(t('wallet.clipboard-address'), address_public)">
+							@click="copyToClipboard(t('wallet.clipboard-address'), nodeStore.publicAddress)">
 							<div class=" content">
 								<p class="label">
 									{{ $t('wallet.public-address-label') }}<ion-icon :icon="copy" class="icon-right" />
 								</p>
-								<p class="value">{{ address_public }}</p>
+								<p class="value">{{ nodeStore.publicAddress }}</p>
 							</div>
 						</ion-button>
 						<ion-button class="item" fill="clear"
-							@click="copyToClipboard(t('wallet.clipboard-address'), address_node)">
+							@click="copyToClipboard(t('wallet.clipboard-address'), nodeStore.nodeAddress)">
 							<div class="content">
 								<p class="label">
 									{{ $t('wallet.node-address-label') }}<ion-icon :icon="copy" class="icon-right" />
 								</p>
-								<p class="value">{{ address_node }}</p>
+								<p class="value">{{ nodeStore.nodeAddress }}</p>
 							</div>
 						</ion-button>
 					</ion-card-content>
@@ -88,7 +74,8 @@ const address_node: Ref<string> = ref('sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g
 						<ion-card-title>{{ $t('wallet.latest-transactions-label') }}</ion-card-title>
 					</ion-card-header>
 					<ion-card-content>
-						<ion-item v-for="(transaction, index) in transactions" :key="index" class="transaction">
+						<ion-item v-for="(transaction, index) in nodeStore.transactions" :key="index"
+							class="transaction">
 							<ion-label>
 								<div class="first-line">
 									<p class="type">{{ $t(`wallet.${transaction.type}-label`) }}</p>
