@@ -45,6 +45,10 @@ const routes: Array<RouteRecordRaw> = [
 		],
 	},
 	{
+		path: '/wizard',
+		redirect: '/wizard/welcome',
+	},
+	{
 		path: '/wizard/welcome',
 		name: 'Wizard1Welcome',
 		component: () => import('@views/Wizard/Step1Welcome.vue')
