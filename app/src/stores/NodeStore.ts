@@ -19,12 +19,12 @@ export const useNodeStore = defineStore('node',
 
 		// Node Settings
 		moniker: 'My Residential Node',
-		type: 'Residential',
+		type: 'residential',
 
 		// VPN Settings
 		maximumPeers: 250,
 		vpnTypeSettings: 'Wireguard',
-
+		
 		// Wallet
 		nodeBalance: '1,432.45 DVPN',
 		publicAddress: 'sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw',
