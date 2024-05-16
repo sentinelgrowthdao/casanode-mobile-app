@@ -6,6 +6,12 @@ import {
 } from '@ionic/vue';
 import { document } from 'ionicons/icons';
 import AppToolbar from '@/components/AppToolbar.vue';
+import { useNodeStore } from '@stores/NodeStore';
+import buildInfo from '@assets/build.json';
+
+// Import the useNodeStore composable function.
+const nodeStore = useNodeStore();
+
 </script>
 <template>
 	<ion-page>
@@ -20,10 +26,10 @@ import AppToolbar from '@/components/AppToolbar.vue';
 					</ion-card-header>
 					<ion-card-content>
 						<p class="item">
-							<strong>{{ $t('about.app-version-label') }}</strong> 1.0.0-alpha
+							<strong>{{ $t('about.app-version-label') }}</strong>{{ buildInfo.version }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.app-release-date-label') }}</strong> June 5, 2024
+							<strong>{{ $t('about.app-release-date-label') }}</strong>{{ buildInfo.buildDate }}
 						</p>
 					</ion-card-content>
 				</ion-card>
@@ -34,23 +40,22 @@ import AppToolbar from '@/components/AppToolbar.vue';
 					</ion-card-header>
 					<ion-card-content>
 						<p class="item">
-							<strong>{{ $t('about.casanode-version-label') }}</strong> 1.0.0
+							<strong>{{ $t('about.casanode-version-label') }}</strong>{{ nodeStore.casanodeVersion }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.operating-system-label') }}</strong> Debian 12
+							<strong>{{ $t('about.operating-system-label') }}</strong>{{ nodeStore.operatingSystem }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.kernel-version-label') }}</strong> 6.6.28+rpt-rpi-2712
+							<strong>{{ $t('about.kernel-version-label') }}</strong>{{ nodeStore.kernelVersion }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.architecture-label') }}</strong> aarch64
+							<strong>{{ $t('about.architecture-label') }}</strong>{{ nodeStore.architecture }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.docker-image-label') }}</strong>
-							wajatmaka/sentinel-aarch64-alpine:v0.7.1
+							<strong>{{ $t('about.docker-image-label') }}</strong>{{ nodeStore.dockerImage }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.uptime-label') }}</strong> 27 days, 11:40
+							<strong>{{ $t('about.uptime-label') }}</strong>{{ nodeStore.uptime }}
 						</p>
 					</ion-card-content>
 				</ion-card>

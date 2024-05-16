@@ -4,18 +4,21 @@ import {
 	IonGrid, IonRow, IonCol,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/vue';
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
+import { useNodeStore } from '@stores/NodeStore';
 
 // Import the useI18n composable function.
 const { t } = useI18n();
 
-const connectedUsers = ref<number>(0);
+// Import the useNodeStore composable function.
+const nodeStore = useNodeStore();
 
+// Define the node status text
 const nodeStatus = computed(() =>
 {
-	return t('dashboard.status-running');
+	return t(`dashboard.status-${nodeStore.status}`);
 });
 
 </script>
@@ -36,7 +39,7 @@ const nodeStatus = computed(() =>
 								</ion-col>
 								<ion-col class="item right">
 									<p class="label">{{ $t('dashboard.status-users') }}</p>
-									<p class="value">{{ connectedUsers }}</p>
+									<p class="value">{{ nodeStore.connectedUsers }}</p>
 								</ion-col>
 							</ion-row>
 						</ion-grid>
@@ -49,28 +52,28 @@ const nodeStatus = computed(() =>
 					</ion-card-header>
 					<ion-card-content>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-address') }}</strong> 194.164.29.195
+							<strong>{{ $t('dashboard.node-address') }}</strong>{{ nodeStore.ipAddress }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-location') }}</strong> Slough / United Kingdom
+							<strong>{{ $t('dashboard.node-location') }}</strong>{{ nodeStore.location }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-vpn') }}</strong> Wireguard
+							<strong>{{ $t('dashboard.node-vpn') }}</strong>{{ nodeStore.vpnType }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-port') }}</strong> 16567
+							<strong>{{ $t('dashboard.node-port') }}</strong>{{ nodeStore.nodePort }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-v2ray-port') }}</strong> 16568
+							<strong>{{ $t(`dashboard.node-${nodeStore.vpnType}-port`) }}</strong>{{ nodeStore.vpnPort }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-ssl-expiry') }}</strong> May 6 19:05:15 2025 GMT
+							<strong>{{ $t('dashboard.node-ssl-expiry') }}</strong>{{ nodeStore.sslExpiry }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-upload-speed') }}</strong> 18.3 MB
+							<strong>{{ $t('dashboard.node-upload-speed') }}</strong>{{ nodeStore.uploadSpeed }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-download-speed') }}</strong> 87.19 MB
+							<strong>{{ $t('dashboard.node-download-speed') }}</strong>{{ nodeStore.downloadSpeed }}
 						</p>
 					</ion-card-content>
 				</ion-card>
