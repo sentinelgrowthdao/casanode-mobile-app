@@ -7,7 +7,7 @@ import {
 import { document } from 'ionicons/icons';
 import AppToolbar from '@/components/AppToolbar.vue';
 import { useNodeStore } from '@stores/NodeStore';
-import buildInfo from '@assets/build.json';
+import buildInfo from '@/assets/build.json';
 
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
