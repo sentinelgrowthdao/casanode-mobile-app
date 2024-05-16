@@ -5,16 +5,20 @@ import {
 	IonButton, IonLabel, IonSelect, IonSelectOption, IonInput
 } from '@ionic/vue';
 import { ref } from 'vue';
+import { useNodeStore } from '@stores/NodeStore';
 import AppToolbar from '@/components/AppToolbar.vue';
 
+// Import the useNodeStore composable function.
+const nodeStore = useNodeStore();
+
 const nodeSettings = ref({
-	moniker: 'My Residential Node',
-	type: 'Residential',
-	ipAddress: '194.164.29.195',
-	nodePort: 16567,
-	vpnPort: 16568,
-	maximumPeers: 250,
-	vpnType: 'wireguard'
+	moniker: nodeStore.moniker,
+	type: nodeStore.type,
+	ipAddress: nodeStore.ipAddress,
+	nodePort: nodeStore.nodePort,
+	vpnPort: nodeStore.vpnPort,
+	maximumPeers: nodeStore.maximumPeers,
+	vpnType: nodeStore.vpnType
 });
 
 const saveSettings = () =>
@@ -87,8 +91,8 @@ const saveSettings = () =>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.vpn-type-label') }}</ion-label>
 						<ion-select v-model="nodeSettings.vpnType">
-						<ion-select-option value="wireguard">Wireguard</ion-select-option>
-						<ion-select-option value="v2ray">V2Ray</ion-select-option>
+							<ion-select-option value="wireguard">Wireguard</ion-select-option>
+							<ion-select-option value="v2ray">V2Ray</ion-select-option>
 						</ion-select>
 					</ion-item>
 				</ion-card-content>
@@ -112,5 +116,4 @@ ion-item
 {
 	--background: transparent;
 }
-
 </style>
