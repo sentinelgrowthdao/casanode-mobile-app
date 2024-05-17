@@ -46,8 +46,8 @@ const saveSettings = () =>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.type-label') }}</ion-label>
 						<ion-select v-model="nodeSettings.nodeType">
-							<ion-select-option value="Residential">Residential</ion-select-option>
-							<ion-select-option value="Commercial">Commercial</ion-select-option>
+							<ion-select-option value="residential">Residential</ion-select-option>
+							<ion-select-option value="commercial">Commercial</ion-select-option>
 						</ion-select>
 					</ion-item>
 				</ion-card-content>
