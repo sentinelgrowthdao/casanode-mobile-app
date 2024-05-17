@@ -16,7 +16,6 @@ const moniker: Ref<string> = ref('');
 
 const setMonikerAndNavigate = () =>
 {
-	console.log('Moniker:', moniker.value)
 	wizardStore.setMoniker(moniker.value);
 	router.push({ name: 'Wizard3Location' });
 };
