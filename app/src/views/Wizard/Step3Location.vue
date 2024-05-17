@@ -1,10 +1,28 @@
 <script lang="ts" setup>
+import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonButton,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 	IonSelect, IonSelectOption
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
+import { useWizardStore } from '@stores/WizardStore';
+
+const wizardStore = useWizardStore();
+const router = useRouter();
+const nodeType: Ref<string> = ref('');
+
+const setNodeTypeAndNavigate = () =>
+{
+	// Check if the node type is residential or datacenter
+	if(nodeType.value === 'residential' || nodeType.value === 'datacenter')
+	{
+		wizardStore.setNodeType(nodeType.value);
+		router.push({ name: 'Wizard4Protocol' });
+	}
+};
+
 </script>
 <template>
 	<ion-page>
@@ -19,7 +37,7 @@ import {
 					</ul>
 					<ion-list class="input">
 						<ion-item>
-							<ion-select aria-label="location" :placeholder="$t('wizard.location-placeholder')" value="">
+							<ion-select aria-label="location" :placeholder="$t('wizard.location-placeholder')" v-model="nodeType">
 								<ion-select-option value="residential">
 									{{ $t('wizard.location-residential') }}
 								</ion-select-option>
@@ -34,8 +52,7 @@ import {
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard4Protocol' }"
-									router-direction="forward">
+								<ion-button expand="block" @click="setNodeTypeAndNavigate">
 									{{ $t('wizard.button-next') }}
 								</ion-button>
 							</ion-col>

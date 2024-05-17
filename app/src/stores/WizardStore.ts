@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useWizardStore = defineStore("wizard", {
 	state: () => ({
 		moniker: "",
-		type: "",
+		nodeType: "",
 		vpnType: "",
 		ipAddress: "",
 		nodePort: 0,
@@ -17,9 +17,9 @@ export const useWizardStore = defineStore("wizard", {
 		{
 			this.moniker = moniker;
 		},
-		setType(type: string)
+		setNodeType(nodeType: string)
 		{
-			this.type = type;
+			this.nodeType = nodeType;
 		},
 		setVpnType(vpnType: string)
 		{
