@@ -13,7 +13,7 @@ const nodeStore = useNodeStore();
 
 const nodeSettings = ref({
 	moniker: nodeStore.moniker,
-	type: nodeStore.type,
+	nodeType: nodeStore.nodeType,
 	ipAddress: nodeStore.ipAddress,
 	nodePort: nodeStore.nodePort,
 	vpnPort: nodeStore.vpnPort,
@@ -45,7 +45,7 @@ const saveSettings = () =>
 					</ion-item>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.type-label') }}</ion-label>
-						<ion-select v-model="nodeSettings.type">
+						<ion-select v-model="nodeSettings.nodeType">
 							<ion-select-option value="Residential">Residential</ion-select-option>
 							<ion-select-option value="Commercial">Commercial</ion-select-option>
 						</ion-select>

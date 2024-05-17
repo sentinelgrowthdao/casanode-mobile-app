@@ -10,7 +10,6 @@ export const useNodeStore = defineStore('node',
 		// Node Information
 		ipAddress: '194.164.29.195',
 		location: 'Slough / United Kingdom',
-		vpnType: 'wireguard',
 		nodePort: 16567,
 		vpnPort: 16568,
 		sslExpiry: 'May 6 19:05:15 2025 GMT',
@@ -19,11 +18,11 @@ export const useNodeStore = defineStore('node',
 
 		// Node Settings
 		moniker: 'My Residential Node',
-		type: 'residential',
+		nodeType: 'residential',
 
 		// VPN Settings
+		vpnType: 'wireguard',
 		maximumPeers: 250,
-		vpnTypeSettings: 'Wireguard',
 		
 		// Wallet
 		nodeBalance: '1,432.45 DVPN',
