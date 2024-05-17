@@ -21,6 +21,7 @@
 			"@/*": ["./src/*"],
 			"@locales/*": ["./src/locales/*"],
 			"@assets/*": ["./src/assets/*"],
+			"@components/*": ["./src/components/*"],
 			"@views/*": ["./src/views/*"],
 			"@scss/*": ["./src/scss/*"],
 			"@stores/*": ["./src/stores/*"],
