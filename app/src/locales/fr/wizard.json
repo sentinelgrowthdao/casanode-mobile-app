@@ -7,6 +7,7 @@
 	"moniker-text": "Donnez à votre nœud un nom unique pour l'identifier au sein du réseau VPN décentralisé.",
 	"moniker-explain": "Ce nom représentera votre nœud auprès des autres, alors choisissez un moniker mémorable et distinctif.",
 	"moniker-placeholder": "Entrez votre moniker",
+	"moniker-error": "Le moniker doit contenir au moins 4 caractères.",
 	
 	"location-title": "Sélectionnez l'emplacement du nœud",
 	"location-text": "Choisissez le type d'environnement dans lequel votre nœud est hébergé. Cela aide à configurer les paramètres réseau pour des performances optimales.",

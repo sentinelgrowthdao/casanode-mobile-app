@@ -5,16 +5,18 @@ import
 	IonPage, IonContent, IonButton,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
-	IonInput
+	IonInput, IonText
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useWizardStore } from '@stores/WizardStore';
+import AppInput from '@components/AppInput.vue';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
 const moniker: Ref<string> = ref('');
+const errorMessage: Ref<string> = ref('');
 
-const setMonikerAndNavigate = () =>
+const setValueAndNavigate = () =>
 {
 	const monikerValue = moniker.value.trim();
 	// Check if the moniker is not empty and at least 4 characters
@@ -35,9 +37,15 @@ const setMonikerAndNavigate = () =>
 					<p class="text">{{ $t('wizard.moniker-text') }}</p>
 					<p class="text">{{ $t('wizard.moniker-explain') }}</p>
 					<ion-list class="input">
-						<ion-item>
-							<ion-input aria-label="Moniker" :placeholder="$t('wizard.moniker-placeholder')"
-								v-model="moniker" />
+						<ion-item lines="none">
+							<app-input
+								:placeholder="$t('wizard.moniker-placeholder')"
+								:errorMessage="$t('wizard.moniker-error')"
+								type="text"
+								v-model="moniker"
+								aria-label="Moniker"
+								:minLength="4"
+							/>
 						</ion-item>
 					</ion-list>
 				</div>
@@ -45,7 +53,7 @@ const setMonikerAndNavigate = () =>
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" @click="setMonikerAndNavigate">
+								<ion-button expand="block" @click="setValueAndNavigate">
 									{{ $t('wizard.button-next') }}
 								</ion-button>
 							</ion-col>
