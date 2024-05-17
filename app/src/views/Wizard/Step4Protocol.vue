@@ -1,10 +1,28 @@
 <script lang="ts" setup>
+import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonButton,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 	IonSelect, IonSelectOption
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
+import { useWizardStore } from '@stores/WizardStore';
+
+const wizardStore = useWizardStore();
+const router = useRouter();
+const vpnType: Ref<string> = ref('');
+
+const setVpnTypeAndNavigate = () =>
+{
+	// Check if the node type is wireguard or v2ray
+	if(vpnType.value === 'wireguard' || vpnType.value === 'v2ray')
+	{
+		wizardStore.setVpnType(vpnType.value);
+		router.push({ name: 'Wizard5Network' });
+	}
+};
+
 </script>
 <template>
 	<ion-page>
@@ -25,7 +43,7 @@ import {
 					</ul>
 					<ion-list class="input">
 						<ion-item>
-							<ion-select aria-label="protocol" :placeholder="$t('wizard.protocol-placeholder')" value="">
+							<ion-select aria-label="protocol" :placeholder="$t('wizard.protocol-placeholder')" v-model="vpnType">
 								<ion-select-option value="wireguard">
 									{{ $t('wizard.protocol-wireguard') }}
 								</ion-select-option>
@@ -40,8 +58,7 @@ import {
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard5Network' }"
-									router-direction="forward">
+								<ion-button expand="block" @click="setVpnTypeAndNavigate">
 									{{ $t('wizard.button-next') }}
 								</ion-button>
 							</ion-col>
