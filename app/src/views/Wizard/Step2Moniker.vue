@@ -16,8 +16,13 @@ const moniker: Ref<string> = ref('');
 
 const setMonikerAndNavigate = () =>
 {
-	wizardStore.setMoniker(moniker.value);
-	router.push({ name: 'Wizard3Location' });
+	const monikerValue = moniker.value.trim();
+	// Check if the moniker is not empty and at least 4 characters
+	if(monikerValue !== '' && monikerValue.length >= 4)
+	{
+		wizardStore.setMoniker(monikerValue);
+		router.push({ name: 'Wizard3Location' });
+	}
 };
 
 </script>
