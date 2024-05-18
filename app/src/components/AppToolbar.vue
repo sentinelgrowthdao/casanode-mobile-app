@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { IonToolbar, IonTitle, IonButtons, IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { useNodeStore } from '@stores/NodeStore';
 
 const router = useRouter();
-
-const nodeName = ref<string>('Node Name');
+const nodeStore = useNodeStore();
 </script>
 
 <template>
@@ -20,7 +19,7 @@ const nodeName = ref<string>('Node Name');
 				<img class="logo" src="@assets/images/casanode-logo.png" alt="Casanode" />
 			</ion-button>
 		</ion-buttons>
-		<ion-title>{{ nodeName }}</ion-title>
+		<ion-title>{{ nodeStore.moniker }}</ion-title>
 	</ion-toolbar>
 </template>
 
