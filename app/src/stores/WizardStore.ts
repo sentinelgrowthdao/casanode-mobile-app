@@ -5,10 +5,9 @@ export const useWizardStore = defineStore("wizard", {
 		moniker: "",
 		nodeType: "",
 		vpnType: "",
-		ipAddress: "",
+		nodeAddress: "",
 		nodePort: 0,
 		vpnPort: 0,
-		publicAddress: "",
 	}),
 	
 	actions:
@@ -25,9 +24,9 @@ export const useWizardStore = defineStore("wizard", {
 		{
 			this.vpnType = vpnType;
 		},
-		setIpAddress(ipAddress: string)
+		setNodeAddress(nodeAddress: string)
 		{
-			this.ipAddress = ipAddress;
+			this.nodeAddress = nodeAddress;
 		},
 		setNodePort(nodePort: number)
 		{
@@ -36,10 +35,6 @@ export const useWizardStore = defineStore("wizard", {
 		setVpnPort(vpnPort: number)
 		{
 			this.vpnPort = vpnPort;
-		},
-		setPublicAddress(publicAddress: string)
-		{
-			this.publicAddress = publicAddress;
 		},
 	},
 });

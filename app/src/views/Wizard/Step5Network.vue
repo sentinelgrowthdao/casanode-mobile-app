@@ -30,7 +30,7 @@ const setValuesAndNavigate = () =>
 		vpnPortValue >= 1024 && vpnPortValue <= 65535 &&
 		vpnPortValue !== nodePortValue)
 	{
-		wizardStore.setMoniker(ipAddressValue);
+		wizardStore.setNodeAddress(ipAddressValue);
 		wizardStore.setNodePort(nodePortValue);
 		wizardStore.setVpnPort(vpnPortValue);
 		router.push({ name: 'Wizard6Protection' });
