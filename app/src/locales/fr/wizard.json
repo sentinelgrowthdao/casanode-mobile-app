@@ -59,9 +59,9 @@
 	
 	"ports-title": "Configurer le transfert de port",
 	"ports-text": "Pour permettre l'accès externe à votre nœud, veuillez vous assurer que les ports appropriés sont transférés dans les paramètres de votre routeur.",
-	"ports-node": "Port du nœud :",
-	"ports-wireguard": "Port WireGuard :",
-	"ports-v2ray": "Port V2Ray :",
+	"ports-node": "Port du nœud : {port}/tcp",
+	"ports-wireguard": "Port WireGuard : {port}/udp",
+	"ports-v2ray": "Port V2Ray : {port}/tcp",
 	"ports-more": "Pour des instructions plus détaillées, veuillez consulter notre documentation.",
 	
 	"congratulations-title": "Félicitations, votre nœud est en ligne !",

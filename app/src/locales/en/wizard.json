@@ -59,9 +59,9 @@
 	
 	"ports-title": "Configure Port Forwarding",
 	"ports-text": "To enable external access to your node, please ensure the appropriate ports are forwarded in your router settings.",
-	"ports-node": "Node Port:",
-	"ports-wireguard": "WireGuard Port:",
-	"ports-v2ray": "V2Ray Port:",
+	"ports-node": "Node Port: {port}/tcp",
+	"ports-wireguard": "WireGuard Port: {port}/udp",
+	"ports-v2ray": "V2Ray Port: {port}/tcp",
 	"ports-more": "For more detailed guidance, please refer to our documentation.",
 	
 	"congratulations-title": "Congratulations, Your Node is Live!",

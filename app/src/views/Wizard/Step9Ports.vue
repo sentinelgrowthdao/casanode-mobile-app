@@ -6,7 +6,6 @@ import {
 import { useWizardStore } from '@stores/WizardStore';
 
 const wizardStore = useWizardStore();
-
 </script>
 <template>
 	<ion-page>
@@ -16,9 +15,9 @@ const wizardStore = useWizardStore();
 					<h1>{{ $t('wizard.ports-title') }}</h1>
 					<p class="text">{{ $t('wizard.ports-text') }}</p>
 					<ul>
-						<li>{{ $t('wizard.ports-node') }}: 16567/tcp</li>
-						<li v-if="wizardStore.vpnType === 'wireguard'">{{ $t('wizard.ports-wireguard') }}: 16568/udp</li>
-						<li v-if="wizardStore.vpnType === 'v2ray'">{{ $t('wizard.ports-v2ray') }}: 16568/tcp</li>
+						<li>{{ $t('wizard.ports-node', {port: wizardStore.nodePort }) }}</li>
+						<li v-if="wizardStore.vpnType === 'wireguard'">{{ $t('wizard.ports-wireguard', {port: wizardStore.vpnPort }) }}</li>
+						<li v-if="wizardStore.vpnType === 'v2ray'">{{ $t('wizard.ports-v2ray', {port: wizardStore.vpnPort }) }}</li>
 					</ul>
 					<p class="text">{{ $t('wizard.ports-more') }}</p>
 				</div>
