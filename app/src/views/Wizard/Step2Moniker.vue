@@ -5,7 +5,6 @@ import
 	IonPage, IonContent, IonButton,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
-	IonInput, IonText
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useWizardStore } from '@stores/WizardStore';
@@ -14,7 +13,6 @@ import AppInput from '@components/AppInput.vue';
 const wizardStore = useWizardStore();
 const router = useRouter();
 const moniker: Ref<string> = ref('');
-const errorMessage: Ref<string> = ref('');
 
 const setValueAndNavigate = () =>
 {
