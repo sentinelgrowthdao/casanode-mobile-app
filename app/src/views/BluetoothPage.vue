@@ -4,7 +4,7 @@ import {
 	IonButton, IonContent, IonHeader,
 	IonItem, IonList, IonPage,
 	IonTitle, IonToolbar,
-	IonInput,
+	IonInput, IonSelect,
 } from '@ionic/vue';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { encodeDataView, decodeDataView } from '@/utils/bluetooth';
@@ -14,6 +14,7 @@ import { useNodeStore } from '@stores/NodeStore';
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
 const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
 const CHAR_MONIKER_UUID = '0000180d-0000-1000-8000-00805f9b34fd';
+const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
 
 const isConnected = ref(false);
 const deviceId = ref('');
@@ -114,18 +115,39 @@ const sendMoniker = async () =>
 {
 	try
 	{
-		// Send the moniker to the server
+		// Send to the server
 		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_MONIKER_UUID, encodeDataView(moniker.value));
 		monikerResponse.value = `Moniker set to: ${moniker.value}`;
 		monikerResponseClass.value = 'success';
-		// Update the moniker in the store
+		// Update in the store
 		nodeStore.setMoniker(moniker.value);
 	}
 	catch (error)
 	{
-		console.log(error);
-		monikerResponse.value = `Error setting moniker: ${error}`;
+		monikerResponse.value = `Error: ${error}`;
 		monikerResponseClass.value = 'error';
+	}
+};
+
+/** NODE TYPE **/
+const nodeType = ref(nodeStore.nodeType || '');
+const nodeTypeResponse = ref<string | null>(null);
+const nodeTypeResponseClass = ref<string | null>(null);
+const sendNodeType = async () =>
+{
+	try
+	{
+		// Send to the server
+		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_NODE_TYPE_UUID, encodeDataView(nodeType.value));
+		nodeTypeResponse.value = `Moniker set to: ${nodeType.value}`;
+		nodeTypeResponseClass.value = 'success';
+		// Update in the store
+		nodeStore.setNodeType(nodeType.value);
+	}
+	catch (error)
+	{
+		nodeTypeResponse.value = `Error: ${error}`;
+		nodeTypeResponseClass.value = 'error';
 	}
 };
 
@@ -161,6 +183,21 @@ const sendMoniker = async () =>
 						<div class="input-line">
 							<p class="button"><ion-button @click="sendMoniker" :disabled="!isConnected">Set Moniker</ion-button></p>
 							<p :class="['label', 'ion-padding', monikerResponseClass]">{{ monikerResponse }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">Node Type</ion-label>
+						<ion-select v-model="nodeType">
+							<ion-select-option value="residential">Residential</ion-select-option>
+							<ion-select-option value="commercial">Commercial</ion-select-option>
+						</ion-select>
+						</ion-item>
+						<div class="input-line">
+							<p class="button"><ion-button @click="sendNodeType" :disabled="!isConnected">Set Node Type</ion-button></p>
+							<p :class="['label', 'ion-padding', nodeTypeResponseClass]">{{ nodeTypeResponse }}</p>
 						</div>
 					</ion-col>
 				</ion-row>

@@ -63,5 +63,9 @@ export const useNodeStore = defineStore('node',
 		{
 			this.moniker = moniker;
 		},
+		setNodeType(type: string): void
+		{
+			this.nodeType = type;
+		},
 	}
 });
