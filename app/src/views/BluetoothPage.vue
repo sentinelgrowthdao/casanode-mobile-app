@@ -18,6 +18,7 @@ const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
 const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
 const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
 const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
+const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
 
 const isConnected = ref(false);
 const deviceId = ref('');
@@ -220,6 +221,28 @@ const sendVpnType = async () =>
 	}
 };
 
+/** VPN PORT */
+const vpnPort = ref(nodeStore.vpnPort.toString() || '');
+const vpnPortResponse = ref<string | null>(null);
+const vpnPortResponseClass = ref<string | null>(null);
+const sendVpnPort = async () =>
+{
+	try
+	{
+		// Send to the server
+		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_VPN_PORT_UUID, encodeDataView(vpnPort.value));
+		vpnPortResponse.value = `VPN Port set to: ${vpnPort.value}`;
+		vpnPortResponseClass.value = 'success';
+		// Update in the store
+		nodeStore.setVpnPort(parseInt(vpnPort.value));
+	}
+	catch (error)
+	{
+		vpnPortResponse.value = `Error: ${error}`;
+		vpnPortResponseClass.value = 'error';
+	}
+};
+
 </script>
 
 <template>
@@ -304,6 +327,18 @@ const sendVpnType = async () =>
 						<div class="input-line">
 							<p class="button"><ion-button @click="sendVpnType" :disabled="!isConnected">Set VPN Type</ion-button></p>
 							<p :class="['label', 'ion-padding', vpnTypeResponseClass]">{{ vpnTypeResponse }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">VPN Port</ion-label>
+							<ion-input v-model="vpnPort" type="number" placeholder="Enter VPN Port" :disabled="!isConnected" />
+						</ion-item>
+						<div class="input-line">
+							<p class="button"><ion-button @click="sendVpnPort" :disabled="!isConnected">Set VPN Port</ion-button></p>
+							<p :class="['label', 'ion-padding', vpnPortResponseClass]">{{ vpnPortResponse }}</p>
 						</div>
 					</ion-col>
 				</ion-row>
