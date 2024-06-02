@@ -75,5 +75,9 @@ export const useNodeStore = defineStore('node',
 		{
 			this.nodePort = port;
 		},
+		setVpnType(type: string): void
+		{
+			this.vpnType = type;
+		},
 	}
 });

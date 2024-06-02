@@ -17,6 +17,7 @@ const CHAR_MONIKER_UUID = '0000180d-0000-1000-8000-00805f9b34fd';
 const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
 const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
 const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
+const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
 
 const isConnected = ref(false);
 const deviceId = ref('');
@@ -197,6 +198,28 @@ const sendNodePort = async () =>
 	}
 };
 
+/** VPN TYPE */
+const vpnType = ref(nodeStore.vpnType || '');
+const vpnTypeResponse = ref<string | null>(null);
+const vpnTypeResponseClass = ref<string | null>(null);
+const sendVpnType = async () =>
+{
+	try
+	{
+		// Send to the server
+		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_VPN_TYPE_UUID, encodeDataView(vpnType.value));
+		vpnTypeResponse.value = `VPN Type set to: ${vpnType.value}`;
+		vpnTypeResponseClass.value = 'success';
+		// Update in the store
+		nodeStore.setVpnType(vpnType.value);
+	}
+	catch (error)
+	{
+		vpnTypeResponse.value = `Error: ${error}`;
+		vpnTypeResponseClass.value = 'error';
+	}
+};
+
 </script>
 
 <template>
@@ -266,6 +289,21 @@ const sendNodePort = async () =>
 						<div class="input-line">
 							<p class="button"><ion-button @click="sendNodePort" :disabled="!isConnected">Set Node Port</ion-button></p>
 							<p :class="['label', 'ion-padding', nodePortResponseClass]">{{ nodePortResponse }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">VPN Type</ion-label>
+							<ion-select v-model="vpnType">
+								<ion-select-option value="wireguard">Wireguard</ion-select-option>
+								<ion-select-option value="v2ray">V2Ray</ion-select-option>
+							</ion-select>
+						</ion-item>
+						<div class="input-line">
+							<p class="button"><ion-button @click="sendVpnType" :disabled="!isConnected">Set VPN Type</ion-button></p>
+							<p :class="['label', 'ion-padding', vpnTypeResponseClass]">{{ vpnTypeResponse }}</p>
 						</div>
 					</ion-col>
 				</ion-row>
