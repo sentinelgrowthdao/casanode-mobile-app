@@ -6,7 +6,7 @@ export const useNodeStore = defineStore('node',
 		// Node Status
 		status: 'running',
 		connectedUsers: 16,
-
+		
 		// Node Information
 		ipAddress: '194.164.29.195',
 		location: 'Slough / United Kingdom',
@@ -15,11 +15,11 @@ export const useNodeStore = defineStore('node',
 		sslExpiry: 'May 6 19:05:15 2025 GMT',
 		uploadSpeed: '18,3 MB',
 		downloadSpeed: '87,19 MB',
-
+		
 		// Node Settings
 		moniker: 'My Residential Node',
 		nodeType: 'residential',
-
+		
 		// VPN Settings
 		vpnType: 'wireguard',
 		maximumPeers: 250,
@@ -48,7 +48,7 @@ export const useNodeStore = defineStore('node',
 		dockerImage: 'wajatmaka/sentinel-aarch64-alpine:v0.7.1',
 		uptime: 1714514400
 	}),
-
+	
 	actions:
 	{
 		setNodeStatus(status: string)
@@ -58,6 +58,10 @@ export const useNodeStore = defineStore('node',
 		setConnectedUsers(users: number)
 		{
 			this.connectedUsers = users;
+		},
+		setMoniker(moniker: string)
+		{
+			this.moniker = moniker;
 		},
 	}
 });
