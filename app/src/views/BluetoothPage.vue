@@ -213,7 +213,7 @@ const sendNodeIp = async () =>
 							<ion-label position="stacked">Node Type</ion-label>
 						<ion-select v-model="nodeType">
 							<ion-select-option value="residential">Residential</ion-select-option>
-							<ion-select-option value="commercial">Commercial</ion-select-option>
+							<ion-select-option value="datacenter">Datacenter</ion-select-option>
 						</ion-select>
 						</ion-item>
 						<div class="input-line">
