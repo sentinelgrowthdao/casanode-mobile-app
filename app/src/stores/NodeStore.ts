@@ -83,5 +83,9 @@ export const useNodeStore = defineStore('node',
 		{
 			this.vpnPort = port;
 		},
+		setMaximumPeers(peers: number): void
+		{
+			this.maximumPeers = peers;
+		},
 	}
 });

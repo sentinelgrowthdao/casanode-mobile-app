@@ -19,6 +19,7 @@ const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
 const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
 const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
 const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
+const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
 
 const isConnected = ref(false);
 const deviceId = ref('');
@@ -243,6 +244,28 @@ const sendVpnPort = async () =>
 	}
 };
 
+/** MAXIMUM PEERS */
+const maximumPeers = ref(nodeStore.maximumPeers.toString() || '');
+const maximumPeersResponse = ref<string | null>(null);
+const maximumPeersResponseClass = ref<string | null>(null);
+const sendMaximumPeers = async () =>
+{
+	try
+	{
+		// Send to the server
+		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_MAX_PEERS_UUID, encodeDataView(maximumPeers.value));
+		maximumPeersResponse.value = `Maximum Peers set to: ${maximumPeers.value}`;
+		maximumPeersResponseClass.value = 'success';
+		// Update in the store
+		nodeStore.setMaximumPeers(parseInt(maximumPeers.value));
+	}
+	catch (error)
+	{
+		maximumPeersResponse.value = `Error: ${error}`;
+		maximumPeersResponseClass.value = 'error';
+	}
+};
+
 </script>
 
 <template>
@@ -339,6 +362,18 @@ const sendVpnPort = async () =>
 						<div class="input-line">
 							<p class="button"><ion-button @click="sendVpnPort" :disabled="!isConnected">Set VPN Port</ion-button></p>
 							<p :class="['label', 'ion-padding', vpnPortResponseClass]">{{ vpnPortResponse }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">Maximum Peers</ion-label>
+							<ion-input v-model="maximumPeers" type="number" placeholder="Enter Maximum Peers" :disabled="!isConnected" />
+						</ion-item>
+						<div class="input-line">
+							<p class="button"><ion-button @click="sendMaximumPeers" :disabled="!isConnected">Set Maximum Peers</ion-button></p>
+							<p :class="['label', 'ion-padding', maximumPeersResponseClass]">{{ maximumPeersResponse }}</p>
 						</div>
 					</ion-col>
 				</ion-row>
