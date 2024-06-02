@@ -16,6 +16,7 @@ const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
 const CHAR_MONIKER_UUID = '0000180d-0000-1000-8000-00805f9b34fd';
 const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
 const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
+const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
 
 const isConnected = ref(false);
 const deviceId = ref('');
@@ -174,6 +175,28 @@ const sendNodeIp = async () =>
 	}
 };
 
+/** NODE PORT */
+const nodePort = ref(nodeStore.nodePort.toString() || '');
+const nodePortResponse = ref<string | null>(null);
+const nodePortResponseClass = ref<string | null>(null);
+const sendNodePort = async () =>
+{
+	try
+	{
+		// Send to the server
+		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_NODE_PORT_UUID, encodeDataView(nodePort.value));
+		nodePortResponse.value = `Node Port set to: ${nodePort.value}`;
+		nodePortResponseClass.value = 'success';
+		// Update in the store
+		nodeStore.setNodePort(parseInt(nodePort.value));
+	}
+	catch (error)
+	{
+		nodePortResponse.value = `Error: ${error}`;
+		nodePortResponseClass.value = 'error';
+	}
+};
+
 </script>
 
 <template>
@@ -231,6 +254,18 @@ const sendNodeIp = async () =>
 						<div class="input-line">
 							<p class="button"><ion-button @click="sendNodeIp" :disabled="!isConnected">Set IP Address</ion-button></p>
 							<p :class="['label', 'ion-padding', nodeIpResponseClass]">{{ nodeIpResponse }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">Node Port</ion-label>
+							<ion-input v-model="nodePort" type="number" placeholder="Enter Node Port" :disabled="!isConnected" />
+						</ion-item>
+						<div class="input-line">
+							<p class="button"><ion-button @click="sendNodePort" :disabled="!isConnected">Set Node Port</ion-button></p>
+							<p :class="['label', 'ion-padding', nodePortResponseClass]">{{ nodePortResponse }}</p>
 						</div>
 					</ion-col>
 				</ion-row>

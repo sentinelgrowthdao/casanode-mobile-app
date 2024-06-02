@@ -71,5 +71,9 @@ export const useNodeStore = defineStore('node',
 		{
 			this.nodeIp = ip;
 		},
+		setNodePort(port: number): void
+		{
+			this.nodePort = port;
+		},
 	}
 });
