@@ -166,13 +166,11 @@ const sendNodeType = async () =>
 			<ion-button @click="sendMessage" :disabled="!isConnected">Send Message</ion-button>
 			<ion-button @click="readFromServer" :disabled="!isConnected">Read from Server</ion-button>
 			<ion-button @click="subscribeToServer" :disabled="!isConnected">Subscribe to Server</ion-button>
-			<ion-list>
+			<!-- <ion-list>
 				<ion-item v-for="msg in messages" :key="msg.time">
 					{{ msg.text }}
 				</ion-item>
-			</ion-list>
-		</ion-content>
-		<ion-content>
+			</ion-list> -->
 			<ion-grid>
 				<ion-row>
 					<ion-col size="12">
