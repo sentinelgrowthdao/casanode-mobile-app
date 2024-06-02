@@ -9,6 +9,7 @@ import {
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { encodeDataView, decodeDataView } from '@/utils/bluetooth';
 import { useNodeStore } from '@stores/NodeStore';
+import BluetoothService from '@/services/BluetoothService';
 
 
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
@@ -21,95 +22,64 @@ const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
 const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
 const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
 
-const isConnected = ref(false);
+const isConnected = ref(BluetoothService.isConnected());
 const deviceId = ref('');
 const messages = ref<{ text: string; time: number }[]>([]);
 
 // Initialize the node store
 const nodeStore = useNodeStore();
 
+
 const connectToBLE = async () =>
 {
-	try
-	{
-		// Initialize the BLE client
-		await BleClient.initialize();
-		const device = await BleClient.requestDevice({
-			services: [NODE_BLE_UUID]
-		});
-
-		// Connect to the device
-		await BleClient.connect(device.deviceId);
-		deviceId.value = device.deviceId;
-		isConnected.value = true;
-		console.log('Connected to the BLE device!');
-	}
-	catch (error)
-	{
-		console.error('BLE error:', error);
-	}
+	await BluetoothService.connect();
+	isConnected.value = BluetoothService.isConnected();
 };
 
 const disconnectFromBLE = async () =>
 {
-	try
-	{
-		await BleClient.disconnect(deviceId.value);
-		isConnected.value = false;
-		console.log('Disconnected from the BLE device!');
-	}
-	catch (error)
-	{
-		console.error('BLE error:', error);
-	}
+	await BluetoothService.disconnect();
+	isConnected.value = BluetoothService.isConnected();
 };
 
-const sendMessage = async () =>
+const sendHelloMessage = async () =>
 {
-	try
+	const message = 'Hello from client';
+	
+	if(await BluetoothService.sendHelloMessage(message))
 	{
-		const message = 'Hello from client';
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_HELLO_UUID, encodeDataView(message));
 		messages.value.push({ text: `Sent: ${message}`, time: Date.now() });
 		console.log('Message sent to the BLE server.');
 	}
-	catch (error)
+	else
 	{
-		console.error('BLE error:', error);
+		console.error('Failed to send message to the BLE server.');
 	}
 };
 
 const readFromServer = async () =>
 {
-	try
+	const message: string|null = await BluetoothService.readHelloFromServer();
+	if(message)
 	{
-		const value = await BleClient.read(deviceId.value, NODE_BLE_UUID, CHAR_HELLO_UUID);
-		const message = `Received: ${new TextDecoder().decode(value)}`;
-		messages.value.push({ text: message, time: Date.now() });
-		console.log(message);
+		messages.value.push({ text: `Received: message`, time: Date.now() });
+		console.log(`Received: ${message}`);
 	}
-	catch (error)
-	{
-		console.error('BLE error:', error);
-	}
+	else
+		console.error('Failed to read message from the BLE server.')
 };
 
 const subscribeToServer = async () =>
 {
-	try
+	// Subscribe to the server
+	const isSubscribed = await BluetoothService.subscribeToServer((value) =>
 	{
-		await BleClient.startNotifications(deviceId.value, NODE_BLE_UUID, CHAR_HELLO_UUID, (value) =>
-		{
-			const message = `Received (subscription): ${new TextDecoder().decode(value)}`;
-			messages.value.push({ text: message, time: Date.now() });
-			console.log(message);
-		});
-		console.log('Subscribed to the BLE server.');
-	}
-	catch (error)
-	{
-		console.error('BLE error:', error);
-	}
+		const message = `Received (subscription): ${new TextDecoder().decode(value)}`;
+		messages.value.push({ text: message, time: Date.now() });
+		console.log(message);
+	});
+	
+	console.log(isSubscribed ? 'Subscribed to the BLE server.' : 'Failed to subscribe to the BLE server.');
 };
 
 /** MONIKER **/
@@ -278,7 +248,7 @@ const sendMaximumPeers = async () =>
 		<ion-content class="ion-padding">
 			<ion-button @click="connectToBLE">Connect</ion-button>
 			<ion-button @click="disconnectFromBLE" :disabled="!isConnected">Disconnect</ion-button>
-			<ion-button @click="sendMessage" :disabled="!isConnected">Send Message</ion-button>
+			<ion-button @click="sendHelloMessage" :disabled="!isConnected">Send Message</ion-button>
 			<ion-button @click="readFromServer" :disabled="!isConnected">Read from Server</ion-button>
 			<ion-button @click="subscribeToServer" :disabled="!isConnected">Subscribe to Server</ion-button>
 			<!-- <ion-list>
