@@ -52,7 +52,7 @@ const nodeStatus = computed(() =>
 					</ion-card-header>
 					<ion-card-content>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-address') }}</strong>{{ nodeStore.ipAddress }}
+							<strong>{{ $t('dashboard.node-address') }}</strong>{{ nodeStore.nodeIp }}
 						</p>
 						<p class="item">
 							<strong>{{ $t('dashboard.node-location') }}</strong>{{ nodeStore.location }}

@@ -14,7 +14,7 @@ const nodeStore = useNodeStore();
 const nodeSettings = ref({
 	moniker: nodeStore.moniker,
 	nodeType: nodeStore.nodeType,
-	ipAddress: nodeStore.ipAddress,
+	nodeIp: nodeStore.nodeIp,
 	nodePort: nodeStore.nodePort,
 	vpnPort: nodeStore.vpnPort,
 	maximumPeers: nodeStore.maximumPeers,
@@ -61,7 +61,7 @@ const saveSettings = () =>
 				<ion-card-content>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.ip-address-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.ipAddress" placeholder=""></ion-input>
+						<ion-input v-model="nodeSettings.nodeIp" placeholder=""></ion-input>
 					</ion-item>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.node-port-label') }}</ion-label>

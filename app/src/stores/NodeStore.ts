@@ -8,7 +8,7 @@ export const useNodeStore = defineStore('node',
 		connectedUsers: 16,
 		
 		// Node Information
-		ipAddress: '194.164.29.195',
+		nodeIp: '194.164.29.195',
 		location: 'Slough / United Kingdom',
 		nodePort: 16567,
 		vpnPort: 16568,
@@ -66,6 +66,10 @@ export const useNodeStore = defineStore('node',
 		setNodeType(type: string): void
 		{
 			this.nodeType = type;
+		},
+		setNodeIp(ip: string): void
+		{
+			this.nodeIp = ip;
 		},
 	}
 });

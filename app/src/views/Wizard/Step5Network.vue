@@ -11,7 +11,7 @@ import { useWizardStore } from '@stores/WizardStore';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
-const ipAddress: Ref<string> = ref('');
+const nodeIp: Ref<string> = ref('');
 const nodePort: Ref<string> = ref(wizardStore.nodePort.toString());
 const vpnPort: Ref<string> = ref(wizardStore.vpnPort.toString());
 
@@ -20,17 +20,17 @@ const setValuesAndNavigate = () =>
 	const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
 	const ipv6Pattern = /^(([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)|(([0-9a-fA-F]{1,4}:){1,6}:([0-9a-fA-F]{1,4}|:)|(([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|(([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|(([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|(([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|([0-9a-fA-F]{1,4}:)((:[0-9a-fA-F]{1,4}){1,6})|(:((:[0-9a-fA-F]{1,4}){1,7}|:))))))))$/;
 	
-	const ipAddressValue: string = ipAddress.value.trim();
+	const nodeIpValue: string = nodeIp.value.trim();
 	const nodePortValue: number = parseInt(nodePort.value.trim());
 	const vpnPortValue: number = parseInt(vpnPort.value.trim());
 	
 	// Check if the address is valid and ports are between 1024 and 65535
-	if ((ipv4Pattern.test(ipAddressValue) || ipv6Pattern.test(ipAddressValue)) &&
+	if ((ipv4Pattern.test(nodeIpValue) || ipv6Pattern.test(nodeIpValue)) &&
 		nodePortValue >= 1024 && nodePortValue <= 65535 &&
 		vpnPortValue >= 1024 && vpnPortValue <= 65535 &&
 		vpnPortValue !== nodePortValue)
 	{
-		wizardStore.setNodeAddress(ipAddressValue);
+		wizardStore.setNodeAddress(nodeIpValue);
 		wizardStore.setNodePort(nodePortValue);
 		wizardStore.setVpnPort(vpnPortValue);
 		router.push({ name: 'Wizard6Protection' });
@@ -47,7 +47,7 @@ const setValuesAndNavigate = () =>
 					<p class="text">{{ $t('wizard.network-text') }}</p>
 					<ion-list class="input">
 						<ion-item>
-							<ion-input :label="$t('wizard.network-public-ip')" v-model="ipAddress" />
+							<ion-input :label="$t('wizard.network-public-ip')" v-model="nodeIp" />
 						</ion-item>
 						<ion-item>
 							<ion-input :label="$t('wizard.network-api-port')" v-model="nodePort" />

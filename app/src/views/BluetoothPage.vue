@@ -15,6 +15,7 @@ const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
 const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
 const CHAR_MONIKER_UUID = '0000180d-0000-1000-8000-00805f9b34fd';
 const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
+const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
 
 const isConnected = ref(false);
 const deviceId = ref('');
@@ -151,6 +152,28 @@ const sendNodeType = async () =>
 	}
 };
 
+/** IP ADDRESS */
+const nodeIp = ref(nodeStore.nodeIp || '');
+const nodeIpResponse = ref<string | null>(null);
+const nodeIpResponseClass = ref<string | null>(null);
+const sendNodeIp = async () =>
+{
+	try
+	{
+		// Send to the server
+		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_NODE_IP_UUID, encodeDataView(nodeIp.value));
+		nodeIpResponse.value = `IP Address set to: ${nodeIp.value}`;
+		nodeIpResponseClass.value = 'success';
+		// Update in the store
+		nodeStore.setNodeIp(nodeIp.value);
+	}
+	catch (error)
+	{
+		nodeIpResponse.value = `Error: ${error}`;
+		nodeIpResponseClass.value = 'error';
+	}
+};
+
 </script>
 
 <template>
@@ -196,6 +219,18 @@ const sendNodeType = async () =>
 						<div class="input-line">
 							<p class="button"><ion-button @click="sendNodeType" :disabled="!isConnected">Set Node Type</ion-button></p>
 							<p :class="['label', 'ion-padding', nodeTypeResponseClass]">{{ nodeTypeResponse }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">IP Address</ion-label>
+							<ion-input v-model="nodeIp" placeholder="Enter IP Address" :disabled="!isConnected" />
+						</ion-item>
+						<div class="input-line">
+							<p class="button"><ion-button @click="sendNodeIp" :disabled="!isConnected">Set IP Address</ion-button></p>
+							<p :class="['label', 'ion-padding', nodeIpResponseClass]">{{ nodeIpResponse }}</p>
 						</div>
 					</ion-col>
 				</ion-row>
