@@ -173,7 +173,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendMoniker(data: string): Promise<boolean>
+	public async writeMoniker(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -195,7 +195,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendNodeType(data: string): Promise<boolean>
+	public async writeNodeType(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -217,7 +217,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendNodeIp(data: string): Promise<boolean>
+	public async writeNodeIp(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -239,7 +239,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendNodePort(data: string): Promise<boolean>
+	public async writeNodePort(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -261,7 +261,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendVpnType(data: string): Promise<boolean>
+	public async writeVpnType(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -283,7 +283,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendVpnPort(data: string): Promise<boolean>
+	public async writeVpnPort(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -305,7 +305,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async sendMaximumPeers(data: string): Promise<boolean>
+	public async writeMaximumPeers(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -326,7 +326,7 @@ class BluetoothService
 	 * Send apply node config to the BLE server.
 	 * @returns Promise<boolean>
 	 */
-	public async sendApplyNodeConfig(): Promise<boolean>
+	public async writeNodeConfig(): Promise<boolean>
 	{
 		try
 		{

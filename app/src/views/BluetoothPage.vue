@@ -89,7 +89,7 @@ const monikerResponseClass = ref<string | null>(null);
 const sendMoniker = async () =>
 {
 	// Send to the server
-	if(await BluetoothService.sendMoniker(moniker.value))
+	if(await BluetoothService.writeMoniker(moniker.value))
 	{
 		monikerResponse.value = `Moniker set to: ${moniker.value}`;
 		monikerResponseClass.value = 'success';
@@ -111,7 +111,7 @@ const nodeTypeResponse = ref<string | null>(null);
 const nodeTypeResponseClass = ref<string | null>(null);
 const sendNodeType = async () =>
 {
-	if(await BluetoothService.sendNodeType(nodeType.value))
+	if(await BluetoothService.writeNodeType(nodeType.value))
 	{
 		nodeTypeResponse.value = `Node Type set to: ${nodeType.value}`;
 		nodeTypeResponseClass.value = 'success';
@@ -133,7 +133,7 @@ const nodeIpResponse = ref<string | null>(null);
 const nodeIpResponseClass = ref<string | null>(null);
 const sendNodeIp = async () =>
 {
-	if(await BluetoothService.sendNodeIp(nodeIp.value))
+	if(await BluetoothService.writeNodeIp(nodeIp.value))
 	{
 		nodeIpResponse.value = `IP Address set to: ${nodeIp.value}`;
 		nodeIpResponseClass.value = 'success';
@@ -155,7 +155,7 @@ const nodePortResponse = ref<string | null>(null);
 const nodePortResponseClass = ref<string | null>(null);
 const sendNodePort = async () =>
 {
-	if(await BluetoothService.sendNodePort(nodePort.value))
+	if(await BluetoothService.writeNodePort(nodePort.value))
 	{
 		nodePortResponse.value = `Node Port set to: ${nodePort.value}`;
 		nodePortResponseClass.value = 'success';
@@ -177,7 +177,7 @@ const vpnTypeResponse = ref<string | null>(null);
 const vpnTypeResponseClass = ref<string | null>(null);
 const sendVpnType = async () =>
 {
-	if(await BluetoothService.sendVpnType(vpnType.value))
+	if(await BluetoothService.writeVpnType(vpnType.value))
 	{
 		vpnTypeResponse.value = `VPN Type set to: ${vpnType.value}`;
 		vpnTypeResponseClass.value = 'success';
@@ -199,7 +199,7 @@ const vpnPortResponse = ref<string | null>(null);
 const vpnPortResponseClass = ref<string | null>(null);
 const sendVpnPort = async () =>
 {
-	if(await BluetoothService.sendVpnPort(vpnPort.value))
+	if(await BluetoothService.writeVpnPort(vpnPort.value))
 	{
 		vpnPortResponse.value = `VPN Port set to: ${vpnPort.value}`;
 		vpnPortResponseClass.value = 'success';
@@ -221,7 +221,7 @@ const maximumPeersResponse = ref<string | null>(null);
 const maximumPeersResponseClass = ref<string | null>(null);
 const sendMaximumPeers = async () =>
 {
-	if(await BluetoothService.sendMaximumPeers(maximumPeers.value))
+	if(await BluetoothService.writeMaximumPeers(maximumPeers.value))
 	{
 		maximumPeersResponse.value = `Maximum Peers set to: ${maximumPeers.value}`;
 		maximumPeersResponseClass.value = 'success';
@@ -242,7 +242,7 @@ const applyNodeConfig = async () =>
 {
 	if (isConnected.value && nodeStore.applyCounter > 0)
 	{
-		if(await BluetoothService.sendApplyNodeConfig())
+		if(await BluetoothService.writeNodeConfig())
 		{
 			console.log('Node configuration applied successfully.');
 		}
