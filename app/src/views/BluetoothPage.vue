@@ -6,24 +6,10 @@ import {
 	IonTitle, IonToolbar,
 	IonInput, IonSelect,
 } from '@ionic/vue';
-import { BleClient } from '@capacitor-community/bluetooth-le';
-import { encodeDataView, decodeDataView } from '@/utils/bluetooth';
 import { useNodeStore } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 
-
-const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
-const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
-const CHAR_MONIKER_UUID = '0000180d-0000-1000-8000-00805f9b34fd';
-const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
-const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
-const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
-const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
-const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
-const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
-
 const isConnected = ref(BluetoothService.isConnected());
-const deviceId = ref('');
 const messages = ref<{ text: string; time: number }[]>([]);
 
 // Initialize the node store
