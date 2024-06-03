@@ -6,14 +6,19 @@
  */
 export function encodeDataView(data: string): DataView
 {
-	const buffer = new ArrayBuffer(data.length);
+	const encoder = new TextEncoder();
+	const encodedData = encoder.encode(data);
+	const buffer = new ArrayBuffer(encodedData.length);
 	const view = new DataView(buffer);
-	for (let i = 0; i < data.length; i++)
+	
+	for (let i = 0; i < encodedData.length; i++)
 	{
-		view.setUint8(i, data.charCodeAt(i));
+		view.setUint8(i, encodedData[i]);
 	}
+	
 	return view;
 }
+
 
 /**
  * Decode a DataView into a string
@@ -22,5 +27,5 @@ export function encodeDataView(data: string): DataView
  */
 export function decodeDataView(value: DataView): string
 {
-	return new TextDecoder().decode(value);
+	return new TextDecoder('utf-8').decode(value);
 }
