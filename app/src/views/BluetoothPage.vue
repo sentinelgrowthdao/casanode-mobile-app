@@ -237,6 +237,22 @@ const sendMaximumPeers = async () =>
 	}
 };
 
+/** APPLY NODE CONFIG */
+const applyNodeConfig = async () =>
+{
+	if (isConnected.value && nodeStore.applyCounter > 0)
+	{
+		if(await BluetoothService.sendApplyNodeConfig())
+		{
+			console.log('Node configuration applied successfully.');
+		}
+		else
+		{
+			console.error('Failed to apply node configuration.');
+		}
+	}
+};
+
 </script>
 
 <template>
@@ -346,6 +362,11 @@ const sendMaximumPeers = async () =>
 							<p class="button"><ion-button @click="sendMaximumPeers" :disabled="!isConnected">Set Maximum Peers</ion-button></p>
 							<p :class="['label', 'ion-padding', maximumPeersResponseClass]">{{ maximumPeersResponse }}</p>
 						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-button @click="applyNodeConfig" :disabled="!isConnected || nodeStore.applyCounter === 0">Apply Node Configuration ({{ nodeStore.applyCounter }})</ion-button>
 					</ion-col>
 				</ion-row>
 			</ion-grid>

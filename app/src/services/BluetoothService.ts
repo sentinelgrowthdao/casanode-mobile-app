@@ -11,6 +11,7 @@ const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
 const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
 const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
 const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
+const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
 
 class BluetoothService
 {
@@ -311,6 +312,28 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MAX_PEERS_UUID, encodeDataView(data));
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		return false;
+	}
+	
+	/**
+	 * Send apply node config to the BLE server.
+	 * @returns Promise<boolean>
+	 */
+	public async sendApplyNodeConfig(): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const data: string = 'apply';
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_CONFIG_UUID, encodeDataView(data));
 				return true;
 			}
 		}
