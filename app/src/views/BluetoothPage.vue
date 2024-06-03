@@ -280,6 +280,16 @@ const applyNodeConfig = async () =>
 		if(await BluetoothService.writeNodeConfig())
 		{
 			console.log('Node configuration applied successfully.');
+			// Reset the apply counter
+			nodeStore.resetApplyCounter();
+			// Remove input responses
+			monikerResponse.value = null;
+			nodeTypeResponse.value = null;
+			nodeIpResponse.value = null;
+			nodePortResponse.value = null;
+			vpnTypeResponse.value = null;
+			vpnPortResponse.value = null;
+			maximumPeersResponse.value = null;
 		}
 		else
 		{
