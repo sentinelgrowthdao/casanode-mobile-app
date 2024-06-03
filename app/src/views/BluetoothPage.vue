@@ -88,18 +88,19 @@ const monikerResponse = ref<string | null>(null);
 const monikerResponseClass = ref<string | null>(null);
 const sendMoniker = async () =>
 {
-	try
+	// Send to the server
+	if(await BluetoothService.sendMoniker(moniker.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_MONIKER_UUID, encodeDataView(moniker.value));
 		monikerResponse.value = `Moniker set to: ${moniker.value}`;
 		monikerResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setMoniker(moniker.value);
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		monikerResponse.value = `Error: ${error}`;
+		monikerResponse.value = `Failed to set moniker to: ${moniker.value}`;
 		monikerResponseClass.value = 'error';
 	}
 };
@@ -110,18 +111,18 @@ const nodeTypeResponse = ref<string | null>(null);
 const nodeTypeResponseClass = ref<string | null>(null);
 const sendNodeType = async () =>
 {
-	try
+	if(await BluetoothService.sendNodeType(nodeType.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_NODE_TYPE_UUID, encodeDataView(nodeType.value));
-		nodeTypeResponse.value = `Moniker set to: ${nodeType.value}`;
+		nodeTypeResponse.value = `Node Type set to: ${nodeType.value}`;
 		nodeTypeResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setNodeType(nodeType.value);
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		nodeTypeResponse.value = `Error: ${error}`;
+		nodeTypeResponse.value = `Failed to set Node Type to: ${nodeType.value}`;
 		nodeTypeResponseClass.value = 'error';
 	}
 };
@@ -132,18 +133,18 @@ const nodeIpResponse = ref<string | null>(null);
 const nodeIpResponseClass = ref<string | null>(null);
 const sendNodeIp = async () =>
 {
-	try
+	if(await BluetoothService.sendNodeIp(nodeIp.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_NODE_IP_UUID, encodeDataView(nodeIp.value));
 		nodeIpResponse.value = `IP Address set to: ${nodeIp.value}`;
 		nodeIpResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setNodeIp(nodeIp.value);
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		nodeIpResponse.value = `Error: ${error}`;
+		nodeIpResponse.value = `Failed to set IP Address to: ${nodeIp.value}`;
 		nodeIpResponseClass.value = 'error';
 	}
 };
@@ -154,18 +155,18 @@ const nodePortResponse = ref<string | null>(null);
 const nodePortResponseClass = ref<string | null>(null);
 const sendNodePort = async () =>
 {
-	try
+	if(await BluetoothService.sendNodePort(nodePort.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_NODE_PORT_UUID, encodeDataView(nodePort.value));
 		nodePortResponse.value = `Node Port set to: ${nodePort.value}`;
 		nodePortResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setNodePort(parseInt(nodePort.value));
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		nodePortResponse.value = `Error: ${error}`;
+		nodePortResponse.value = `Failed to set Node Port to: ${nodePort.value}`;
 		nodePortResponseClass.value = 'error';
 	}
 };
@@ -176,18 +177,18 @@ const vpnTypeResponse = ref<string | null>(null);
 const vpnTypeResponseClass = ref<string | null>(null);
 const sendVpnType = async () =>
 {
-	try
+	if(await BluetoothService.sendVpnType(vpnType.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_VPN_TYPE_UUID, encodeDataView(vpnType.value));
 		vpnTypeResponse.value = `VPN Type set to: ${vpnType.value}`;
 		vpnTypeResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setVpnType(vpnType.value);
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		vpnTypeResponse.value = `Error: ${error}`;
+		vpnTypeResponse.value = `Failed to set VPN Type to: ${vpnType.value}`;
 		vpnTypeResponseClass.value = 'error';
 	}
 };
@@ -198,18 +199,18 @@ const vpnPortResponse = ref<string | null>(null);
 const vpnPortResponseClass = ref<string | null>(null);
 const sendVpnPort = async () =>
 {
-	try
+	if(await BluetoothService.sendVpnPort(vpnPort.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_VPN_PORT_UUID, encodeDataView(vpnPort.value));
 		vpnPortResponse.value = `VPN Port set to: ${vpnPort.value}`;
 		vpnPortResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setVpnPort(parseInt(vpnPort.value));
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		vpnPortResponse.value = `Error: ${error}`;
+		vpnPortResponse.value = `Failed to set VPN Port to: ${vpnPort.value}`;
 		vpnPortResponseClass.value = 'error';
 	}
 };
@@ -220,18 +221,18 @@ const maximumPeersResponse = ref<string | null>(null);
 const maximumPeersResponseClass = ref<string | null>(null);
 const sendMaximumPeers = async () =>
 {
-	try
+	if(await BluetoothService.sendMaximumPeers(maximumPeers.value))
 	{
-		// Send to the server
-		await BleClient.write(deviceId.value, NODE_BLE_UUID, CHAR_MAX_PEERS_UUID, encodeDataView(maximumPeers.value));
 		maximumPeersResponse.value = `Maximum Peers set to: ${maximumPeers.value}`;
 		maximumPeersResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setMaximumPeers(parseInt(maximumPeers.value));
+		// Increase the apply counter to notify user that the changes are not applied
+		nodeStore.increaseApplyCounter();
 	}
-	catch (error)
+	else
 	{
-		maximumPeersResponse.value = `Error: ${error}`;
+		maximumPeersResponse.value = `Failed to set Maximum Peers to: ${maximumPeers.value}`;
 		maximumPeersResponseClass.value = 'error';
 	}
 };
