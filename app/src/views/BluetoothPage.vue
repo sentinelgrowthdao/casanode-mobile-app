@@ -2,10 +2,11 @@
 import { ref, computed } from 'vue';
 import {
 	IonButton, IonContent, IonHeader,
-	IonItem, IonPage,
+	IonItem, IonPage, IonIcon,
 	IonTitle, IonToolbar,
 	IonInput, IonSelect,
 } from '@ionic/vue';
+import { shieldHalf } from 'ionicons/icons';
 import { useNodeStore } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 
@@ -305,6 +306,15 @@ const applyNodeConfig = async () =>
 		<ion-header>
 			<ion-toolbar>
 				<ion-title>Connect to BLE</ion-title>
+				<ion-buttons slot="start">
+					<ion-button expand="block" :router-link="{ name: 'NodeDashboard' }"
+						router-direction="forward" fill="clear">
+						<ion-icon :icon="shieldHalf" />
+					</ion-button>
+				</ion-buttons>
+				<ion-buttons slot="end">
+					<ion-button @click="applyNodeConfig" :disabled="!isConnected || nodeStore.applyCounter === 0">Apply ({{ nodeStore.applyCounter }})</ion-button>
+				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
@@ -407,11 +417,6 @@ const applyNodeConfig = async () =>
 							<p class="button"><ion-button @click="sendMaximumPeers" :disabled="!isConnected">Set Maximum Peers</ion-button></p>
 							<p :class="['label', 'ion-padding', maximumPeersResponseClass]">{{ maximumPeersResponse }}</p>
 						</div>
-					</ion-col>
-				</ion-row>
-				<ion-row>
-					<ion-col size="12">
-						<ion-button @click="applyNodeConfig" :disabled="!isConnected || nodeStore.applyCounter === 0">Apply Node Configuration ({{ nodeStore.applyCounter }})</ion-button>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
