@@ -1,6 +1,5 @@
 // src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { encodeDataView, decodeDataView } from '@/utils/bluetooth';
 
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
 const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
@@ -12,6 +11,36 @@ const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
 const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
 const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
 const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
+
+/**
+ * Encode a string into a DataView
+ * @param data string to encode
+ * @returns 
+ */
+function encodeDataView(data: string): DataView
+{
+	const encoder = new TextEncoder();
+	const encodedData = encoder.encode(data);
+	const buffer = new ArrayBuffer(encodedData.length);
+	const view = new DataView(buffer);
+	
+	for (let i = 0; i < encodedData.length; i++)
+	{
+		view.setUint8(i, encodedData[i]);
+	}
+	
+	return view;
+}
+
+/**
+ * Decode a DataView into a string
+ * @param value DataView to decode
+ * @returns string
+ */
+function decodeDataView(value: DataView): string
+{
+	return new TextDecoder('utf-8').decode(value);
+}
 
 class BluetoothService
 {
