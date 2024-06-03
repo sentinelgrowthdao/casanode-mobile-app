@@ -12,17 +12,17 @@ export const useNodeStore = defineStore('node',
 		connectedUsers: 16,
 		
 		// Node Information
-		nodeIp: '194.164.29.195',
-		location: 'Slough / United Kingdom',
-		nodePort: 16567,
-		vpnPort: 16568,
+		nodeIp: '',
+		location: '',
+		nodePort: -1,
+		vpnPort: -1,
 		sslExpiry: 'May 6 19:05:15 2025 GMT',
 		uploadSpeed: '18,3 MB',
 		downloadSpeed: '87,19 MB',
 		
 		// Node Settings
-		moniker: 'My Residential Node',
-		nodeType: 'residential',
+		moniker: '',
+		nodeType: '',
 		
 		// VPN Settings
 		vpnType: 'wireguard',
