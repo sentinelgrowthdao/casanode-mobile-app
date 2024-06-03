@@ -66,38 +66,47 @@ export const useNodeStore = defineStore('node',
 			this.applyCounter = 0;
 		},
 		
+		// Set the node status
 		setNodeStatus(status: string)
 		{
 			this.status = status;
 		},
+		// Set the number of connected users
 		setConnectedUsers(users: number)
 		{
 			this.connectedUsers = users;
 		},
+		// Set the node balance
 		setMoniker(moniker: string)
 		{
 			this.moniker = moniker;
 		},
+		// Set the node balance
 		setNodeType(type: string): void
 		{
 			this.nodeType = type;
 		},
+		// Set the node balance
 		setNodeIp(ip: string): void
 		{
 			this.nodeIp = ip;
 		},
+		// Set the node balance
 		setNodePort(port: number): void
 		{
 			this.nodePort = port;
 		},
+		// Set the node balance
 		setVpnType(type: string): void
 		{
 			this.vpnType = type;
 		},
+		// Set the node balance
 		setVpnPort(port: number): void
 		{
 			this.vpnPort = port;
 		},
+		// Set the node balance
 		setMaximumPeers(peers: number): void
 		{
 			this.maximumPeers = peers;
