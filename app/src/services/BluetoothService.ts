@@ -168,6 +168,28 @@ class BluetoothService
 		return false;
 	}
 	
+	
+	/**
+	 * Read moniker from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readMoniker(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MONIKER_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
 	/**
 	 * Send node type to the BLE server.
 	 * @param data string
@@ -191,6 +213,27 @@ class BluetoothService
 	}
 	
 	/**
+	 * Read node type from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readNodeType(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_TYPE_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	/**
 	 * Send node type to the BLE server.
 	 * @param data string
 	 * @returns Promise<boolean>
@@ -212,6 +255,27 @@ class BluetoothService
 		return false;
 	}
 	
+	/**
+	 * Read node IP from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readNodeIp(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_IP_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
 	/**
 	 * Send node IP to the BLE server.
 	 * @param data string
@@ -235,6 +299,27 @@ class BluetoothService
 	}
 	
 	/**
+	 * Read node port from the BLE server.
+	 * @returns Promise<number|null>
+	 */
+	public async readNodePort(): Promise<number|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PORT_UUID);
+				return parseInt(decodeDataView(value));
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	/**
 	 * Send node port to the BLE server.
 	 * @param data string
 	 * @returns Promise<boolean>
@@ -256,6 +341,27 @@ class BluetoothService
 		return false;
 	}
 	
+	/**
+	 * Read VPN type from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readVpnType(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_VPN_TYPE_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
 	/**
 	 * Send VPN type to the BLE server.
 	 * @param data string
@@ -279,6 +385,27 @@ class BluetoothService
 	}
 	
 	/**
+	 * Read VPN port from the BLE server.
+	 * @returns Promise<number|null>
+	 */
+	public async readVpnPort(): Promise<number|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_VPN_PORT_UUID);
+				return parseInt(decodeDataView(value));
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	/**
 	 * Send VPN port to the BLE server.
 	 * @param data string
 	 * @returns Promise<boolean>
@@ -300,6 +427,27 @@ class BluetoothService
 		return false;
 	}
 	
+	/**
+	 * Read maximum peers from the BLE server.
+	 * @returns Promise<number|null>
+	 */
+	public async readMaximumPeers(): Promise<number|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MAX_PEERS_UUID);
+				return parseInt(decodeDataView(value));
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
 	/**
 	 * Send maximum peers to the BLE server.
 	 * @param data string
