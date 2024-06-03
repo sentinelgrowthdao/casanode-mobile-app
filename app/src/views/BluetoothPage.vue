@@ -263,7 +263,7 @@ const applyNodeConfig = async () =>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
-			<ion-button @click="connectToBLE">Connect</ion-button>
+			<ion-button @click="connectToBLE" :disabled="isConnected">Connect</ion-button>
 			<ion-button @click="disconnectFromBLE" :disabled="!isConnected">Disconnect</ion-button>
 			<ion-button @click="sendHelloMessage" :disabled="!isConnected">Send Message</ion-button>
 			<ion-button @click="readFromServer" :disabled="!isConnected">Read from Server</ion-button>
@@ -290,7 +290,7 @@ const applyNodeConfig = async () =>
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">Node Type</ion-label>
-						<ion-select v-model="nodeType">
+						<ion-select v-model="nodeType" :disabled="!isConnected">
 							<ion-select-option value="residential">Residential</ion-select-option>
 							<ion-select-option value="datacenter">Datacenter</ion-select-option>
 						</ion-select>
@@ -329,7 +329,7 @@ const applyNodeConfig = async () =>
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">VPN Type</ion-label>
-							<ion-select v-model="vpnType">
+							<ion-select v-model="vpnType" :disabled="!isConnected">
 								<ion-select-option value="wireguard">Wireguard</ion-select-option>
 								<ion-select-option value="v2ray">V2Ray</ion-select-option>
 							</ion-select>
