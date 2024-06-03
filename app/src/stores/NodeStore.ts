@@ -3,6 +3,10 @@ import { defineStore } from 'pinia';
 export const useNodeStore = defineStore('node',
 {
 	state: () => ({
+		
+		// Counter of modified configurations to be applied
+		applyCounter: 0,
+		
 		// Node Status
 		status: 'running',
 		connectedUsers: 16,
@@ -51,6 +55,17 @@ export const useNodeStore = defineStore('node',
 	
 	actions:
 	{
+		// Increment the counter to be applied
+		increaseApplyCounter(): void
+		{
+			this.applyCounter++;
+		},
+		// Reset the counter to be applied
+		resetApplyCounter(): void
+		{
+			this.applyCounter = 0;
+		},
+		
 		setNodeStatus(status: string)
 		{
 			this.status = status;
