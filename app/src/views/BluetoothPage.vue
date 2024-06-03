@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import {
 	IonButton, IonContent, IonHeader,
 	IonItem, IonList, IonPage,
@@ -18,8 +18,30 @@ const nodeStore = useNodeStore();
 
 const connectToBLE = async () =>
 {
-	await BluetoothService.connect();
-	isConnected.value = BluetoothService.isConnected();
+	// Connect to the BLE device
+	if(await BluetoothService.connect())
+	{
+		// Load the node configuration
+		const moniker = await BluetoothService.readMoniker();
+		const nodeType = await BluetoothService.readNodeType();
+		const nodeIp = await BluetoothService.readNodeIp();
+		const nodePort = await BluetoothService.readNodePort();
+		const vpnType = await BluetoothService.readVpnType();
+		const vpnPort = await BluetoothService.readVpnPort();
+		const maximumPeers = await BluetoothService.readMaximumPeers();
+		
+		// Update the connected status
+		isConnected.value = BluetoothService.isConnected();
+		
+		// Update the store
+		nodeStore.setMoniker(moniker || '');
+		nodeStore.setNodeType(nodeType || '');
+		nodeStore.setNodeIp(nodeIp || '');
+		nodeStore.setNodePort(nodePort || 0);
+		nodeStore.setVpnType(vpnType || '');
+		nodeStore.setVpnPort(vpnPort || 0);
+		nodeStore.setMaximumPeers(maximumPeers || 0);
+	}
 };
 
 const disconnectFromBLE = async () =>
@@ -68,8 +90,43 @@ const subscribeToServer = async () =>
 	console.log(isSubscribed ? 'Subscribed to the BLE server.' : 'Failed to subscribe to the BLE server.');
 };
 
+// Define computed properties and methods for the node configuration
+const moniker = computed({
+	get: () => nodeStore.moniker,
+set: (value: string) => nodeStore.setMoniker(value),
+});
+const nodeType = computed({
+	get: () => nodeStore.nodeType,
+	set: (value: string) => nodeStore.setNodeType(value),
+});
+
+const nodeIp = computed({
+	get: () => nodeStore.nodeIp,
+	set: (value: string) => nodeStore.setNodeIp(value),
+});
+
+const nodePort = computed({
+	get: () => nodeStore.nodePort,
+	set: (value: number) => nodeStore.setNodePort(value),
+});
+
+const vpnType = computed({
+	get: () => nodeStore.vpnType,
+	set: (value: string) => nodeStore.setVpnType(value),
+});
+
+const vpnPort = computed({
+	get: () => nodeStore.vpnPort,
+	set: (value: number) => nodeStore.setVpnPort(value),
+});
+
+const maximumPeers = computed({
+	get: () => nodeStore.maximumPeers,
+	set: (value: number) => nodeStore.setMaximumPeers(value),
+});
+
+
 /** MONIKER **/
-const moniker = ref(nodeStore.moniker || '');
 const monikerResponse = ref<string | null>(null);
 const monikerResponseClass = ref<string | null>(null);
 const sendMoniker = async () =>
@@ -79,8 +136,6 @@ const sendMoniker = async () =>
 	{
 		monikerResponse.value = `Moniker set to: ${moniker.value}`;
 		monikerResponseClass.value = 'success';
-		// Update in the store
-		nodeStore.setMoniker(moniker.value);
 		// Increase the apply counter to notify user that the changes are not applied
 		nodeStore.increaseApplyCounter();
 	}
@@ -92,7 +147,6 @@ const sendMoniker = async () =>
 };
 
 /** NODE TYPE **/
-const nodeType = ref(nodeStore.nodeType || '');
 const nodeTypeResponse = ref<string | null>(null);
 const nodeTypeResponseClass = ref<string | null>(null);
 const sendNodeType = async () =>
@@ -114,7 +168,6 @@ const sendNodeType = async () =>
 };
 
 /** IP ADDRESS */
-const nodeIp = ref(nodeStore.nodeIp || '');
 const nodeIpResponse = ref<string | null>(null);
 const nodeIpResponseClass = ref<string | null>(null);
 const sendNodeIp = async () =>
@@ -136,17 +189,16 @@ const sendNodeIp = async () =>
 };
 
 /** NODE PORT */
-const nodePort = ref(nodeStore.nodePort.toString() || '');
 const nodePortResponse = ref<string | null>(null);
 const nodePortResponseClass = ref<string | null>(null);
 const sendNodePort = async () =>
 {
-	if(await BluetoothService.writeNodePort(nodePort.value))
+	if(await BluetoothService.writeNodePort(nodePort.value.toString()))
 	{
 		nodePortResponse.value = `Node Port set to: ${nodePort.value}`;
 		nodePortResponseClass.value = 'success';
 		// Update in the store
-		nodeStore.setNodePort(parseInt(nodePort.value));
+		nodeStore.setNodePort(parseInt(nodePort.value.toString()));
 		// Increase the apply counter to notify user that the changes are not applied
 		nodeStore.increaseApplyCounter();
 	}
@@ -158,7 +210,6 @@ const sendNodePort = async () =>
 };
 
 /** VPN TYPE */
-const vpnType = ref(nodeStore.vpnType || '');
 const vpnTypeResponse = ref<string | null>(null);
 const vpnTypeResponseClass = ref<string | null>(null);
 const sendVpnType = async () =>
@@ -180,17 +231,16 @@ const sendVpnType = async () =>
 };
 
 /** VPN PORT */
-const vpnPort = ref(nodeStore.vpnPort.toString() || '');
 const vpnPortResponse = ref<string | null>(null);
 const vpnPortResponseClass = ref<string | null>(null);
 const sendVpnPort = async () =>
 {
-	if(await BluetoothService.writeVpnPort(vpnPort.value))
+	if(await BluetoothService.writeVpnPort(vpnPort.value.toString()))
 	{
 		vpnPortResponse.value = `VPN Port set to: ${vpnPort.value}`;
 		vpnPortResponseClass.value = 'success';
 		// Update in the store
-		nodeStore.setVpnPort(parseInt(vpnPort.value));
+		nodeStore.setVpnPort(parseInt(vpnPort.value.toString()));
 		// Increase the apply counter to notify user that the changes are not applied
 		nodeStore.increaseApplyCounter();
 	}
@@ -202,23 +252,22 @@ const sendVpnPort = async () =>
 };
 
 /** MAXIMUM PEERS */
-const maximumPeers = ref(nodeStore.maximumPeers.toString() || '');
 const maximumPeersResponse = ref<string | null>(null);
 const maximumPeersResponseClass = ref<string | null>(null);
 const sendMaximumPeers = async () =>
 {
-	if(await BluetoothService.writeMaximumPeers(maximumPeers.value))
+	if(await BluetoothService.writeMaximumPeers(maximumPeers.value.toString()))
 	{
-		maximumPeersResponse.value = `Maximum Peers set to: ${maximumPeers.value}`;
+		maximumPeersResponse.value = `Maximum Peers set to: ${maximumPeers.value.toString()}`;
 		maximumPeersResponseClass.value = 'success';
 		// Update in the store
-		nodeStore.setMaximumPeers(parseInt(maximumPeers.value));
+		nodeStore.setMaximumPeers(maximumPeers.value);
 		// Increase the apply counter to notify user that the changes are not applied
 		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
-		maximumPeersResponse.value = `Failed to set Maximum Peers to: ${maximumPeers.value}`;
+		maximumPeersResponse.value = `Failed to set Maximum Peers to: ${maximumPeers.value.toString()}`;
 		maximumPeersResponseClass.value = 'error';
 	}
 };
