@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import {
 	IonButton, IonContent, IonHeader,
-	IonItem, IonList, IonPage,
+	IonItem, IonPage,
 	IonTitle, IonToolbar,
 	IonInput, IonSelect,
 } from '@ionic/vue';
