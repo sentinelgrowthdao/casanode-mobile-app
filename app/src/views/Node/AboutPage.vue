@@ -93,13 +93,13 @@ onUnmounted(() =>
 							<strong>{{ $t('about.casanode-version-label') }}</strong>{{ nodeStore.casanodeVersion }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.operating-system-label') }}</strong>{{ nodeStore.operatingSystem }}
+							<strong>{{ $t('about.operating-system-label') }}</strong>{{ nodeStore.systemOs }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.kernel-version-label') }}</strong>{{ nodeStore.kernelVersion }}
+							<strong>{{ $t('about.kernel-version-label') }}</strong>{{ nodeStore.systemKernel }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('about.architecture-label') }}</strong>{{ nodeStore.architecture }}
+							<strong>{{ $t('about.architecture-label') }}</strong>{{ nodeStore.systemArch }}
 						</p>
 						<p class="item">
 							<strong>{{ $t('about.docker-image-label') }}</strong>{{ nodeStore.dockerImage }}

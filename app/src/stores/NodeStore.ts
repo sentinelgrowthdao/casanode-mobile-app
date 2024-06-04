@@ -7,6 +7,14 @@ export interface BandwidthSpeed
 	download: string;
 }
 
+export interface SystemInfos
+{
+	casanodeVersion: string;
+	systemOs: string;
+	systemKernel: string;
+	systemArch: string;
+}
+
 export const useNodeStore = defineStore('node',
 {
 	state: () => ({
@@ -43,9 +51,9 @@ export const useNodeStore = defineStore('node',
 		
 		// System Information
 		casanodeVersion: '1.0.0',
-		operatingSystem: 'Debian 12',
-		kernelVersion: '6.6.28+rpt-rpi-2712',
-		architecture: 'aarch64',
+		systemOs: 'Debian 12',
+		systemKernel: '6.6.28+rpt-rpi-2712',
+		systemArch: 'aarch64',
 		dockerImage: 'wajatmaka/sentinel-aarch64-alpine:v0.7.1',
 		uptime: 0
 	}),
@@ -128,6 +136,19 @@ export const useNodeStore = defineStore('node',
 		setSystemUptime(uptime: number): void
 		{
 			this.uptime = uptime;
-		}
+		},
+		// Set the system information
+		setSystemInfos(systemInfos: SystemInfos): void
+		{
+			this.casanodeVersion = systemInfos.casanodeVersion;
+			this.systemOs = systemInfos.systemOs;
+			this.systemKernel = systemInfos.systemKernel;
+			this.systemArch = systemInfos.systemArch;
+		},
+		// Set the docker image
+		setDockerImage(dockerImage: string): void
+		{
+			this.dockerImage = dockerImage;
+		},
 	}
 });
