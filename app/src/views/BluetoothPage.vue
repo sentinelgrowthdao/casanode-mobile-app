@@ -16,7 +16,10 @@ const messages = ref<{ text: string; time: number }[]>([]);
 // Initialize the node store
 const nodeStore = useNodeStore();
 
-
+/**
+ * Function to connect to the BLE device
+ * @returns void
+ */
 const connectToBLE = async () =>
 {
 	// Connect to the BLE device
@@ -53,6 +56,10 @@ const connectToBLE = async () =>
 	}
 };
 
+/**
+ * Function to disconnect from the BLE device
+ * @returns void
+ */
 const disconnectFromBLE = async () =>
 {
 	await BluetoothService.disconnect();
