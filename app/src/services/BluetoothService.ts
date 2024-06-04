@@ -12,6 +12,7 @@ const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
 const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
 const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
 const CHAR_NODE_LOCATION_UUID = '0000180d-0000-1000-8000-00805f9b3505';
+const CHAR_CERT_EXPIRITY_UUID = '0000180d-0000-1000-8000-00805f9b3506';
 
 /**
  * Encode a string into a DataView
@@ -533,6 +534,28 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_LOCATION_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Read certificate expiry from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readCertExpiry(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CERT_EXPIRITY_UUID);
 				return decodeDataView(value);
 			}
 		}

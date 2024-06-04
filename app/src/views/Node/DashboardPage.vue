@@ -67,7 +67,7 @@ const nodeStatus = computed(() =>
 							<strong>{{ $t(`dashboard.node-${nodeStore.vpnType}-port`) }}</strong>{{ nodeStore.vpnPort }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-ssl-expiry') }}</strong>{{ nodeStore.sslExpiry }}
+							<strong>{{ $t('dashboard.node-ssl-expiry') }}</strong>{{ nodeStore.certExpiry }}
 						</p>
 						<p class="item">
 							<strong>{{ $t('dashboard.node-upload-speed') }}</strong>{{ nodeStore.uploadSpeed }}

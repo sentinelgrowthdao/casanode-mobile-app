@@ -16,7 +16,7 @@ export const useNodeStore = defineStore('node',
 		nodeLocation: '',
 		nodePort: -1,
 		vpnPort: -1,
-		sslExpiry: 'May 6 19:05:15 2025 GMT',
+		certExpiry: '',
 		uploadSpeed: '18,3 MB',
 		downloadSpeed: '87,19 MB',
 		
@@ -115,6 +115,11 @@ export const useNodeStore = defineStore('node',
 		setNodeLocation(nodeLocation: string): void
 		{
 			this.nodeLocation = nodeLocation;
+		},
+		// Set certificate expiry
+		setCertExpiry(certExpiry: string): void
+		{
+			this.certExpiry = certExpiry;
 		},
 	}
 });
