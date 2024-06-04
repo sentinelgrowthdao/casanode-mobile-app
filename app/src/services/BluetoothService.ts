@@ -1,5 +1,6 @@
 // src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { type BandwidthSpeed } from '@stores/NodeStore';
 
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
 const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
@@ -568,7 +569,7 @@ class BluetoothService
 		return null;
 	}
 
-	public async readBandwidthSpeed(): Promise<{upload:string,download:string}|null>
+	public async readBandwidthSpeed(): Promise<BandwidthSpeed|null>
 	{
 		try
 		{

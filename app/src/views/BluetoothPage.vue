@@ -32,7 +32,7 @@ const connectToBLE = async () =>
 		const maximumPeers = await BluetoothService.readMaximumPeers();
 		const nodeLocation = await BluetoothService.readNodeLocation();
 		const certExpiry = await BluetoothService.readCertExpiry();
-		const bandwidthSpeed: BandwidthSpeed = await BluetoothService.readBandwidthSpeed();
+		const bandwidthSpeed: BandwidthSpeed|null = await BluetoothService.readBandwidthSpeed();
 		
 		// Update the connected status
 		isConnected.value = BluetoothService.isConnected();
@@ -47,7 +47,7 @@ const connectToBLE = async () =>
 		nodeStore.setMaximumPeers(maximumPeers || 0);
 		nodeStore.setNodeLocation(nodeLocation || '');
 		nodeStore.setCertExpiry(certExpiry || '');
-		nodeStore.setBandwidthSpeed(bandwidthSpeed.upload, bandwidthSpeed.download);
+		nodeStore.setBandwidthSpeed(bandwidthSpeed?.upload || 'N/A', bandwidthSpeed?.download || 'N/A');
 	}
 };
 
