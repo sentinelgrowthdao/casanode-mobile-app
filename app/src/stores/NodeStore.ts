@@ -134,5 +134,10 @@ export const useNodeStore = defineStore('node',
 			this.uploadSpeed = uploadSpeed;
 			this.downloadSpeed = downloadSpeed;
 		},
+		// Set the system uptime
+		setSystemUptime(uptime: number): void
+		{
+			this.uptime = uptime;
+		}
 	}
 });

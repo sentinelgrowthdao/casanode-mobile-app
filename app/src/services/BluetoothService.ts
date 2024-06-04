@@ -15,6 +15,7 @@ const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
 const CHAR_NODE_LOCATION_UUID = '0000180d-0000-1000-8000-00805f9b3505';
 const CHAR_CERT_EXPIRITY_UUID = '0000180d-0000-1000-8000-00805f9b3506';
 const CHAR_BANDWIDTH_SPEED_UUID = '0000180d-0000-1000-8000-00805f9b3507';
+const CHAR_SYSTEM_UPTIME_UUID = '0000180d-0000-1000-8000-00805f9b3508';
 
 /**
  * Encode a string into a DataView
@@ -591,6 +592,28 @@ class BluetoothService
 		
 		return null;
 	}
+	
+	/**
+	 * Read system uptime from the BLE server.
+	 * @returns Promise<number|null>
+	 */
+	public async readSystemUptime(): Promise<number|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_UPTIME_UUID);
+				return parseInt(decodeDataView(value));
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}	
 }
 
 export default BluetoothService.getInstance();

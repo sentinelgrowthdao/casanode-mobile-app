@@ -33,6 +33,7 @@ const connectToBLE = async () =>
 		const nodeLocation = await BluetoothService.readNodeLocation();
 		const certExpiry = await BluetoothService.readCertExpiry();
 		const bandwidthSpeed: BandwidthSpeed|null = await BluetoothService.readBandwidthSpeed();
+		const systemUptime = await BluetoothService.readSystemUptime();
 		
 		// Update the connected status
 		isConnected.value = BluetoothService.isConnected();
@@ -48,6 +49,7 @@ const connectToBLE = async () =>
 		nodeStore.setNodeLocation(nodeLocation || '');
 		nodeStore.setCertExpiry(certExpiry || '');
 		nodeStore.setBandwidthSpeed(bandwidthSpeed?.upload || 'N/A', bandwidthSpeed?.download || 'N/A');
+		nodeStore.setSystemUptime(systemUptime || -1);
 	}
 };
 
