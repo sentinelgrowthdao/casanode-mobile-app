@@ -568,7 +568,11 @@ class BluetoothService
 		
 		return null;
 	}
-
+	
+	/**
+	 * Read bandwidth speed from the BLE server.
+	 * @returns Promise<BandwidthSpeed|null>
+	 */
 	public async readBandwidthSpeed(): Promise<BandwidthSpeed|null>
 	{
 		try
