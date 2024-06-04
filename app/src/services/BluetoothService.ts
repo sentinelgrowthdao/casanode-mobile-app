@@ -13,6 +13,7 @@ const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
 const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
 const CHAR_NODE_LOCATION_UUID = '0000180d-0000-1000-8000-00805f9b3505';
 const CHAR_CERT_EXPIRITY_UUID = '0000180d-0000-1000-8000-00805f9b3506';
+const CHAR_BANDWIDTH_SPEED_UUID = '0000180d-0000-1000-8000-00805f9b3507';
 
 /**
  * Encode a string into a DataView
@@ -557,6 +558,25 @@ class BluetoothService
 			{
 				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CERT_EXPIRITY_UUID);
 				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+
+	public async readBandwidthSpeed(): Promise<{upload:string,download:string}|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_BANDWIDTH_SPEED_UUID);
+				const data = JSON.parse(decodeDataView(value));
+				return data;
 			}
 		}
 		catch (error)

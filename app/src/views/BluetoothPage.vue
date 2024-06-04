@@ -7,7 +7,7 @@ import {
 	IonInput, IonSelect,
 } from '@ionic/vue';
 import { shieldHalf } from 'ionicons/icons';
-import { useNodeStore } from '@stores/NodeStore';
+import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 
 const isConnected = ref(BluetoothService.isConnected());
@@ -32,6 +32,7 @@ const connectToBLE = async () =>
 		const maximumPeers = await BluetoothService.readMaximumPeers();
 		const nodeLocation = await BluetoothService.readNodeLocation();
 		const certExpiry = await BluetoothService.readCertExpiry();
+		const bandwidthSpeed: BandwidthSpeed = await BluetoothService.readBandwidthSpeed();
 		
 		// Update the connected status
 		isConnected.value = BluetoothService.isConnected();
@@ -46,6 +47,7 @@ const connectToBLE = async () =>
 		nodeStore.setMaximumPeers(maximumPeers || 0);
 		nodeStore.setNodeLocation(nodeLocation || '');
 		nodeStore.setCertExpiry(certExpiry || '');
+		nodeStore.setBandwidthSpeed(bandwidthSpeed.upload, bandwidthSpeed.download);
 	}
 };
 

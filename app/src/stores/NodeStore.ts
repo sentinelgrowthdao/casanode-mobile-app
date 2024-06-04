@@ -1,5 +1,12 @@
 import { defineStore } from 'pinia';
 
+
+export interface BandwidthSpeed
+{
+	upload: string;
+	download: string;
+}
+
 export const useNodeStore = defineStore('node',
 {
 	state: () => ({
@@ -120,6 +127,12 @@ export const useNodeStore = defineStore('node',
 		setCertExpiry(certExpiry: string): void
 		{
 			this.certExpiry = certExpiry;
+		},
+		// Set Bandwidth Speed
+		setBandwidthSpeed(uploadSpeed: string, downloadSpeed: string): void
+		{
+			this.uploadSpeed = uploadSpeed;
+			this.downloadSpeed = downloadSpeed;
 		},
 	}
 });
