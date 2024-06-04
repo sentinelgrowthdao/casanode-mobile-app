@@ -11,6 +11,7 @@ const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
 const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
 const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
 const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
+const CHAR_NODE_LOCATION_UUID = '0000180d-0000-1000-8000-00805f9b3505';
 
 /**
  * Encode a string into a DataView
@@ -521,6 +522,27 @@ class BluetoothService
 		return false;
 	}
 	
+	/**
+	 * Read node location from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readNodeLocation(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_LOCATION_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
 }
 
 export default BluetoothService.getInstance();

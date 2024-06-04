@@ -13,7 +13,7 @@ export const useNodeStore = defineStore('node',
 		
 		// Node Information
 		nodeIp: '',
-		location: '',
+		nodeLocation: '',
 		nodePort: -1,
 		vpnPort: -1,
 		sslExpiry: 'May 6 19:05:15 2025 GMT',
@@ -110,6 +110,11 @@ export const useNodeStore = defineStore('node',
 		setMaximumPeers(peers: number): void
 		{
 			this.maximumPeers = peers;
+		},
+		// Set the node location
+		setNodeLocation(nodeLocation: string): void
+		{
+			this.nodeLocation = nodeLocation;
 		},
 	}
 });

@@ -55,7 +55,7 @@ const nodeStatus = computed(() =>
 							<strong>{{ $t('dashboard.node-address') }}</strong>{{ nodeStore.nodeIp }}
 						</p>
 						<p class="item">
-							<strong>{{ $t('dashboard.node-location') }}</strong>{{ nodeStore.location }}
+							<strong>{{ $t('dashboard.node-location') }}</strong>{{ nodeStore.nodeLocation }}
 						</p>
 						<p class="item">
 							<strong>{{ $t('dashboard.node-vpn') }}</strong>{{ nodeStore.vpnType }}

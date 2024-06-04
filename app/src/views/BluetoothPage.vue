@@ -30,6 +30,7 @@ const connectToBLE = async () =>
 		const vpnType = await BluetoothService.readVpnType();
 		const vpnPort = await BluetoothService.readVpnPort();
 		const maximumPeers = await BluetoothService.readMaximumPeers();
+		const nodeLocation = await BluetoothService.readNodeLocation();
 		
 		// Update the connected status
 		isConnected.value = BluetoothService.isConnected();
@@ -42,6 +43,7 @@ const connectToBLE = async () =>
 		nodeStore.setVpnType(vpnType || '');
 		nodeStore.setVpnPort(vpnPort || 0);
 		nodeStore.setMaximumPeers(maximumPeers || 0);
+		nodeStore.setNodeLocation(nodeLocation || '');
 	}
 };
 
