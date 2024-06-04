@@ -581,7 +581,7 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_BANDWIDTH_SPEED_UUID);
-				const data = JSON.parse(decodeDataView(value));
+				const data = JSON.parse(decodeDataView(value)) as BandwidthSpeed;
 				return data;
 			}
 		}
