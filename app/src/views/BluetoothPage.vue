@@ -7,7 +7,7 @@ import {
 	IonInput, IonSelect,
 } from '@ionic/vue';
 import { shieldHalf } from 'ionicons/icons';
-import { useNodeStore, type BandwidthSpeed, type SystemInfos } from '@stores/NodeStore';
+import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 
 const isConnected = ref(BluetoothService.isConnected());
@@ -37,8 +37,11 @@ const connectToBLE = async () =>
 		const certExpiry = await BluetoothService.readCertExpiry();
 		const bandwidthSpeed: BandwidthSpeed|null = await BluetoothService.readBandwidthSpeed();
 		const systemUptime = await BluetoothService.readSystemUptime();
-		// const systemInfos: SystemInfos|null = await BluetoothService.readSystemInfos();
+		const casanodeVersion = await BluetoothService.readCasanodeVersion();
 		const dockerImage = await BluetoothService.readDockerImage();
+		const systemOs = await BluetoothService.readSystemOs();
+		const systemArch = await BluetoothService.readSystemArch();
+		const systemKernel = await BluetoothService.readSystemKernel();
 		
 		// Update the connected status
 		isConnected.value = BluetoothService.isConnected();
@@ -55,8 +58,11 @@ const connectToBLE = async () =>
 		nodeStore.setCertExpiry(certExpiry || '');
 		nodeStore.setBandwidthSpeed(bandwidthSpeed?.upload || 'N/A', bandwidthSpeed?.download || 'N/A');
 		nodeStore.setSystemUptime(systemUptime || -1);
-		// nodeStore.setSystemInfos(systemInfos);
+		nodeStore.setCasanodeVersion(casanodeVersion || '');
 		nodeStore.setDockerImage(dockerImage || '');
+		nodeStore.setSystemOs(systemOs || '');
+		nodeStore.setSystemArch(systemArch || '');
+		nodeStore.setSystemKernel(systemKernel || '');
 	}
 };
 

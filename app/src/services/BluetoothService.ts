@@ -1,6 +1,6 @@
 // src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { type BandwidthSpeed, type SystemInfos } from '@stores/NodeStore';
+import { type BandwidthSpeed } from '@stores/NodeStore';
 
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
 const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
@@ -16,8 +16,11 @@ const CHAR_NODE_LOCATION_UUID = '0000180d-0000-1000-8000-00805f9b3505';
 const CHAR_CERT_EXPIRITY_UUID = '0000180d-0000-1000-8000-00805f9b3506';
 const CHAR_BANDWIDTH_SPEED_UUID = '0000180d-0000-1000-8000-00805f9b3507';
 const CHAR_SYSTEM_UPTIME_UUID = '0000180d-0000-1000-8000-00805f9b3508';
-const CHAR_SYSTEM_INFOS_UUID = '0000180d-0000-1000-8000-00805f9b3509';
+const CHAR_CASANODE_VERSION_UUID = '0000180d-0000-1000-8000-00805f9b3509';
 const CHAR_DOCKER_IMAGE_UUID = '0000180d-0000-1000-8000-00805f9b350a';
+const CHAR_SYSTEM_OS_UUID = '0000180d-0000-1000-8000-00805f9b350b';
+const CHAR_SYSTEM_ARCH_UUID = '0000180d-0000-1000-8000-00805f9b350c';
+const CHAR_SYSTEM_KERNEL_UUID = '0000180d-0000-1000-8000-00805f9b350d';
 
 /**
  * Encode a string into a DataView
@@ -619,17 +622,16 @@ class BluetoothService
 	
 	/**
 	 * Read system infos from the BLE server.
-	 * @returns Promise<SystemInfos|null>
+	 * @returns Promise<string|null>
 	 */
-	public async readSystemInfos(): Promise<SystemInfos|null>
+	public async readCasanodeVersion(): Promise<string|null>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_INFOS_UUID);
-				const data = JSON.parse(decodeDataView(value)) as SystemInfos;
-				return data;
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CASANODE_VERSION_UUID);
+				return decodeDataView(value);
 			}
 		}
 		catch (error)
@@ -651,6 +653,72 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_DOCKER_IMAGE_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Read system arch from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readSystemOs(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_OS_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Read system arch from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readSystemArch(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ARCH_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Read system kernel from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readSystemKernel(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_KERNEL_UUID);
 				return decodeDataView(value);
 			}
 		}

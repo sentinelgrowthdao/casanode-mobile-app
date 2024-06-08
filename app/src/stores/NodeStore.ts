@@ -137,18 +137,30 @@ export const useNodeStore = defineStore('node',
 		{
 			this.uptime = uptime;
 		},
-		// Set the system information
-		setSystemInfos(systemInfos: SystemInfos): void
+		// Set the casanode version
+		setCasanodeVersion(casanodeVersion: string): void
 		{
-			this.casanodeVersion = systemInfos.casanodeVersion;
-			this.systemOs = systemInfos.systemOs;
-			this.systemKernel = systemInfos.systemKernel;
-			this.systemArch = systemInfos.systemArch;
+			this.casanodeVersion = casanodeVersion;
 		},
 		// Set the docker image
 		setDockerImage(dockerImage: string): void
 		{
 			this.dockerImage = dockerImage;
+		},
+		// Set the system os
+		setSystemOs(systemOs: string): void
+		{
+			this.systemOs = systemOs;
+		},
+		// Set the system kernel
+		setSystemKernel(systemKernel: string): void
+		{
+			this.systemKernel = systemKernel;
+		},
+		// Set the system arch
+		setSystemArch(systemArch: string): void
+		{
+			this.systemArch = systemArch;
 		},
 	}
 });
