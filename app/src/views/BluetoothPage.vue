@@ -5,6 +5,7 @@ import {
 	IonItem, IonPage, IonIcon,
 	IonTitle, IonToolbar,
 	IonInput, IonSelect,
+	IonSpinner,
 } from '@ionic/vue';
 import { shieldHalf } from 'ionicons/icons';
 import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
@@ -16,12 +17,24 @@ const messages = ref<{ text: string; time: number }[]>([]);
 // Initialize the node store
 const nodeStore = useNodeStore();
 
+// Initialize the loading state
+const isLoading = ref(false);
+
 /**
  * Function to connect to the BLE device
  * @returns void
  */
 const connectToBLE = async () =>
 {
+	if(isConnected.value)
+	{
+		console.log('Already connected to the BLE device.');
+		return;
+	}
+	
+	// Update the loading state
+	isLoading.value = true;
+	
 	// Connect to the BLE device
 	if(await BluetoothService.connect())
 	{
@@ -46,6 +59,9 @@ const connectToBLE = async () =>
 		// Update the connected status
 		isConnected.value = BluetoothService.isConnected();
 		
+		// Update the loading state
+		isLoading.value = false;
+		
 		// Update the store
 		nodeStore.setMoniker(moniker || '');
 		nodeStore.setNodeType(nodeType || '');
@@ -63,6 +79,12 @@ const connectToBLE = async () =>
 		nodeStore.setSystemOs(systemOs || '');
 		nodeStore.setSystemArch(systemArch || '');
 		nodeStore.setSystemKernel(systemKernel || '');
+	}
+	else
+	{
+		// Update the loading state
+		isLoading.value = false;
+		console.error('Failed to connect to the BLE device.');
 	}
 };
 
@@ -343,7 +365,10 @@ const applyNodeConfig = async () =>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
-			<ion-button @click="connectToBLE" :disabled="isConnected">Connect</ion-button>
+			<ion-button @click="connectToBLE" :disabled="isConnected">
+				<ion-spinner name="crescent" v-if="isLoading && !isConnected" />
+				Connect
+			</ion-button>
 			<ion-button @click="disconnectFromBLE" :disabled="!isConnected">Disconnect</ion-button>
 			<!-- <ion-button @click="sendHelloMessage" :disabled="!isConnected">Send Message</ion-button>
 			<ion-button @click="readFromServer" :disabled="!isConnected">Read from Server</ion-button>
@@ -471,5 +496,11 @@ const applyNodeConfig = async () =>
 	{
 		color: var(--ion-color-danger);
 	}
+}
+ion-spinner
+{
+	width: 1rem;
+	height: 1rem;
+	margin-right: 0.5rem;
 }
 </style>
