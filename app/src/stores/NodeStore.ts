@@ -7,14 +7,6 @@ export interface BandwidthSpeed
 	download: string;
 }
 
-export interface SystemInfos
-{
-	casanodeVersion: string;
-	systemOs: string;
-	systemKernel: string;
-	systemArch: string;
-}
-
 export const useNodeStore = defineStore('node',
 {
 	state: () => ({
