@@ -50,11 +50,11 @@ export const useNodeStore = defineStore('node',
 		transactions: [],
 		
 		// System Information
-		casanodeVersion: '1.0.0',
-		systemOs: 'Debian 12',
-		systemKernel: '6.6.28+rpt-rpi-2712',
-		systemArch: 'aarch64',
-		dockerImage: 'wajatmaka/sentinel-aarch64-alpine:v0.7.1',
+		casanodeVersion: '',
+		systemOs: '',
+		systemKernel: '',
+		systemArch: '',
+		dockerImage: '',
 		uptime: 0
 	}),
 	
