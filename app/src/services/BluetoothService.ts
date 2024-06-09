@@ -764,7 +764,6 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				console.log('write passphrase', data);
 				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PASSPHRASE_UUID, encodeDataView(data));
 				return true;
 			}
