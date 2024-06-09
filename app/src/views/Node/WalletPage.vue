@@ -4,6 +4,7 @@ import {
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent,
 	IonButton, IonIcon, IonGrid, IonRow, IonCol, IonItem, IonLabel
 } from '@ionic/vue';
+import { computed } from 'vue';
 import { refresh, link, copy } from 'ionicons/icons';
 import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
@@ -11,10 +12,21 @@ import { copyToClipboard } from '@/utils/clipboard';
 import { useNodeStore } from '@stores/NodeStore';
 
 // Import the useI18n composable function.
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
+
+// Define format amount function
+const formattedAmount = computed(() =>
+{
+	return formatNumber(nodeStore.nodeBalanceAmount, locale.value);
+});
+
+function formatNumber(amount: number, locale: string): string
+{
+	return new Intl.NumberFormat(locale).format(amount);
+}
 
 </script>
 <template>
@@ -31,7 +43,7 @@ const nodeStore = useNodeStore();
 							<ion-row>
 								<ion-col size="9">
 									<p class="label">{{ $t('wallet.node-balance-label') }}</p>
-									<p class="amount">1,432.45<span class="unit">DVPN</span></p>
+									<p class="amount">{{ formattedAmount }}<span class="unit">{{ nodeStore.nodeBalanceDenom }}</span></p>
 								</ion-col>
 								<ion-col size="3" class="ion-text-right">
 									<ion-button fill="clear" size="large" class="refresh-button">
