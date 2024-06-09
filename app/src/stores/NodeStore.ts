@@ -36,9 +36,8 @@ export const useNodeStore = defineStore('node',
 		maximumPeers: 0,
 		
 		// Wallet
-		nodeBalance: '1,432.45 DVPN',
-		publicAddress: 'sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw',
-		nodeAddress: 'sentnode1gml0h2eavhrqcwz8u5h0s8f8mds67f0g6a6fkc',
+		nodeBalanceAmount: 12432.45,
+		nodeBalanceDenom: 'DVPN',
 		transactions: [],
 		
 		// System Information
@@ -163,6 +162,13 @@ export const useNodeStore = defineStore('node',
 		setNodeAddress(address: string): void
 		{
 			this.nodeAddress = address;
+		},
+		// Set the node balance
+		setNodeBalance(balance: string): void
+		{
+			const parts = balance.split(' ');
+			this.nodeBalanceAmount = parseFloat(parts[0]);
+			this.nodeBalanceDenom = parts[1];
 		},
 	}
 });
