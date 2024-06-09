@@ -38,6 +38,8 @@ export const useNodeStore = defineStore('node',
 		// Wallet
 		nodeBalanceAmount: 12432.45,
 		nodeBalanceDenom: 'DVPN',
+		publicAddress: '',
+		nodeAddress: '',
 		transactions: [],
 		
 		// System Information
