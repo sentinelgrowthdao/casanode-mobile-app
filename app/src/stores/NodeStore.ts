@@ -154,5 +154,15 @@ export const useNodeStore = defineStore('node',
 		{
 			this.systemArch = systemArch;
 		},
+		// Set the public address
+		setPublicAddress(address: string): void
+		{
+			this.publicAddress = address;
+		},
+		// Set the node address
+		setNodeAddress(address: string): void
+		{
+			this.nodeAddress = address;
+		},
 	}
 });
