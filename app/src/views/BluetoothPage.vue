@@ -13,12 +13,64 @@ import BluetoothService from '@/services/BluetoothService';
 
 const isConnected = ref(BluetoothService.isConnected());
 const messages = ref<{ text: string; time: number }[]>([]);
+const passphraseFormOpen = ref(false);
+const passphraseInputValue = ref('');
+const passphraseErrorMessage = ref('');
+const isPassphraseLoading = ref(false);
 
 // Initialize the node store
 const nodeStore = useNodeStore();
 
 // Initialize the loading state
 const isLoading = ref(false);
+
+/**
+ * Function to load the node informations
+ * @returns void
+ */
+async function loadNodeInformations(): Promise<void>
+{
+	const publicAddress = await BluetoothService.readPublicAddress();
+	const nodeAddress = await BluetoothService.readNodeAddress();
+	const nodeBalance = await BluetoothService.readNodeBalance();
+	
+	nodeStore.setPublicAddress(publicAddress || '');
+	nodeStore.setNodeAddress(nodeAddress || '');
+	nodeStore.setNodeBalance(nodeBalance || '');
+}
+
+/**
+ * Function to send the passphrase to the BLE device
+ * @returns void
+ */
+const sendPassphrase = async () =>
+{
+	// Reset the error message
+	passphraseErrorMessage.value = '';
+	// Update the loading state
+	isPassphraseLoading.value = true;
+	// Get the passphrase
+	const passphrase = passphraseInputValue.value.trim();
+	// Send the passphrase to the BLE device
+	if(await BluetoothService.writeNodePassphrase(passphrase))
+	{
+		// Load the node informations
+		await loadNodeInformations();
+		// Stop the passphrase loading
+		isPassphraseLoading.value = false;
+		// Close the passphrase form
+		passphraseFormOpen.value = false;
+		// Update the connected status
+		isConnected.value = true;
+	}
+	else
+	{
+		// Stop the passphrase loading
+		isPassphraseLoading.value = false;
+		// Show the error message
+		passphraseErrorMessage.value = 'Passphrase is incorrect.';
+	}
+};
 
 /**
  * Function to connect to the BLE device
@@ -56,8 +108,26 @@ const connectToBLE = async () =>
 		const systemArch = await BluetoothService.readSystemArch();
 		const systemKernel = await BluetoothService.readSystemKernel();
 		
-		// Update the connected status
-		isConnected.value = BluetoothService.isConnected();
+		// Get if passphrase is required/set
+		const passphraseAvailable = await BluetoothService.readNodePassphrase();
+		
+		// If all the passphrase is already available
+		if(passphraseAvailable)
+		{
+			console.log('Passphrase is already available.');
+			// Close the passphrase form
+			passphraseFormOpen.value = false;
+			// Load the node informations
+			loadNodeInformations();
+			// Update the connected status
+			isConnected.value = true;
+		}
+		else
+		{
+			console.log('Passphrase is required before loading the node informations.');
+			// Open the passphrase form
+			passphraseFormOpen.value = true;
+		}
 		
 		// Update the loading state
 		isLoading.value = false;
@@ -96,6 +166,7 @@ const disconnectFromBLE = async () =>
 {
 	await BluetoothService.disconnect();
 	isConnected.value = BluetoothService.isConnected();
+	passphraseFormOpen.value = false;
 };
 
 const sendHelloMessage = async () =>
@@ -365,11 +436,11 @@ const applyNodeConfig = async () =>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
-			<ion-button @click="connectToBLE" :disabled="isConnected">
+			<ion-button @click="connectToBLE" :disabled="isConnected || passphraseFormOpen">
 				<ion-spinner name="crescent" v-if="isLoading && !isConnected" />
 				Connect
 			</ion-button>
-			<ion-button @click="disconnectFromBLE" :disabled="!isConnected">Disconnect</ion-button>
+			<ion-button @click="disconnectFromBLE" :disabled="!isConnected && !passphraseFormOpen">Disconnect</ion-button>
 			<!-- <ion-button @click="sendHelloMessage" :disabled="!isConnected">Send Message</ion-button>
 			<ion-button @click="readFromServer" :disabled="!isConnected">Read from Server</ion-button>
 			<ion-button @click="subscribeToServer" :disabled="!isConnected">Subscribe to Server</ion-button> -->
@@ -379,7 +450,24 @@ const applyNodeConfig = async () =>
 				</ion-item>
 			</ion-list> -->
 			<ion-grid>
-				<ion-row>
+				<ion-row v-if="passphraseFormOpen">
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="stacked">Please enter wallet passphrase</ion-label>
+							<ion-input type="password" placeholder="Enter passphrase" v-model="passphraseInputValue" />
+						</ion-item>
+						<div class="input-line">
+							<p class="button">
+								<ion-button @click="sendPassphrase" :disabled="passphraseInputValue.length === 0">
+									<ion-spinner name="crescent" v-if="isPassphraseLoading && !isConnected" />
+									Send Passphrase
+								</ion-button>
+							</p>
+							<p v-if="passphraseErrorMessage.length > 0" :class="['label', 'ion-padding', 'error']">{{ passphraseErrorMessage }}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 						<ion-label position="stacked">Node Moniker</ion-label>
@@ -391,7 +479,7 @@ const applyNodeConfig = async () =>
 						</div>
 					</ion-col>
 				</ion-row>
-				<ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">Node Type</ion-label>
@@ -406,7 +494,7 @@ const applyNodeConfig = async () =>
 						</div>
 					</ion-col>
 				</ion-row>
-				<ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">IP Address</ion-label>
@@ -418,7 +506,7 @@ const applyNodeConfig = async () =>
 						</div>
 					</ion-col>
 				</ion-row>
-				<ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">Node Port</ion-label>
@@ -430,7 +518,7 @@ const applyNodeConfig = async () =>
 						</div>
 					</ion-col>
 				</ion-row>
-				<ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">VPN Type</ion-label>
@@ -445,7 +533,7 @@ const applyNodeConfig = async () =>
 						</div>
 					</ion-col>
 				</ion-row>
-				<ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">VPN Port</ion-label>
@@ -457,7 +545,7 @@ const applyNodeConfig = async () =>
 						</div>
 					</ion-col>
 				</ion-row>
-				<ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 							<ion-label position="stacked">Maximum Peers</ion-label>

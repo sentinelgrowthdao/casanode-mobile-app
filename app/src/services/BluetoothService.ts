@@ -24,6 +24,7 @@ const CHAR_SYSTEM_KERNEL_UUID = '0000180d-0000-1000-8000-00805f9b350d';
 const CHAR_NODE_PASSPHRASE_UUID = '0000180d-0000-1000-8000-00805f9b350e';
 const CHAR_PUBLIC_ADDRESS_UUID = '0000180d-0000-1000-8000-00805f9b350f';
 const CHAR_ADDRESS_NODE_UUID = '0000180d-0000-1000-8000-00805f9b3510';
+const CHAR_NODE_BALANCE_UUID = '0000180d-0000-1000-8000-00805f9b3511';
 
 /**
  * Encode a string into a DataView
@@ -819,6 +820,29 @@ class BluetoothService
 		
 		return null;
 	}
+	
+	/**
+	 * Read node balance from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readNodeBalance(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_BALANCE_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
 }
 
 export default BluetoothService.getInstance();
