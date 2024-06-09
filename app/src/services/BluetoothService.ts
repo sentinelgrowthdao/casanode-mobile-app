@@ -21,6 +21,7 @@ const CHAR_DOCKER_IMAGE_UUID = '0000180d-0000-1000-8000-00805f9b350a';
 const CHAR_SYSTEM_OS_UUID = '0000180d-0000-1000-8000-00805f9b350b';
 const CHAR_SYSTEM_ARCH_UUID = '0000180d-0000-1000-8000-00805f9b350c';
 const CHAR_SYSTEM_KERNEL_UUID = '0000180d-0000-1000-8000-00805f9b350d';
+const CHAR_NODE_PASSPHRASE_UUID = '0000180d-0000-1000-8000-00805f9b350e';
 
 /**
  * Encode a string into a DataView
@@ -728,6 +729,50 @@ class BluetoothService
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Read node passphrase from the BLE server.
+	 */
+	public async readNodePassphrase(): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PASSPHRASE_UUID);
+				return decodeDataView(value) === 'true';
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Send node passphrase to the BLE server.
+	 * @param data string
+	 * @returns Promise<boolean>
+	 */
+	public async writeNodePassphrase(data: string): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				console.log('write passphrase', data);
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PASSPHRASE_UUID, encodeDataView(data));
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		return false;
 	}
 }
 
