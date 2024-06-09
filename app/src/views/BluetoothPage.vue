@@ -90,6 +90,8 @@ const connectToBLE = async () =>
 	// Connect to the BLE device
 	if(await BluetoothService.connect())
 	{
+		// Load the node status
+		const nodeStatus = await BluetoothService.readNodeStatus();
 		// Load the node configuration
 		const moniker = await BluetoothService.readMoniker();
 		const nodeType = await BluetoothService.readNodeType();
@@ -133,6 +135,7 @@ const connectToBLE = async () =>
 		isLoading.value = false;
 		
 		// Update the store
+		nodeStore.setNodeStatus(nodeStatus || '');
 		nodeStore.setMoniker(moniker || '');
 		nodeStore.setNodeType(nodeType || '');
 		nodeStore.setNodeIp(nodeIp || '');

@@ -2,16 +2,38 @@
 import { IonToolbar, IonTitle, IonButtons, IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useNodeStore } from '@stores/NodeStore';
+import { computed } from 'vue';
 
+// Import pictures
+import statusRunning from '@assets/icons/status-running.svg';
+import statusStopped from '@assets/icons/status-stopped.svg';
+import statusError from '@assets/icons/status-error.svg';
+
+// Use the router and the node store
 const router = useRouter();
 const nodeStore = useNodeStore();
+
+// Computed the status image
+const statusImage = computed(() =>
+{
+	switch (nodeStore.status)
+	{
+		case 'running':
+			return statusRunning;
+		case 'stopped':
+			return statusStopped;
+		default:
+			return statusError;
+	}
+});
+
 </script>
 
 <template>
 	<ion-toolbar>
 		<ion-buttons slot="primary">
 			<ion-button fill="clear">
-				Status
+				<img :src="statusImage" alt="Status" />
 			</ion-button>
 		</ion-buttons>
 		<ion-buttons slot="secondary">
@@ -37,5 +59,10 @@ const nodeStore = useNodeStore();
 		display: inline-block;
 		height: 3rem;
 	}
+}
+
+ion-button img
+{
+	height: 1.5rem;
 }
 </style>

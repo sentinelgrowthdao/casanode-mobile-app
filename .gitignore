@@ -16,3 +16,8 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+
+######################
+#  Excluded folders  #
+######################
+!app/src/assets/icons/

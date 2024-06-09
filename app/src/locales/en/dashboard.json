@@ -2,6 +2,9 @@
 
 	"status-title": "Node Status",
 	"status-users": "Connected Users",
+	"status-unknown": "Unknown",
+	"status-uninstalled": "Uninstalled",
+	"status-stopped": "Stopped",
 	"status-running": "Running",
 
 	"node-title": "Node Information",

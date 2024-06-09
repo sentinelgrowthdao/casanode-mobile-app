@@ -15,7 +15,7 @@ export const useNodeStore = defineStore('node',
 		applyCounter: 0,
 		
 		// Node Status
-		status: 'running',
+		status: '',
 		connectedUsers: 16,
 		
 		// Node Information
