@@ -69,7 +69,7 @@ const nodeStore = useNodeStore();
 				</ion-card>
 
 				<!-- Latest Transactions -->
-				<ion-card class="container list">
+				<ion-card class="container list" v-if="nodeStore.transactions.length > 0">
 					<ion-card-header>
 						<ion-card-title>{{ $t('wallet.latest-transactions-label') }}</ion-card-title>
 					</ion-card-header>
