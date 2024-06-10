@@ -1,0 +1,64 @@
+.loading
+{
+	margin: 0;
+	padding: 3rem 0 0;
+	background-image: url(@assets/images/welcome-background.png);
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	
+	&>.header
+	{
+		margin: 0 0 3rem;
+		width: 100%;
+		
+		&>h1
+		{
+			margin: 0;
+			font-size: 2.5rem;
+			text-align: center;
+		}
+		
+		&>.logo
+		{
+			margin: 0 auto;
+			width: 100%;
+			max-width: 15rem;
+			
+			&>img
+			{
+				width: 100%;
+			}
+		}
+	}
+	
+	&> .connecting
+	{
+		margin: 0 auto;
+		width: 100%;
+		max-width: 15rem;
+		text-align: center;
+		
+		&> .spinner
+		{
+			margin: 0 0 1.5rem;
+			text-align:center;
+			
+			&> ion-spinner
+			{
+				width: 5rem;
+				height: 5rem;
+			}
+		}
+		
+		&> .message
+		{
+			margin: 0;
+			font-size: 1.2rem;
+			line-height:1.6rem;
+			text-align: center;
+			font-weight: 300;
+		}
+	}
+}
