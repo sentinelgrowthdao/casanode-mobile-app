@@ -25,7 +25,7 @@ const openNodeLink = async () =>
 					<div class="start">
 						<p class="message">{{ $t('welcome.start-text') }}</p>
 						<p class="button">
-							<ion-button @click="router.replace({ name: 'Wizard1Welcome' })">
+							<ion-button @click="router.replace({ name: 'Loading' })">
 								{{ $t('welcome.start-button') }}
 							</ion-button>
 						</p>
