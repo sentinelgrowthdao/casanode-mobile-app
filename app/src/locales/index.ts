@@ -10,6 +10,7 @@ import AboutEn from '@locales/en/about.json';
 import WalletEn from '@locales/en/wallet.json';
 import ActionsEn from '@locales/en/actions.json';
 import SettingsEn from '@locales/en/settings.json';
+import LoadingEn from '@locales/en/loading.json';
 
 // French
 import AppFr from '@locales/fr/app.json';
@@ -20,6 +21,7 @@ import AboutFr from '@locales/fr/about.json';
 import WalletFr from '@locales/fr/wallet.json';
 import ActionsFr from '@locales/fr/actions.json';
 import SettingsFr from '@locales/fr/settings.json';
+import LoadingFr from '@locales/fr/loading.json';
 
 interface Option
 {
@@ -50,6 +52,7 @@ const messages : MessageFile =
 		"wallet": WalletEn,
 		"actions": ActionsEn,
 		"settings": SettingsEn,
+		"loading": LoadingEn,
 	},
 	fr:
 	{
@@ -61,6 +64,7 @@ const messages : MessageFile =
 		"wallet": WalletFr,
 		"actions": ActionsFr,
 		"settings": SettingsFr,
+		"loading": LoadingFr,
 	},
 };
 

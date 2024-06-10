@@ -1,0 +1,7 @@
+{
+	"wait-connection": "Connecting, please wait...",
+	"wait-docker": "Installing the docker image...",
+	"wait-config": "Creating configuration files...",
+	
+	"error-message": "An error has occurred during the node connection process."
+}
