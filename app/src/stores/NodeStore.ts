@@ -15,8 +15,8 @@ export const useNodeStore = defineStore('node',
 		applyCounter: 0,
 		
 		// Node Status
-		status: '',
-		connectedUsers: 16,
+		status: 'unknown',
+		connectedUsers: 0,
 		
 		// Node Information
 		nodeIp: '',
