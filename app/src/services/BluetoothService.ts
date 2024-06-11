@@ -26,6 +26,7 @@ const CHAR_PUBLIC_ADDRESS_UUID = '0000180d-0000-1000-8000-00805f9b350f';
 const CHAR_ADDRESS_NODE_UUID = '0000180d-0000-1000-8000-00805f9b3510';
 const CHAR_NODE_BALANCE_UUID = '0000180d-0000-1000-8000-00805f9b3511';
 const CHAR_NODE_STATUS_UUID = '0000180d-0000-1000-8000-00805f9b3512';
+const CHAR_CHECK_INSTALL_UUID = '0000180d-0000-1000-8000-00805f9b3513';
 
 /**
  * Encode a string into a DataView
@@ -865,6 +866,27 @@ class BluetoothService
 		return null;
 	}
 	
+	/**
+	 * Read check image from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readCheckInstallation(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CHECK_INSTALL_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
 }
 
 export default BluetoothService.getInstance();
