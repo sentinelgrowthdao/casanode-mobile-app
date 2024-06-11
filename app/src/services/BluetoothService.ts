@@ -27,6 +27,8 @@ const CHAR_ADDRESS_NODE_UUID = '0000180d-0000-1000-8000-00805f9b3510';
 const CHAR_NODE_BALANCE_UUID = '0000180d-0000-1000-8000-00805f9b3511';
 const CHAR_NODE_STATUS_UUID = '0000180d-0000-1000-8000-00805f9b3512';
 const CHAR_CHECK_INSTALL_UUID = '0000180d-0000-1000-8000-00805f9b3513';
+const CHAR_INSTALL_IMAGE_UUID = '0000180d-0000-1000-8000-00805f9b3514';
+const CHAR_INSTALL_CONFIGS_UUID = '0000180d-0000-1000-8000-00805f9b3515';
 
 /**
  * Encode a string into a DataView
@@ -868,9 +870,9 @@ class BluetoothService
 	
 	/**
 	 * Read check image from the BLE server.
-	 * @returns Promise<string|null>
+	 * @returns Promise<string>
 	 */
-	public async readCheckInstallation(): Promise<string|null>
+	public async readCheckInstallation(): Promise<string>
 	{
 		try
 		{
@@ -885,7 +887,51 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return null;
+		return '0000';
+	}
+	
+	/**
+	 * Send install image to the BLE server.
+	 * @returns Promise<number>
+	 */
+	public async readInstallImage(): Promise<number>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_INSTALL_IMAGE_UUID);
+				return parseInt(decodeDataView(value));
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * Send create config files to the BLE server.
+	 * @returns Promise<string>
+	 */
+	public async readInstallConfigs(): Promise<string>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_INSTALL_CONFIGS_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return '00';
 	}
 }
 
