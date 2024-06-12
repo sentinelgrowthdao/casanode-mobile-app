@@ -3,5 +3,6 @@
 	"wait-docker": "Installation de l'image docker..",
 	"wait-config": "Création des fichiers de configuration...",
 	
-	"error-message": "Une erreur s'est produite au cours du processus de connexion au nœud."
+	"error-message": "Une erreur s'est produite au cours du processus de connexion au nœud.",
+	"retry": "Recommencer"
 }

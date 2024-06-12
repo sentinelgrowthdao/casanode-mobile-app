@@ -14,6 +14,8 @@ const router = useRouter();
 const { t } = useI18n();
 // Connecting message
 const connectingMessage: Ref<string> = ref('');
+// Error message
+const errorMessage: Ref<string> = ref('');
 
 // On mounted
 onMounted(async () =>
@@ -43,6 +45,8 @@ const connectToBluetooth = async () =>
 {
 	// Set the connecting message
 	connectingMessage.value = t('loading.wait-connection') as string;
+	// Clear the error message
+	errorMessage.value = '';
 	
 	// Connect to the Bluetooth device
 	if(await BluetoothService.connect())
@@ -104,7 +108,7 @@ const connectToBluetooth = async () =>
 	else
 	{
 		// Set the connecting message
-		connectingMessage.value = t('loading.error-message') as string;
+		errorMessage.value = t('loading.error-message') as string;
 	}
 };
 
@@ -117,14 +121,14 @@ const connectToBluetooth = async () =>
 					<h1>{{ $t('app.name') }}</h1>
 					<p class="logo"><img src="@assets/images/casanode-logo.png" alt="Logo" /></p>
 				</div>
-				<div class="connecting">
+				<div v-if="errorMessage.length === 0" class="connecting">
 					<p class="spinner"><ion-spinner name="crescent" /></p>
 					<p class="message">{{ connectingMessage }}</p>
 				</div>
-				<p>
-					<ion-button @click="tryConnection">connect</ion-button>
-					<!-- <ion-button @click="router.replace({ name: 'Home' })">home</ion-button> -->
-				</p>
+				<div v-else class="error">
+					<p class="message">{{ errorMessage }}</p>
+					<p class="button"><ion-button @click="tryConnection">{{ $t('loading.retry') }}</ion-button></p>
+				</div>
 			</div>
 		</ion-content>
 	</ion-page>

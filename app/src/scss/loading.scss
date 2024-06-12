@@ -61,4 +61,32 @@
 			font-weight: 300;
 		}
 	}
+	&> .error
+	{
+		position: absolute;
+		bottom: 3rem;
+		left: 50%;
+		transform: translateX(-50%);
+		margin: var(--content-margin);
+		padding: var(--content-padding);
+		width: var(--content-width);
+		max-width: var(--content-max-width);
+		border-radius: var(--content-radius);
+		background: var(--app-background-color-secondary-alt);
+
+		&>.message
+		{
+			margin: 0 0 0.65rem;
+			padding: 0.35rem 1rem;
+			text-align: center;
+			color: var(--app-background-color-alert);
+		}
+
+		&>.button
+		{
+			margin: 0;
+			padding: 0;
+			text-align: center;
+		}
+	}
 }

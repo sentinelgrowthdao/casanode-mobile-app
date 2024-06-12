@@ -3,5 +3,6 @@
 	"wait-docker": "Installing the docker image...",
 	"wait-config": "Creating configuration files...",
 	
-	"error-message": "An error has occurred during the node connection process."
+	"error-message": "An error has occurred during the node connection process.",
+	"retry": "Retry"
 }
