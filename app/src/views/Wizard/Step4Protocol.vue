@@ -11,7 +11,7 @@ import { useWizardStore } from '@stores/WizardStore';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
-const vpnType: Ref<string> = ref('');
+const vpnType: Ref<string> = ref(wizardStore.vpnType);
 
 const setVpnTypeAndNavigate = () =>
 {

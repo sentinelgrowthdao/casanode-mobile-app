@@ -11,7 +11,7 @@ import { useWizardStore } from '@stores/WizardStore';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
-const nodeType: Ref<string> = ref('');
+const nodeType: Ref<string> = ref(wizardStore.nodeType);
 
 const setNodeTypeAndNavigate = () =>
 {

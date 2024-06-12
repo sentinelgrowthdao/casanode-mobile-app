@@ -11,7 +11,7 @@ import { useWizardStore } from '@stores/WizardStore';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
-const nodeIp: Ref<string> = ref('');
+const nodeIp: Ref<string> = ref(wizardStore.nodeAddress);
 const nodePort: Ref<string> = ref(wizardStore.nodePort.toString());
 const vpnPort: Ref<string> = ref(wizardStore.vpnPort.toString());
 

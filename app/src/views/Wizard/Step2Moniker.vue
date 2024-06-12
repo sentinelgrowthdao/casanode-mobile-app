@@ -12,7 +12,7 @@ import AppInput from '@components/AppInput.vue';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
-const moniker: Ref<string> = ref('');
+const moniker: Ref<string> = ref(wizardStore.moniker);
 
 const setValueAndNavigate = () =>
 {
