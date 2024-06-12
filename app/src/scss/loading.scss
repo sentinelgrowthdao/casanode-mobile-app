@@ -73,7 +73,7 @@
 		max-width: var(--content-max-width);
 		border-radius: var(--content-radius);
 		background: var(--app-background-color-secondary-alt);
-
+		
 		&>.message
 		{
 			margin: 0 0 0.65rem;
@@ -81,12 +81,50 @@
 			text-align: center;
 			color: var(--app-background-color-alert);
 		}
-
+		
 		&>.button
 		{
 			margin: 0;
 			padding: 0;
 			text-align: center;
+		}
+	}
+	
+	&> .passphrase
+	{
+		margin: var(--content-margin);
+		padding: var(--content-padding);
+		width: var(--content-width);
+		max-width: var(--content-max-width);
+		border-radius: var(--content-radius);
+		background: var(--app-background-color-secondary-alt);
+		
+		&>.message
+		{
+			margin: 0 0 0.65rem;
+			padding: 0.35rem 1rem;
+			text-align: center;
+		}
+		
+		&> ion-item
+		{
+			--background:transparent;
+			margin:0 2rem 2rem;
+		}
+		
+		&>.button
+		{
+			margin: 0;
+			padding: 0;
+			text-align: center;
+		}
+
+		&>.error
+		{
+			margin: 0 0 0.65rem;
+			padding: 0.35rem 1rem;
+			text-align: center;
+			color: var(--app-background-color-alert);
 		}
 	}
 }

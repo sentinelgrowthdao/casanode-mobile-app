@@ -10,6 +10,7 @@ import {
 import { shieldHalf } from 'ionicons/icons';
 import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
+import NodeService from '@/services/NodeService';
 
 const isConnected = ref(BluetoothService.isConnected());
 const messages = ref<{ text: string; time: number }[]>([]);

@@ -2,7 +2,13 @@
 	"wait-connection": "Connexion, veuillez patienter...",
 	"wait-docker": "Installation de l'image docker..",
 	"wait-config": "Création des fichiers de configuration...",
+	"wait-passphrase": "Vérification de la passphrase...",
 	
 	"error-message": "Une erreur s'est produite au cours du processus de connexion au nœud.",
-	"retry": "Recommencer"
+	"retry": "Recommencer",
+	
+	"passphrase-message": "Vous devez saisir la phrase de passe protégeant le portefeuille du nœud avant de continuer.",
+	"passphrase-placeholder": "Passphrase",
+	"passphrase-button": "Déverrouiller",
+	"passphrase-error": "La passphrase est incorrecte, veuillez réessayer."
 }

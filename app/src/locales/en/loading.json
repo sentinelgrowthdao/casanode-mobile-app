@@ -2,7 +2,13 @@
 	"wait-connection": "Connecting, please wait...",
 	"wait-docker": "Installing the docker image...",
 	"wait-config": "Creating configuration files...",
+	"wait-passphrase": "Checking the passphrase...",
 	
 	"error-message": "An error has occurred during the node connection process.",
-	"retry": "Retry"
+	"retry": "Retry",
+	
+	"passphrase-message": "You must enter the passphrase protecting the node's wallet before continuing.",
+	"passphrase-placeholder": "Passphrase",
+	"passphrase-button": "Unlock",
+	"passphrase-error": "The passphrase is incorrect. Please try again."
 }

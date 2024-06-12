@@ -2,11 +2,13 @@
 import {
 	IonPage, IonContent, IonButton,
 	IonSpinner,
+	IonItem, IonInput
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ref, type Ref, onMounted } from 'vue';
 import BluetoothService from '@/services/BluetoothService';
+import NodeService from '@/services/NodeService';
 
 // Router
 const router = useRouter();
@@ -16,6 +18,14 @@ const { t } = useI18n();
 const connectingMessage: Ref<string> = ref('');
 // Error message
 const errorMessage: Ref<string> = ref('');
+// Passphrase form open
+const passphraseFormOpen: Ref<boolean> = ref(false);
+// Passphrase input value
+const passphraseInputValue: Ref<string> = ref('');
+// Passphrase loading
+const passphraseLoading: Ref<boolean> = ref(false);
+// Passphrase error message
+const passphraseErrorMessage: Ref<string> = ref('');
 
 // On mounted
 onMounted(async () =>
@@ -23,30 +33,33 @@ onMounted(async () =>
 	tryConnection();
 });
 
+/**
+ * Try to connect to the Bluetooth device
+ */
 const tryConnection = async () =>
 {
 	// Check if the device is connected
 	const isConnected = await BluetoothService.isConnected();
-	
 	// If connected, disconnect
 	if(isConnected)
 	{
 		await BluetoothService.disconnect();
 	}
 	
-
 	// Connect to the Bluetooth device
 	await connectToBluetooth();
 };
 
-
-// Connect to the Bluetooth device
+/**
+ * Connect to the Bluetooth device
+ */
 const connectToBluetooth = async () =>
 {
 	// Set the connecting message
 	connectingMessage.value = t('loading.wait-connection') as string;
 	// Clear the error message
 	errorMessage.value = '';
+	passphraseErrorMessage.value = '';
 	
 	// Connect to the Bluetooth device
 	if(await BluetoothService.connect())
@@ -56,7 +69,6 @@ const connectToBluetooth = async () =>
 		
 		// Parse the installation status
 		const imageAvailable = checkInstallation[0] === '1';
-		const containerExists = checkInstallation[1] === '1';
 		const nodeConfig = checkInstallation[2] === '1';
 		const vpnConfig = checkInstallation[3] === '1';
 		
@@ -93,22 +105,81 @@ const connectToBluetooth = async () =>
 			}
 		}
 		
-		// If the container does not exist
-		if(!containerExists)
+		// Check if passprhase is needed
+		const passphraseNeeded = await BluetoothService.readNodePassphrase();
+		// If passphrase is needed
+		if(!passphraseNeeded)
 		{
-			// Launch the wizard
-			router.replace({ name: 'Wizard1Welcome' });
+			errorMessage.value = '';
+			// Open the passphrase form
+			passphraseFormOpen.value = true;
 		}
 		else
 		{
-			// Redirect to the dashboard
-			router.replace({ name: 'NodeDashboard' });
+			// Finish the connection process
+			await finishConnection();
 		}
+		
 	}
 	else
 	{
 		// Set the connecting message
 		errorMessage.value = t('loading.error-message') as string;
+	}
+};
+
+/**
+ * Finish the connection process
+ */
+const finishConnection = async () =>
+{
+	// Load the node configuration
+	await NodeService.loadNodeConfiguration();
+	
+	// Get installation status
+	const checkInstallation = await BluetoothService.readCheckInstallation();
+	// If the container does not exist
+	if(checkInstallation[1] === '0')
+	{
+		// Launch the wizard
+		router.replace({ name: 'Wizard1Welcome' });
+	}
+	else
+	{
+		// Redirect to the dashboard
+		router.replace({ name: 'NodeDashboard' });
+	}
+};
+
+/**
+ * Submit the passphrase
+ */
+const submitPassphrase = async () => 
+{
+	// Clear the error message
+	passphraseErrorMessage.value = '';
+	// Show loading
+	passphraseLoading.value = true;
+	// Get the passphrase
+	const passphrase = passphraseInputValue.value.trim();
+	const passphraseValid = await BluetoothService.writeNodePassphrase(passphrase);
+	console.log('passphraseValid', passphraseValid);
+	// Send the passphrase to the BLE device
+	if(passphraseValid)
+	{
+		// Hide the loading
+		passphraseLoading.value = false;
+		// Close the passphrase form
+		passphraseFormOpen.value = false;
+		// Finish the connection process
+		await finishConnection();
+	}
+	else
+	{
+		// Hide the loading
+		passphraseLoading.value = false;
+		// Set the error message
+		passphraseErrorMessage.value = t('loading.passphrase-error') as string;
 	}
 };
 
@@ -121,13 +192,26 @@ const connectToBluetooth = async () =>
 					<h1>{{ $t('app.name') }}</h1>
 					<p class="logo"><img src="@assets/images/casanode-logo.png" alt="Logo" /></p>
 				</div>
-				<div v-if="errorMessage.length === 0" class="connecting">
+				<div v-if="errorMessage.length === 0 && passphraseFormOpen === false" class="connecting">
 					<p class="spinner"><ion-spinner name="crescent" /></p>
 					<p class="message">{{ connectingMessage }}</p>
 				</div>
-				<div v-else class="error">
+				<div v-else-if="passphraseFormOpen === false" class="error">
 					<p class="message">{{ errorMessage }}</p>
 					<p class="button"><ion-button @click="tryConnection">{{ $t('loading.retry') }}</ion-button></p>
+				</div>
+				<div v-else class="passphrase">
+					<p v-if="passphraseErrorMessage.length > 0" class="error">{{ passphraseErrorMessage }}</p>
+					<p v-else class="message">{{ $t('loading.passphrase-message') }}</p>
+					<ion-item>
+						<ion-input v-model="passphraseInputValue" type="password" :placeholder="t('loading.passphrase-placeholder')"></ion-input>
+					</ion-item>
+					<p class="button">
+						<ion-button @click="submitPassphrase" :disabled="passphraseLoading">
+							<ion-spinner name="crescent" v-if="passphraseLoading" />
+							{{ $t('loading.passphrase-button') }}
+						</ion-button>
+					</p>
 				</div>
 			</div>
 		</ion-content>
