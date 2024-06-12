@@ -7,8 +7,10 @@ import {
 	IonInput
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import { useNodeStore } from '@/stores/NodeStore';
 import { useWizardStore } from '@stores/WizardStore';
 
+const nodeStore = useNodeStore();
 const wizardStore = useWizardStore();
 const router = useRouter();
 const nodeIp: Ref<string> = ref(wizardStore.nodeAddress);
@@ -33,7 +35,18 @@ const setValuesAndNavigate = () =>
 		wizardStore.setNodeAddress(nodeIpValue);
 		wizardStore.setNodePort(nodePortValue);
 		wizardStore.setVpnPort(vpnPortValue);
-		router.push({ name: 'Wizard6Protection' });
+		
+		// Check if public address is already exist
+		if(nodeStore.publicAddress.length > 0)
+		{
+			// Skip the wallet configuration
+			router.replace({ name: 'Wizard8Fund' });
+		}
+		else
+		{
+			// Navigate to the next step
+			router.push({ name: 'Wizard6Protection' });
+		}
 	}
 };
 
