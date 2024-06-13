@@ -13,7 +13,6 @@ const router = useRouter();
 // On mounted
 onMounted(async () =>
 {
-	console.log('passphrase', nodeStore.publicAddress);
 	// Check if public address is already exist
 	if(nodeStore.publicAddress.length > 0)
 	{
