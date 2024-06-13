@@ -163,7 +163,7 @@ const submitPassphrase = async () =>
 	// Get the passphrase
 	const passphrase = passphraseInputValue.value.trim();
 	const passphraseValid = await BluetoothService.writeNodePassphrase(passphrase);
-	console.log('passphraseValid', passphraseValid);
+	
 	// Send the passphrase to the BLE device
 	if(passphraseValid)
 	{
