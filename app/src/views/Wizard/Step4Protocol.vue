@@ -1,19 +1,20 @@
 <script lang="ts" setup>
 import { type Ref, ref } from 'vue';
 import {
-	IonPage, IonContent, IonButton,
+	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 	IonSelect, IonSelectOption
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useWizardStore } from '@stores/WizardStore';
+import LoadingButton from '@components/LoadingButton.vue';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
 const vpnType: Ref<string> = ref(wizardStore.vpnType);
 
-const setVpnTypeAndNavigate = () =>
+const setVpnTypeAndNavigate = async () =>
 {
 	// Check if the node type is wireguard or v2ray
 	if(vpnType.value === 'wireguard' || vpnType.value === 'v2ray')
@@ -58,9 +59,7 @@ const setVpnTypeAndNavigate = () =>
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" @click="setVpnTypeAndNavigate">
-									{{ $t('wizard.button-next') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-next')" :callback="setVpnTypeAndNavigate" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>

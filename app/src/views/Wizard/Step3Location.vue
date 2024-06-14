@@ -1,19 +1,20 @@
 <script lang="ts" setup>
 import { type Ref, ref } from 'vue';
 import {
-	IonPage, IonContent, IonButton,
+	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 	IonSelect, IonSelectOption
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useWizardStore } from '@stores/WizardStore';
+import LoadingButton from '@components/LoadingButton.vue';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
 const nodeType: Ref<string> = ref(wizardStore.nodeType);
 
-const setNodeTypeAndNavigate = () =>
+const setNodeTypeAndNavigate = async () =>
 {
 	// Check if the node type is residential or datacenter
 	if(nodeType.value === 'residential' || nodeType.value === 'datacenter')
@@ -52,9 +53,7 @@ const setNodeTypeAndNavigate = () =>
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" @click="setNodeTypeAndNavigate">
-									{{ $t('wizard.button-next') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-next')" :callback="setNodeTypeAndNavigate" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>

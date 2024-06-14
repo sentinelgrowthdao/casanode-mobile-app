@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { type Ref, ref } from 'vue';
 import {
-	IonPage, IonContent, IonButton,
+	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 	IonInput
@@ -9,6 +9,7 @@ import {
 import { useRouter } from 'vue-router';
 import { useNodeStore } from '@/stores/NodeStore';
 import { useWizardStore } from '@stores/WizardStore';
+import LoadingButton from '@components/LoadingButton.vue';
 
 const nodeStore = useNodeStore();
 const wizardStore = useWizardStore();
@@ -17,7 +18,7 @@ const nodeIp: Ref<string> = ref(wizardStore.nodeAddress);
 const nodePort: Ref<string> = ref(wizardStore.nodePort.toString());
 const vpnPort: Ref<string> = ref(wizardStore.vpnPort.toString());
 
-const setValuesAndNavigate = () =>
+const setValuesAndNavigate = async () =>
 {
 	const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
 	const ipv6Pattern = /^(([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)|(([0-9a-fA-F]{1,4}:){1,6}:([0-9a-fA-F]{1,4}|:)|(([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|(([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|(([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|(([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|([0-9a-fA-F]{1,4}:)((:[0-9a-fA-F]{1,4}){1,6})|(:((:[0-9a-fA-F]{1,4}){1,7}|:))))))))$/;
@@ -77,9 +78,7 @@ const setValuesAndNavigate = () =>
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" v-on:click="setValuesAndNavigate">
-									{{ $t('wizard.button-next') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-next')" :callback="setValuesAndNavigate" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>

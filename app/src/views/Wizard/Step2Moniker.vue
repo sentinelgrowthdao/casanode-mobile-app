@@ -2,21 +2,23 @@
 import { type Ref, ref } from 'vue';
 import
 {
-	IonPage, IonContent, IonButton,
+	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
 	IonList, IonItem,
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useWizardStore } from '@stores/WizardStore';
 import AppInput from '@components/AppInput.vue';
+import LoadingButton from '@components/LoadingButton.vue';
 
 const wizardStore = useWizardStore();
 const router = useRouter();
 const moniker: Ref<string> = ref(wizardStore.moniker);
 
-const setValueAndNavigate = () =>
+const setValueAndNavigate = async () =>
 {
 	const monikerValue = moniker.value.trim();
+	
 	// Check if the moniker is not empty and at least 4 characters
 	if(monikerValue !== '' && monikerValue.length >= 4)
 	{
@@ -51,9 +53,7 @@ const setValueAndNavigate = () =>
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" @click="setValueAndNavigate">
-									{{ $t('wizard.button-next') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-next')" :callback="setValueAndNavigate" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>
