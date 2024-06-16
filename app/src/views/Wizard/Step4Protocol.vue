@@ -7,11 +7,18 @@ import {
 	IonSelect, IonSelectOption
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useWizardStore } from '@stores/WizardStore';
+import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
 
-const wizardStore = useWizardStore();
+// Router
 const router = useRouter();
+// Import the useI18n composable function.
+const { t } = useI18n();
+
+const wizardStore = useWizardStore();
+const errorMessage: Ref<string> = ref('');
 const vpnType: Ref<string> = ref(wizardStore.vpnType);
 
 const setVpnTypeAndNavigate = async () =>
@@ -19,8 +26,17 @@ const setVpnTypeAndNavigate = async () =>
 	// Check if the node type is wireguard or v2ray
 	if(vpnType.value === 'wireguard' || vpnType.value === 'v2ray')
 	{
-		wizardStore.setVpnType(vpnType.value);
-		router.push({ name: 'Wizard5Network' });
+		// Send to the server and apply the value
+		if(await BluetoothService.writeVpnType(vpnType.value) && await BluetoothService.writeNodeConfig())
+		{
+			wizardStore.setVpnType(vpnType.value);
+			router.push({ name: 'Wizard5Network' });
+		}
+		else
+		{
+			// Show an error message
+			errorMessage.value = t('wizard.error-occurred') as string;
+		}
 	}
 };
 
