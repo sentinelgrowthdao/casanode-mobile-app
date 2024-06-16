@@ -8,7 +8,7 @@ import {
 	IonSpinner,
 } from '@ionic/vue';
 import { shieldHalf } from 'ionicons/icons';
-import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
+import { useNodeStore, type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 import NodeService from '@/services/NodeService';
 
@@ -37,7 +37,7 @@ async function loadNodeInformations(): Promise<void>
 	
 	nodeStore.setPublicAddress(publicAddress || '');
 	nodeStore.setNodeAddress(nodeAddress || '');
-	nodeStore.setNodeBalance(nodeBalance || '');
+	nodeStore.setNodeBalance(nodeBalance);
 }
 
 /**
