@@ -74,5 +74,8 @@
 	"button-create": "Créer",
 	"button-restore": "Restaurer",
 	"button-test-ports": "Tester les ports",
-	"button-finish": "Terminer"
+	"button-finish": "Terminer",
+	
+	"error-occurred": "Une erreur s'est produite lors de l'envoi de données au nœud.",
+	"warning-wallet-fund": "Le portefeuille du nœud n'a pas assez de dVPN pour démarrer."
 }
