@@ -29,8 +29,17 @@ const checkWalletBalance = async () =>
 	// Check if the balance is not empty
 	if(balance && balance.amount >= 10)
 	{
-		// Navigate to the next step
-		router.push({ name: 'Wizard9Ports' });
+		// Start the dvpn node successfully
+		if(await BluetoothService.startNode() === 0)
+		{
+			// Navigate to the next step
+			router.push({ name: 'Wizard9Ports' });
+		}
+		else
+		{
+			// Show the error message
+			balanceMessage.value = t('wizard.error-start-failed');
+		}
 	}
 	else
 	{

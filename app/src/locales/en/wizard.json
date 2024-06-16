@@ -77,5 +77,6 @@
 	"button-finish": "Finish",
 	
 	"error-occurred": "An error has occurred while sending data to the node.",
+	"error-start-failed": "Failed to start the node.",
 	"warning-wallet-fund": "The node's wallet does not have enough dVPNs to start."
 }

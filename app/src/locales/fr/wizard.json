@@ -77,5 +77,6 @@
 	"button-finish": "Terminer",
 	
 	"error-occurred": "Une erreur s'est produite lors de l'envoi de données au nœud.",
+	"error-start-failed": "Échec du démarrage du nœud.",
 	"warning-wallet-fund": "Le portefeuille du nœud n'a pas assez de dVPN pour démarrer."
 }
