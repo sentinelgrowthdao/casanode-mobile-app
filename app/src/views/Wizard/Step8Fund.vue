@@ -1,16 +1,43 @@
 <script lang="ts" setup>
+import { type Ref, ref } from 'vue';
 import {
-	IonPage, IonContent, IonButton,
-	IonGrid, IonCol, IonRow
+	IonPage, IonContent,
+	IonGrid, IonCol, IonRow,
+	IonItem, IonText
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { copyToClipboard } from '@/utils/clipboard';
+import { useNodeStore } from '@/stores/NodeStore';
+import BluetoothService from '@/services/BluetoothService';
+import LoadingButton from '@components/LoadingButton.vue';
 
+// Router
+const router = useRouter();
 // Import the useI18n composable function.
 const { t } = useI18n();
 
-// The public address to fund.
-const address_public = "sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw";
+const nodeStore = useNodeStore();
+const balanceMessage: Ref<string> = ref('');
+
+const checkWalletBalance = async () => 
+{
+	// Clear the balance message
+	balanceMessage.value = '';
+	// Get wallet balance
+	const balance = await BluetoothService.readNodeBalance();
+	// Check if the balance is not empty
+	if(balance && balance.amount >= 10)
+	{
+		// Navigate to the next step
+		router.push({ name: 'Wizard9Ports' });
+	}
+	else
+	{
+		// Show the warning message
+		balanceMessage.value = t('wizard.warning-wallet-fund');
+	}
+};
 
 </script>
 <template>
@@ -20,19 +47,19 @@ const address_public = "sent1gml0h2eavhrqcwz8u5h0s8f8mds67f0gvtmsnw";
 				<div class="form">
 					<h1>{{ $t('wizard.wallet-fund-title') }}</h1>
 					<p class="text">{{ $t('wizard.wallet-fund-text') }}</p>
-					<p class="address" @click="copyToClipboard(t('wizard.wallet-fund-copied'), address_public)">
-						{{ address_public }}
+					<p class="address" @click="copyToClipboard(t('wizard.wallet-fund-copied'), nodeStore.publicAddress)">
+						{{ nodeStore.publicAddress }}
 					</p>
 					<p class="text">{{ $t('wizard.wallet-fund-next') }}</p>
+					<ion-item lines="none" v-if="balanceMessage">
+						<ion-text color="warning">{{ balanceMessage }}</ion-text>
+					</ion-item>
 				</div>
 				<div class="submit">
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard9Ports' }"
-									router-direction="forward">
-									{{ $t('wizard.button-next') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-next')" :callback="checkWalletBalance" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>
