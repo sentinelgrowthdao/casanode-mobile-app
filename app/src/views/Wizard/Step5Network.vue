@@ -3,17 +3,24 @@ import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
-	IonList, IonItem,
+	IonList, IonItem, IonText,
 	IonInput
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
 import { useWizardStore } from '@stores/WizardStore';
+import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
+
+// Router
+const router = useRouter();
+// Import the useI18n composable function.
+const { t } = useI18n();
 
 const nodeStore = useNodeStore();
 const wizardStore = useWizardStore();
-const router = useRouter();
+const errorMessage: Ref<string> = ref('');
 const nodeIp: Ref<string> = ref(wizardStore.nodeAddress);
 const nodePort: Ref<string> = ref(wizardStore.nodePort.toString());
 const vpnPort: Ref<string> = ref(wizardStore.vpnPort.toString());
@@ -33,20 +40,32 @@ const setValuesAndNavigate = async () =>
 		vpnPortValue >= 1024 && vpnPortValue <= 65535 &&
 		vpnPortValue !== nodePortValue)
 	{
-		wizardStore.setNodeAddress(nodeIpValue);
-		wizardStore.setNodePort(nodePortValue);
-		wizardStore.setVpnPort(vpnPortValue);
-		
-		// Check if public address is already exist
-		if(nodeStore.publicAddress.length > 0)
+		// Send to the server and apply the value
+		if(await BluetoothService.writeNodeIp(nodeIpValue)
+			&& await BluetoothService.writeNodePort(nodePortValue.toString())
+			&& await BluetoothService.writeVpnPort(vpnPortValue.toString())
+			&& await BluetoothService.writeNodeConfig())
 		{
-			// Skip the wallet configuration
-			router.replace({ name: 'Wizard8Fund' });
+			wizardStore.setNodeAddress(nodeIpValue);
+			wizardStore.setNodePort(nodePortValue);
+			wizardStore.setVpnPort(vpnPortValue);
+			
+			// Check if public address is already exist
+			if(nodeStore.publicAddress.length > 0)
+			{
+				// Skip the wallet configuration
+				router.replace({ name: 'Wizard8Fund' });
+			}
+			else
+			{
+				// Navigate to the next step
+				router.push({ name: 'Wizard6Protection' });
+			}
 		}
 		else
 		{
-			// Navigate to the next step
-			router.push({ name: 'Wizard6Protection' });
+			// Show an error message
+			errorMessage.value = t('wizard.error-occurred') as string;
 		}
 	}
 };
@@ -71,6 +90,9 @@ const setValuesAndNavigate = async () =>
 						</ion-item>
 						<ion-item v-if="wizardStore.vpnType === 'v2ray'">
 							<ion-input :label="$t('wizard.network-v2ray-port')" v-model="vpnPort" />
+						</ion-item>
+						<ion-item lines="none" v-if="errorMessage">
+							<ion-text color="danger">{{ errorMessage }}</ion-text>
 						</ion-item>
 					</ion-list>
 				</div>
