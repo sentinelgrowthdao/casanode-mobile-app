@@ -7,23 +7,44 @@ import
 	IonList, IonItem,
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useWizardStore } from '@stores/WizardStore';
+import BluetoothService from '@/services/BluetoothService';
 import AppInput from '@components/AppInput.vue';
 import LoadingButton from '@components/LoadingButton.vue';
 
-const wizardStore = useWizardStore();
+// Router
 const router = useRouter();
+// Import the useI18n composable function.
+const { t } = useI18n();
+
+const wizardStore = useWizardStore();
+const errorMessage: Ref<string> = ref('');
 const moniker: Ref<string> = ref(wizardStore.moniker);
 
 const setValueAndNavigate = async () =>
 {
+	// Clear the error message
+	errorMessage.value = '';
+	// Trim the moniker value
 	const monikerValue = moniker.value.trim();
 	
 	// Check if the moniker is not empty and at least 4 characters
 	if(monikerValue !== '' && monikerValue.length >= 4)
 	{
-		wizardStore.setMoniker(monikerValue);
-		router.push({ name: 'Wizard3Location' });
+		// Send to the server and apply the value
+		if(await BluetoothService.writeMoniker(moniker.value) && await BluetoothService.writeNodeConfig())
+		{
+			// Set the moniker value
+			wizardStore.setMoniker(monikerValue);
+			// Navigate to the next step
+			router.push({ name: 'Wizard3Location' });
+		}
+		else
+		{
+			// Show an error message
+			errorMessage.value = t('wizard.error-occurred') as string;
+		}
 	}
 };
 
@@ -46,6 +67,9 @@ const setValueAndNavigate = async () =>
 								aria-label="Moniker"
 								:minLength="4"
 							/>
+						</ion-item>
+						<ion-item lines="none" v-if="errorMessage">
+							<ion-text color="danger">{{ errorMessage }}</ion-text>
 						</ion-item>
 					</ion-list>
 				</div>
