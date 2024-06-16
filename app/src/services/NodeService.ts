@@ -94,7 +94,7 @@ class NodeService
 				// Update the node store
 				nodeStore.setPublicAddress(publicAddress || '');
 				nodeStore.setNodeAddress(nodeAddress || '');
-				nodeStore.setNodeBalance(nodeBalance || '');
+				nodeStore.setNodeBalance(nodeBalance);
 			}
 		
 		}

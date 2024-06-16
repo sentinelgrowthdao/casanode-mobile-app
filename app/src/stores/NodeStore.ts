@@ -7,6 +7,12 @@ export interface BandwidthSpeed
 	download: string;
 }
 
+export interface NodeBalance
+{
+	amount: number;
+	denom: string;
+}
+
 export const useNodeStore = defineStore('node',
 {
 	state: () => ({
@@ -36,8 +42,10 @@ export const useNodeStore = defineStore('node',
 		maximumPeers: 0,
 		
 		// Wallet
-		nodeBalanceAmount: 12432.45,
-		nodeBalanceDenom: 'DVPN',
+		nodeBalance: {
+			amount: 0,
+			denom: ''
+		} as NodeBalance,
 		publicAddress: '',
 		nodeAddress: '',
 		transactions: [],
@@ -166,11 +174,12 @@ export const useNodeStore = defineStore('node',
 			this.nodeAddress = address;
 		},
 		// Set the node balance
-		setNodeBalance(balance: string): void
+		setNodeBalance(balance: NodeBalance|null): void
 		{
-			const parts = balance.split(' ');
-			this.nodeBalanceAmount = parseFloat(parts[0]);
-			this.nodeBalanceDenom = parts[1];
+			if(balance === null)
+				this.nodeBalance = { amount: 0, denom: '' };
+			else
+				this.nodeBalance = balance;
 		},
 	}
 });

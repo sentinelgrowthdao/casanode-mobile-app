@@ -1,6 +1,6 @@
 // src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { type BandwidthSpeed } from '@stores/NodeStore';
+import { type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
 
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
 const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
@@ -848,16 +848,22 @@ class BluetoothService
 	
 	/**
 	 * Read node balance from the BLE server.
-	 * @returns Promise<string|null>
+	 * @returns Promise<NodeBalance|null>
 	 */
-	public async readNodeBalance(): Promise<string|null>
+	public async readNodeBalance(): Promise<NodeBalance|null>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
 				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_BALANCE_UUID);
-				return decodeDataView(value);
+				const valueString = decodeDataView(value);
+				// Split the string to get the amount and the denom
+				const balance = valueString.split(' ');
+				return {
+					amount: parseFloat(balance[0]) ?? 0.0,
+					denom: balance[1] ?? 'udvpn',
+				};
 			}
 		}
 		catch (error)

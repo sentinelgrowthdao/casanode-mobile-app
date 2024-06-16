@@ -20,7 +20,7 @@ const nodeStore = useNodeStore();
 // Define format amount function
 const formattedAmount = computed(() =>
 {
-	return formatNumber(nodeStore.nodeBalanceAmount, locale.value);
+	return formatNumber(nodeStore.nodeBalance.amount, locale.value);
 });
 
 function formatNumber(amount: number, locale: string): string
@@ -43,7 +43,7 @@ function formatNumber(amount: number, locale: string): string
 							<ion-row>
 								<ion-col size="9">
 									<p class="label">{{ $t('wallet.node-balance-label') }}</p>
-									<p class="amount">{{ formattedAmount }}<span class="unit">{{ nodeStore.nodeBalanceDenom }}</span></p>
+									<p class="amount">{{ formattedAmount }}<span class="unit">{{ nodeStore.nodeBalance.denom }}</span></p>
 								</ion-col>
 								<ion-col size="3" class="ion-text-right">
 									<ion-button fill="clear" size="large" class="refresh-button">
