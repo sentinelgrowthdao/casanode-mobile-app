@@ -3,7 +3,7 @@ import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
-	IonList, IonItem,
+	IonList, IonItem, IonText,
 	IonSelect, IonSelectOption
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
@@ -68,6 +68,9 @@ const setVpnTypeAndNavigate = async () =>
 									{{ $t('wizard.protocol-v2ray') }}
 								</ion-select-option>
 							</ion-select>
+						</ion-item>
+						<ion-item lines="none" v-if="errorMessage">
+							<ion-text color="danger">{{ errorMessage }}</ion-text>
 						</ion-item>
 					</ion-list>
 				</div>

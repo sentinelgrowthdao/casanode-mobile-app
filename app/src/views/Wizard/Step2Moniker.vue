@@ -4,7 +4,7 @@ import
 {
 	IonPage, IonContent,
 	IonGrid, IonRow, IonCol,
-	IonList, IonItem,
+	IonList, IonItem, IonText,
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
