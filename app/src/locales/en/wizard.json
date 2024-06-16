@@ -74,5 +74,7 @@
 	"button-create": "Create",
 	"button-restore": "Restore",
 	"button-test-ports": "Test Ports",
-	"button-finish": "Finish"
+	"button-finish": "Finish",
+	
+	"error-occurred": "An error has occurred while sending data to the node."
 }
