@@ -33,7 +33,7 @@ const setValueAndNavigate = async () =>
 	if(monikerValue !== '' && monikerValue.length >= 4)
 	{
 		// Send to the server and apply the value
-		if(await BluetoothService.writeMoniker(moniker.value) && await BluetoothService.writeNodeConfig())
+		if(await BluetoothService.writeMoniker(monikerValue) && await BluetoothService.writeNodeConfig())
 		{
 			// Set the moniker value
 			wizardStore.setMoniker(monikerValue);
