@@ -3,6 +3,26 @@ import {
 	IonPage, IonContent, IonButton,
 	IonGrid, IonCol, IonRow
 } from '@ionic/vue';
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useNodeStore } from '@/stores/NodeStore';
+
+// Router
+const router = useRouter();
+// Node store
+const nodeStore = useNodeStore();
+
+// On mounted
+onMounted(async () =>
+{
+	// Check if public address is already exist
+	if(nodeStore.publicAddress.length > 0)
+	{
+		// Navigate to the next step
+		router.replace({ name: 'Wizard8Fund' });
+	}
+});
+
 </script>
 <template>
 	<ion-page>
