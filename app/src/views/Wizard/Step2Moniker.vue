@@ -8,7 +8,7 @@ import
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { useWizardStore } from '@stores/WizardStore';
+import { useNodeStore } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 import AppInput from '@components/AppInput.vue';
 import LoadingButton from '@components/LoadingButton.vue';
@@ -18,9 +18,9 @@ const router = useRouter();
 // Import the useI18n composable function.
 const { t } = useI18n();
 
-const wizardStore = useWizardStore();
+const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
-const moniker: Ref<string> = ref(wizardStore.moniker);
+const moniker: Ref<string> = ref(nodeStore.moniker);
 
 const setValueAndNavigate = async () =>
 {
@@ -36,7 +36,7 @@ const setValueAndNavigate = async () =>
 		if(await BluetoothService.writeMoniker(monikerValue) && await BluetoothService.writeNodeConfig())
 		{
 			// Set the moniker value
-			wizardStore.setMoniker(monikerValue);
+			nodeStore.setMoniker(monikerValue);
 			// Navigate to the next step
 			router.push({ name: 'Wizard3Location' });
 		}

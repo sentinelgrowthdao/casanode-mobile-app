@@ -1,7 +1,6 @@
 // src/services/NodeService.ts
 import BluetoothService from './BluetoothService';
 import { useNodeStore } from '@/stores/NodeStore';
-import { useWizardStore } from '@/stores/WizardStore';
 
 class NodeService
 {
@@ -25,7 +24,6 @@ class NodeService
 	public async loadNodeConfiguration(): Promise<void>
 	{
 		const nodeStore = useNodeStore();
-		const wizardStore = useWizardStore();
 		
 		// Check if connected to the BLE device
 		if(!BluetoothService.isConnected())
@@ -73,14 +71,6 @@ class NodeService
 			nodeStore.setSystemOs(systemOs || '');
 			nodeStore.setSystemArch(systemArch || '');
 			nodeStore.setSystemKernel(systemKernel || '');
-			
-			// Duplicate the information to the wizard store
-			wizardStore.setMoniker(moniker || '');
-			wizardStore.setNodeType(nodeType || '');
-			wizardStore.setVpnType(vpnType || '');
-			wizardStore.setNodeAddress(nodeIp || '');
-			wizardStore.setNodePort(nodePort || 0);
-			wizardStore.setVpnPort(vpnPort || 0);
 			
 			// Check if passphrase is available
 			const passphraseAvailable = await BluetoothService.readNodePassphrase();

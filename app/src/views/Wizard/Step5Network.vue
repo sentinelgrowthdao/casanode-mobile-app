@@ -9,7 +9,6 @@ import {
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import { useWizardStore } from '@stores/WizardStore';
 import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
 
@@ -19,11 +18,10 @@ const router = useRouter();
 const { t } = useI18n();
 
 const nodeStore = useNodeStore();
-const wizardStore = useWizardStore();
 const errorMessage: Ref<string> = ref('');
-const nodeIp: Ref<string> = ref(wizardStore.nodeAddress);
-const nodePort: Ref<string> = ref(wizardStore.nodePort.toString());
-const vpnPort: Ref<string> = ref(wizardStore.vpnPort.toString());
+const nodeIp: Ref<string> = ref(nodeStore.nodeIp);
+const nodePort: Ref<string> = ref(nodeStore.nodePort.toString());
+const vpnPort: Ref<string> = ref(nodeStore.vpnPort.toString());
 
 const setValuesAndNavigate = async () =>
 {
@@ -46,9 +44,9 @@ const setValuesAndNavigate = async () =>
 			&& await BluetoothService.writeVpnPort(vpnPortValue.toString())
 			&& await BluetoothService.writeNodeConfig())
 		{
-			wizardStore.setNodeAddress(nodeIpValue);
-			wizardStore.setNodePort(nodePortValue);
-			wizardStore.setVpnPort(vpnPortValue);
+			nodeStore.setNodeAddress(nodeIpValue);
+			nodeStore.setNodePort(nodePortValue);
+			nodeStore.setVpnPort(vpnPortValue);
 			
 			// Check if public address is already exist
 			if(nodeStore.publicAddress.length > 0)
@@ -85,10 +83,10 @@ const setValuesAndNavigate = async () =>
 						<ion-item>
 							<ion-input :label="$t('wizard.network-api-port')" v-model="nodePort" />
 						</ion-item>
-						<ion-item v-if="wizardStore.vpnType === 'wireguard'">
+						<ion-item v-if="nodeStore.vpnType === 'wireguard'">
 							<ion-input :label="$t('wizard.network-wireguard-port')" v-model="vpnPort" />
 						</ion-item>
-						<ion-item v-if="wizardStore.vpnType === 'v2ray'">
+						<ion-item v-if="nodeStore.vpnType === 'v2ray'">
 							<ion-input :label="$t('wizard.network-v2ray-port')" v-model="vpnPort" />
 						</ion-item>
 						<ion-item lines="none" v-if="errorMessage">

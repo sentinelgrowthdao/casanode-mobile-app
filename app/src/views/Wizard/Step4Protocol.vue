@@ -8,7 +8,7 @@ import {
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { useWizardStore } from '@stores/WizardStore';
+import { useNodeStore } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
 
@@ -17,9 +17,9 @@ const router = useRouter();
 // Import the useI18n composable function.
 const { t } = useI18n();
 
-const wizardStore = useWizardStore();
+const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
-const vpnType: Ref<string> = ref(wizardStore.vpnType);
+const vpnType: Ref<string> = ref(nodeStore.vpnType);
 
 const setVpnTypeAndNavigate = async () =>
 {
@@ -29,7 +29,7 @@ const setVpnTypeAndNavigate = async () =>
 		// Send to the server and apply the value
 		if(await BluetoothService.writeVpnType(vpnType.value) && await BluetoothService.writeNodeConfig())
 		{
-			wizardStore.setVpnType(vpnType.value);
+			nodeStore.setVpnType(vpnType.value);
 			router.push({ name: 'Wizard5Network' });
 		}
 		else

@@ -3,9 +3,9 @@ import {
 	IonPage, IonContent, IonButton,
 	IonGrid, IonCol, IonRow
 } from '@ionic/vue';
-import { useWizardStore } from '@stores/WizardStore';
+import { useNodeStore } from '@stores/NodeStore';
 
-const wizardStore = useWizardStore();
+const nodeStore = useNodeStore();
 </script>
 <template>
 	<ion-page>
@@ -15,9 +15,9 @@ const wizardStore = useWizardStore();
 					<h1>{{ $t('wizard.ports-title') }}</h1>
 					<p class="text">{{ $t('wizard.ports-text') }}</p>
 					<ul>
-						<li>{{ $t('wizard.ports-node', {port: wizardStore.nodePort }) }}</li>
-						<li v-if="wizardStore.vpnType === 'wireguard'">{{ $t('wizard.ports-wireguard', {port: wizardStore.vpnPort }) }}</li>
-						<li v-if="wizardStore.vpnType === 'v2ray'">{{ $t('wizard.ports-v2ray', {port: wizardStore.vpnPort }) }}</li>
+						<li>{{ $t('wizard.ports-node', {port: nodeStore.nodePort }) }}</li>
+						<li v-if="nodeStore.vpnType === 'wireguard'">{{ $t('wizard.ports-wireguard', {port: nodeStore.vpnPort }) }}</li>
+						<li v-if="nodeStore.vpnType === 'v2ray'">{{ $t('wizard.ports-v2ray', {port: nodeStore.vpnPort }) }}</li>
 					</ul>
 					<p class="text">{{ $t('wizard.ports-more') }}</p>
 				</div>
