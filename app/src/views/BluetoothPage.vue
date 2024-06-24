@@ -421,6 +421,32 @@ const applyNodeConfig = async () =>
 	}
 };
 
+const sendMnemonic = async () =>
+{
+	const mnemonic = 'winner note become voice inside number middle insect spy horror churn envelope island sweet hen happy knee interest flame soccer hospital uniform hood ice';
+	if(await BluetoothService.writeMnemonic(mnemonic))
+	{
+		console.log('Mnemonic sent to the BLE server.');
+	}
+	else
+	{
+		console.error('Failed to send mnemonic to the BLE server.');
+	}
+};
+
+const readMnemonic = async () =>
+{
+	const mnemonic = await BluetoothService.readMnemonic();
+	if(mnemonic)
+	{
+		console.log(`Mnemonic received from the BLE server: ${mnemonic}`);
+	}
+	else
+	{
+		console.error('Failed to read mnemonic from the BLE server.');
+	}
+};
+
 </script>
 
 <template>
@@ -454,6 +480,15 @@ const applyNodeConfig = async () =>
 				</ion-item>
 			</ion-list> -->
 			<ion-grid>
+				<ion-row v-if="isConnected">
+					<ion-col size="12">
+						<ion-item>
+							<ion-button @click="sendMnemonic">Send Mnemonic</ion-button>
+							<ion-button @click="readMnemonic">Read Mnemonic</ion-button>
+						</ion-item>
+					</ion-col>
+				</ion-row>
+
 				<ion-row v-if="passphraseFormOpen">
 					<ion-col size="12">
 						<ion-item>
