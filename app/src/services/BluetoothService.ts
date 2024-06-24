@@ -1,5 +1,7 @@
 // src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { Buffer } from 'buffer';
+import * as cryptoJs from 'crypto-js';
 import { type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
 
 const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
@@ -36,6 +38,7 @@ const CHAR_SYSTEM_RESET_UUID = '0000180d-0000-1000-8000-00805f9b3519';
 const CHAR_SYSTEM_RESTART_UUID = '0000180d-0000-1000-8000-00805f9b351a';
 const CHAR_SYSTEM_HALT_UUID = '0000180d-0000-1000-8000-00805f9b351b';
 const CHAR_CERTIFICATE_RENEW_UUID = '0000180d-0000-1000-8000-00805f9b351c';
+const CHAR_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b351d';
 
 /**
  * Encode a string into a DataView
@@ -1099,6 +1102,118 @@ class BluetoothService
 		}
 		
 		return -1;
+	}
+	
+	private splitIntoChunks(data: Buffer, chunkSize: number): Buffer[]
+	{
+		// Create an array to store the chunks
+		const chunks: Buffer[] = [];
+		
+		// Split the data into chunks
+		for (let i = 0; i < data.length; i += chunkSize)
+		{
+			const end = i + chunkSize;
+			const chunk = (end < data.length) ? Buffer.alloc(chunkSize) : Buffer.alloc(data.length - i);
+			data.copy(chunk, 0, i, end);
+			chunks.push(chunk);
+		}
+		
+		// Return the chunks
+		return chunks;
+	}
+	
+	
+	/**
+	 * Read mnemonic from the BLE server.
+	 * @returns Promise<string | null>
+	 */
+	public async readMnemonic(): Promise<string | null>
+	{
+		try
+		{
+			if (this.deviceId)
+			{
+				// Read the length of the data first
+				const lengthBuffer = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID);
+				const length = lengthBuffer.getUint32(0, true);
+				let dataBuffer = Buffer.alloc(0);
+				
+				do
+				{
+					// Read the next chunk
+					const chunk = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID);
+					// console.log(`Received chunk: ${chunk.buffer.toString()} (${chunk.buffer.length} bytes)`);
+					dataBuffer = Buffer.concat([dataBuffer, Buffer.from(chunk.buffer)]);
+				}
+				while(dataBuffer.toString('utf-8').length < length)
+				
+				// Process the received data
+				const receivedStr = dataBuffer.toString('utf-8');
+				const parts = receivedStr.split(' ');
+				const hash = parts.pop();
+				const mnemonic = parts.join(' ');
+				
+				const calculatedHash = cryptoJs.SHA256(mnemonic).toString();
+				if (calculatedHash === hash)
+				{
+					return mnemonic;
+				}
+				else
+				{
+					console.error('Hash mismatch for received mnemonic');
+					return null;
+				}
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Send mnemonic to the BLE server.
+	 * @param data string
+	 * @returns Promise<boolean>
+	 */
+	public async writeMnemonic(data: string): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const hash = cryptoJs.SHA256(data).toString();
+				const dataToSend = `${data} ${hash}`;
+				const dataBuffer = Buffer.from(dataToSend);
+				
+				// console.log(`Sending mnemonic: ${data} ${hash} (${dataBuffer.length} bytes)`);
+				
+				// Send the length of the data first
+				const lengthBuffer = Buffer.alloc(4);
+				lengthBuffer.writeUInt32LE(dataBuffer.length, 0);
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID, new DataView(lengthBuffer.buffer));
+				
+				// Send the data in chunks
+				const chunks = this.splitIntoChunks(dataBuffer, 20);
+				for (const chunk of chunks)
+				{
+					// console.log(`Sending chunk: ${chunk.toString('utf-8')} (${chunk.length} bytes)`)
+					await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID, new DataView(chunk.buffer));
+				}
+				
+				// Return true if the mnemonic was sent successfully
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		// Return false if there was an error
+		return false;
 	}
 }
 
