@@ -38,7 +38,8 @@ const CHAR_SYSTEM_RESET_UUID = '0000180d-0000-1000-8000-00805f9b3519';
 const CHAR_SYSTEM_RESTART_UUID = '0000180d-0000-1000-8000-00805f9b351a';
 const CHAR_SYSTEM_HALT_UUID = '0000180d-0000-1000-8000-00805f9b351b';
 const CHAR_CERTIFICATE_RENEW_UUID = '0000180d-0000-1000-8000-00805f9b351c';
-const CHAR_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b351d';
+const CHAR_WALLET_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b351d';
+const CHAR_WALLET_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b351e';
 
 /**
  * Encode a string into a DataView
@@ -1104,6 +1105,12 @@ class BluetoothService
 		return -1;
 	}
 	
+	/**
+	 * Split the data into chunks.
+	 * @param data Buffer
+	 * @param chunkSize number
+	 * @returns Buffer[]
+	 */
 	private splitIntoChunks(data: Buffer, chunkSize: number): Buffer[]
 	{
 		// Create an array to store the chunks
@@ -1134,14 +1141,14 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Read the length of the data first
-				const lengthBuffer = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID);
+				const lengthBuffer = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID);
 				const length = lengthBuffer.getUint32(0, true);
 				let dataBuffer = Buffer.alloc(0);
 				
 				do
 				{
 					// Read the next chunk
-					const chunk = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID);
+					const chunk = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID);
 					// console.log(`Received chunk: ${chunk.buffer.toString()} (${chunk.buffer.length} bytes)`);
 					dataBuffer = Buffer.concat([dataBuffer, Buffer.from(chunk.buffer)]);
 				}
@@ -1193,14 +1200,14 @@ class BluetoothService
 				// Send the length of the data first
 				const lengthBuffer = Buffer.alloc(4);
 				lengthBuffer.writeUInt32LE(dataBuffer.length, 0);
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID, new DataView(lengthBuffer.buffer));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID, new DataView(lengthBuffer.buffer));
 				
 				// Send the data in chunks
 				const chunks = this.splitIntoChunks(dataBuffer, 20);
 				for (const chunk of chunks)
 				{
 					// console.log(`Sending chunk: ${chunk.toString('utf-8')} (${chunk.length} bytes)`)
-					await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MNEMONIC_UUID, new DataView(chunk.buffer));
+					await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID, new DataView(chunk.buffer));
 				}
 				
 				// Return true if the mnemonic was sent successfully
@@ -1215,6 +1222,33 @@ class BluetoothService
 		// Return false if there was an error
 		return false;
 	}
+	
+	/**
+	 * Perform a wallet action on the BLE server.
+	 * @param action string
+	 * @returns Promise<boolean>
+	 */
+	public async performWalletAction(action: string): Promise<boolean>
+	{
+		// Check if the action is valid
+		if(action !== 'create' && action !== 'restore' && action !== 'remove')
+			return false;
+		
+		try
+		{
+			if(this.deviceId)
+			{
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_ACTIONS_UUID, encodeDataView(action));
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		return false;
+	}
+	
 }
 
 export default BluetoothService.getInstance();
