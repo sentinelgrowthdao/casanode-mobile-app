@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import {
 	IonPage, IonContent, IonButton,
-	IonGrid, IonCol, IonRow
+	IonGrid, IonCol, IonRow,
+	IonTextarea
 } from '@ionic/vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
