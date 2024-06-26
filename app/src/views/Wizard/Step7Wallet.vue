@@ -1,16 +1,24 @@
 <script lang="ts" setup>
+import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonButton,
-	IonGrid, IonCol, IonRow
+	IonGrid, IonCol, IonRow,
+	IonItem, IonText,
 } from '@ionic/vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
+import BluetoothService from '@/services/BluetoothService';
+import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
 const router = useRouter();
-// Node store
+// Import the useI18n composable function.
+const { t } = useI18n();
+
 const nodeStore = useNodeStore();
+const errorMessage: Ref<string> = ref('');
 
 // On mounted
 onMounted(async () =>
@@ -23,6 +31,23 @@ onMounted(async () =>
 	}
 });
 
+const requestCreateWallet = async () =>
+{
+	// Create a new wallet
+	if(await BluetoothService.performWalletAction('create'))
+	{
+		// Read mnemonic
+		const mnemonic: string = await BluetoothService.readMnemonic();
+		// Navigate to the next step
+		router.push({ name: 'Wizard7Create' });
+	}
+	else
+	{
+		// Show an error message
+		errorMessage.value = t('wizard.error-wallet-creation') as string;
+	}
+};
+
 </script>
 <template>
 	<ion-page>
@@ -34,12 +59,14 @@ onMounted(async () =>
 				</div>
 				<div class="submit">
 					<ion-grid>
+						<ion-row v-if="errorMessage">
+							<ion-item lines="none">
+								<ion-text color="danger">{{ errorMessage }}</ion-text>
+							</ion-item>
+						</ion-row>
 						<ion-row>
 							<ion-col size="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard7Create' }"
-									router-direction="forward" fill="outline">
-									{{ $t('wizard.button-create') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-create')" :callback="requestCreateWallet" />
 							</ion-col>
 							<ion-col size="6">
 								<ion-button expand="block" :router-link="{ name: 'Wizard7Restore' }"
