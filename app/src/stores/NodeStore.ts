@@ -48,6 +48,7 @@ export const useNodeStore = defineStore('node',
 		} as NodeBalance,
 		publicAddress: '',
 		nodeAddress: '',
+		mnemonic: [] as string[],
 		transactions: [],
 		
 		// System Information
@@ -180,6 +181,11 @@ export const useNodeStore = defineStore('node',
 				this.nodeBalance = { amount: 0, denom: '' };
 			else
 				this.nodeBalance = balance;
+		},
+		// Set the mnemonic
+		setMnemonic(mnemonic: string[]): void
+		{
+			this.mnemonic = mnemonic;
 		},
 	}
 });
