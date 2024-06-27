@@ -40,6 +40,7 @@ const CHAR_SYSTEM_HALT_UUID = '0000180d-0000-1000-8000-00805f9b351b';
 const CHAR_CERTIFICATE_RENEW_UUID = '0000180d-0000-1000-8000-00805f9b351c';
 const CHAR_WALLET_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b351d';
 const CHAR_WALLET_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b351e';
+const CHAR_NODE_KEYRING_BACKEND_UUID = '0000180d-0000-1000-8000-00805f9b351f';
 
 /**
  * Encode a string into a DataView
@@ -1239,6 +1240,50 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_ACTIONS_UUID, encodeDataView(action));
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		return false;
+	}
+	
+	/**
+	 * Read keyring backend from the BLE server.
+	 * @returns Promise<string|null>
+	 */
+	public async readKeyringBackend(): Promise<string|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_KEYRING_BACKEND_UUID);
+				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Send keyring backend to the BLE server.
+	 * @param data string
+	 * @returns Promise<boolean>
+	 */
+	public async writeKeyringBackend(data: string): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_KEYRING_BACKEND_UUID, encodeDataView(data));
 				return true;
 			}
 		}
