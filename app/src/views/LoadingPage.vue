@@ -105,10 +105,12 @@ const connectToBluetooth = async () =>
 			}
 		}
 		
-		// Check if passprhase is needed
-		const passphraseNeeded = await BluetoothService.readNodePassphrase();
-		// If passphrase is needed
-		if(!passphraseNeeded)
+		// Check if passphrase is needed
+		const keyringBackend = await BluetoothService.readKeyringBackend();
+		const publicAddress = await BluetoothService.readPublicAddress();
+		
+		// If passphrase is needed and wallet already exists
+		if(keyringBackend === 'file' && publicAddress !== null)
 		{
 			errorMessage.value = '';
 			// Open the passphrase form
