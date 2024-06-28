@@ -32,8 +32,21 @@ const checkWalletBalance = async () =>
 		// Start the dvpn node successfully
 		if(await BluetoothService.startNode() === 0)
 		{
-			// Navigate to the next step
-			router.push({ name: 'Wizard9Ports' });
+			// Get Node status
+			const status = await BluetoothService.readNodeStatus();
+			// Check if the status is not null
+			if(status !== null)
+			{
+				// Store the node status
+				nodeStore.setNodeStatus(status);
+				// Navigate to the next step
+				router.push({ name: 'Wizard9Ports' });
+			}
+			else
+			{
+				// Show the error message
+				balanceMessage.value = t('wizard.error-start-failed');
+			}
 		}
 		else
 		{
