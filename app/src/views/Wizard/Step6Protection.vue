@@ -1,14 +1,24 @@
 <script lang="ts" setup>
+import { type Ref, ref } from 'vue';
 import {
-	IonPage, IonContent, IonButton,
-	IonGrid, IonCol, IonRow
+	IonPage, IonContent,
+	IonGrid, IonCol, IonRow,
+	IonItem, IonText,
 } from '@ionic/vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
+import BluetoothService from '@/services/BluetoothService';
+import LoadingButton from '@components/LoadingButton.vue';
+
+// Router
+const router = useRouter();
+// Import the useI18n composable function.
+const { t } = useI18n();
 
 const nodeStore = useNodeStore();
-const router = useRouter();
+const errorMessage: Ref<string> = ref('');
 
 // On mounted
 onMounted(async () =>
@@ -20,6 +30,23 @@ onMounted(async () =>
 		router.replace({ name: 'Wizard8Fund' });
 	}
 });
+
+
+// Set the keyring backend value and navigate to the next step
+const setKeyringBackendValue = async (value: string) =>
+{
+	// Send to the server and apply the value
+	if(await BluetoothService.writeKeyringBackend(value) && await BluetoothService.writeNodeConfig())
+	{
+		// Navigate to the next step
+		router.push({ name: value === 'file' ? 'Wizard6Passphrase' : 'Wizard7Wallet' });
+	}
+	else
+	{
+		// Show an error message
+		errorMessage.value = t('wizard.error-occurred') as string;
+	}
+};
 
 </script>
 <template>
@@ -33,13 +60,16 @@ onMounted(async () =>
 				<div class="submit">
 					<ion-grid>
 						<ion-row>
+							<ion-item lines="none" v-if="errorMessage">
+								<ion-text color="danger">{{ errorMessage }}</ion-text>
+							</ion-item>
+						</ion-row>
+						<ion-row>
 							<ion-col size="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard6Passphrase' }"
-									router-direction="forward">{{ $t('wizard.button-yes') }}</ion-button>
+								<loading-button :label="$t('wizard.button-yes')" :callback="async() => await setKeyringBackendValue('file')" />
 							</ion-col>
 							<ion-col size="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard7Wallet' }"
-									router-direction="forward" fill="outline">{{ $t('wizard.button-no') }}</ion-button>
+								<loading-button :label="$t('wizard.button-no')" :callback="async() => await setKeyringBackendValue('test')" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>
