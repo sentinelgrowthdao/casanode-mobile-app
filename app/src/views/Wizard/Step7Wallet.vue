@@ -31,15 +31,36 @@ onMounted(async () =>
 	}
 });
 
+// Send a request to create a wallet
 const requestCreateWallet = async () =>
 {
 	// Create a new wallet
 	if(await BluetoothService.performWalletAction('create'))
 	{
 		// Read mnemonic
-		const mnemonic: string = await BluetoothService.readMnemonic();
-		// Navigate to the next step
-		router.push({ name: 'Wizard7Create' });
+		const mnemonic: string|null = await BluetoothService.readMnemonic();
+		// Read public address
+		const publicAddress: string|null = await BluetoothService.readPublicAddress();
+		// Read node address
+		const nodeAddress: string|null = await BluetoothService.readNodeAddress();
+		// If all values are not null
+		if(mnemonic !== null && publicAddress !== null && nodeAddress !== null)
+		{
+			// Set the mnemonic
+			nodeStore.setMnemonic(mnemonic.split(' '));
+			// Set the public address
+			nodeStore.setPublicAddress(publicAddress);
+			// Set the node address
+			nodeStore.setNodeAddress(nodeAddress);
+			
+			// Navigate to the next step
+			router.push({ name: 'Wizard7Create' });
+		}
+		else
+		{
+			// Show an error message
+			errorMessage.value = t('wizard.error-wallet-creation') as string;
+		}
 	}
 	else
 	{
