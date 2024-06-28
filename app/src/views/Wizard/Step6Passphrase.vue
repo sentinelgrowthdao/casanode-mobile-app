@@ -44,8 +44,6 @@ const setPassphraseAndNavigate = async () =>
 		// Send to the server and apply the value
 		if(await BluetoothService.writeNodePassphrase(passphraseValue))
 		{
-			// Set the moniker value
-			nodeStore.setMoniker(passphraseValue);
 			// Navigate to the next step
 			router.push({ name: 'Wizard7Wallet' });
 		}
