@@ -79,5 +79,7 @@
 	"error-occurred": "Une erreur s'est produite lors de l'envoi de données au nœud.",
 	"error-start-failed": "Échec du démarrage du nœud.",
 	"error-wallet-creation": "Une erreur s'est produite lors de la création du portefeuille.",
+	"error-wallet-restore": "Une erreur s'est produite lors de la restauration du portefeuille.",
+	"error-mnemonic-format": "Votre mnémonic doit être composé de 24 mots séparés par des espaces.",
 	"warning-wallet-fund": "Le portefeuille du nœud n'a pas assez de dVPN pour démarrer."
 }

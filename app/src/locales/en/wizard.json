@@ -79,5 +79,7 @@
 	"error-occurred": "An error has occurred while sending data to the node.",
 	"error-start-failed": "Failed to start the node.",
 	"error-wallet-creation": "An error occurred while creating the wallet.",
+	"error-wallet-restore": "An error occurred while restoring the wallet.",
+	"error-mnemonic-format": "Your mnemonic must be 24 words separated by spaces.",
 	"warning-wallet-fund": "The node's wallet does not have enough dVPNs to start."
 }
