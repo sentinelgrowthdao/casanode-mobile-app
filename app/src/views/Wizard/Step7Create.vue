@@ -1,12 +1,25 @@
 <script lang="ts" setup>
 import {
-	IonPage, IonContent, IonButton,
+	IonPage, IonContent,
 	IonGrid, IonCol, IonRow
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 import { useNodeStore } from '@/stores/NodeStore';
+import LoadingButton from '@components/LoadingButton.vue';
 
+// Router
+const router = useRouter();
 // Node store
 const nodeStore = useNodeStore();
+
+// Remove mnemonic store
+const removeMnemonicStore = async () =>
+{
+	// Clear the store
+	nodeStore.clearMnemonic();
+	// Navigate to the next step
+	router.push({ name: 'Wizard8Fund' });
+};
 
 </script>
 <template>
@@ -28,10 +41,7 @@ const nodeStore = useNodeStore();
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6" offset="6">
-								<ion-button expand="block" :router-link="{ name: 'Wizard8Fund' }"
-									router-direction="forward">
-									{{ $t('wizard.button-next') }}
-								</ion-button>
+								<loading-button :label="$t('wizard.button-next')" :callback="removeMnemonicStore" />
 							</ion-col>
 						</ion-row>
 					</ion-grid>

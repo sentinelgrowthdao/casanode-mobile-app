@@ -187,5 +187,10 @@ export const useNodeStore = defineStore('node',
 		{
 			this.mnemonic = mnemonic;
 		},
+		// Clear the mnemonic
+		clearMnemonic(): void
+		{
+			this.mnemonic = [];
+		},
 	}
 });
