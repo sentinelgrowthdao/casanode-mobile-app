@@ -6,14 +6,128 @@ import {
 	IonCard, IonCardContent, IonButton
 } from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
+import BluetoothService from '@/services/BluetoothService';
+import { useNodeStore } from '@stores/NodeStore';
 
 // Variable to store the selected segment
 const segmentSelected: Ref<string> = ref('node');
+
+// Import the useNodeStore composable function.
+const nodeStore = useNodeStore();
 
 // Segment change event
 const segmentChanged = (event: CustomEvent) =>
 {
 	segmentSelected.value = event.detail.value;
+};
+
+/**
+ * Send request to stop the node
+ */
+const nodeAction = async(action: string) => 
+{
+	if(action === 'start')
+	{
+		if(await BluetoothService.startNode())
+		{
+			console.log('Node started successfully.');
+		}
+		else
+		{
+			console.error('Failed to start the node.');
+		}
+	}
+	else if (action === 'stop')
+	{
+		if(await BluetoothService.stopNode())
+		{
+			console.log('Node stopped successfully.');
+		}
+		else
+		{
+			console.error('Failed to stop the node.');
+		}
+	}
+	else if(action === 'restart')
+	{
+		if(await BluetoothService.restartNode())
+		{
+			console.log('Node restarted successfully.');
+		}
+		else
+		{
+			console.error('Failed to restart the node.');
+		}
+	}
+};
+
+/**
+ * Send request to renew the SSL certificate
+ */
+const certificateAction = async(action: string) =>
+{
+	if(action === 'renew')
+	{
+		if(await BluetoothService.renewCertificate())
+		{
+			console.log('Certificate renewed successfully.');
+		}
+		else
+		{
+			console.error('Failed to renew the certificate.');
+		}
+	}
+};
+
+/**
+ * Send request to perform system action
+ */
+const systemAction = async(action: string) =>
+{
+	if(action === 'update')
+	{
+		if(await BluetoothService.updateSystem())
+		{
+			console.log('System updated successfully.');
+		}
+		else
+		{
+			console.error('Failed to update the system.');
+		}
+	}
+	else if(action === 'reset')
+	{
+		if(await BluetoothService.resetSystem())
+		{
+			console.log('System reset successfully.');
+		}
+		else
+		{
+			console.error('Failed to reset the system.');
+		}
+	}
+	else if(action === 'reboot')
+	{
+		if(await BluetoothService.rebootSystem())
+		{
+			console.log('System rebooted successfully.');
+		}
+		else
+		{
+			console.error('Failed to reboot the system.');
+		}
+	}
+	else if(action === 'shutdown')
+	{
+		if(await BluetoothService.shutdownSystem())
+		{
+			console.log('System shutdown successfully.');
+		}
+		else
+		{
+			console.error('Failed to shutdown the system.');
+		}
+	}
 };
 
 </script>
@@ -38,23 +152,33 @@ const segmentChanged = (event: CustomEvent) =>
 						</ion-segment-button>
 					</ion-segment>
 				</div>
-
+				
 				<div v-if="segmentSelected === 'node'">
+					<!-- Start Node -->
+					<ion-card v-if="nodeStore.status === 'stopped'" class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.start-node-description') }}</p>
+							<ion-button expand="block" color="primary" @click="nodeAction('start')">
+								{{ $t('actions.start-node-button') }}
+							</ion-button>
+						</ion-card-content>
+					</ion-card>
+					
 					<!-- Stop Node -->
-					<ion-card class="container">
+					<ion-card v-if="nodeStore.status === 'running'" class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.stop-node-description') }}</p>
-							<ion-button expand="block" color="primary">
+							<ion-button expand="block" color="primary" @click="nodeAction('stop')">
 								{{ $t('actions.stop-node-button') }}
 							</ion-button>
 						</ion-card-content>
 					</ion-card>
-
+					
 					<!-- Restart Node -->
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.restart-node-description') }}</p>
-							<ion-button expand="block" color="primary">
+							<ion-button expand="block" color="primary" @click="nodeAction('restart')">
 								{{ $t('actions.restart-node-button') }}
 							</ion-button>
 						</ion-card-content>
@@ -64,7 +188,7 @@ const segmentChanged = (event: CustomEvent) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.regenerate-ssl-description') }}</p>
-							<ion-button expand="block" color="primary">
+							<ion-button expand="block" color="primary" @click="certificateAction('renew')">
 								{{ $t('actions.regenerate-ssl-button') }}
 							</ion-button>
 						</ion-card-content>
@@ -76,7 +200,7 @@ const segmentChanged = (event: CustomEvent) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.upgrade-system-description') }}</p>
-							<ion-button expand="block" color="primary">
+							<ion-button expand="block" color="primary" @click="systemAction('update')">
 								{{ $t('actions.upgrade-system-button') }}
 							</ion-button>
 						</ion-card-content>
@@ -86,7 +210,7 @@ const segmentChanged = (event: CustomEvent) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.factory-reset-description') }}</p>
-							<ion-button expand="block" color="danger">
+							<ion-button expand="block" color="danger" @click="systemAction('reset')">
 								{{ $t('actions.factory-reset-button') }}
 							</ion-button>
 						</ion-card-content>
@@ -98,7 +222,7 @@ const segmentChanged = (event: CustomEvent) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.hard-reboot-description') }}</p>
-							<ion-button expand="block" color="primary">
+							<ion-button expand="block" color="primary" @click="systemAction('reboot')">
 								{{ $t('actions.hard-reboot-button') }}
 							</ion-button>
 						</ion-card-content>
@@ -108,7 +232,7 @@ const segmentChanged = (event: CustomEvent) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.shutdown-description') }}</p>
-							<ion-button expand="block" color="primary">
+							<ion-button expand="block" color="primary" @click="systemAction('shutdown')">
 								{{ $t('actions.shutdown-button') }}
 							</ion-button>
 						</ion-card-content>
