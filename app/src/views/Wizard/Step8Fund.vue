@@ -30,7 +30,7 @@ const checkWalletBalance = async () =>
 	if(balance && balance.amount >= 10)
 	{
 		// Start the dvpn node successfully
-		if(await BluetoothService.startNode() === 0)
+		if(await BluetoothService.startNode())
 		{
 			// Get Node status
 			const status = await BluetoothService.readNodeStatus();
