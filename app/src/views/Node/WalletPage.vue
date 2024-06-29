@@ -17,12 +17,20 @@ const { t, locale } = useI18n();
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
 
-// Define format amount function
+/**
+ * Format the amount of the node balance.
+ */
 const formattedAmount = computed(() =>
 {
 	return formatNumber(nodeStore.nodeBalance.amount, locale.value);
 });
 
+/**
+ * Format the number with the locale.
+ * @param amount
+ * @param locale
+ * @returns string
+ */
 function formatNumber(amount: number, locale: string): string
 {
 	return new Intl.NumberFormat(locale).format(amount);
