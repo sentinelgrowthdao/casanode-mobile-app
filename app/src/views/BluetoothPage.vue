@@ -5,12 +5,13 @@ import {
 	IonItem, IonPage, IonIcon,
 	IonTitle, IonToolbar,
 	IonInput, IonSelect,
-	IonSpinner,
+	IonSpinner, IonLabel,
+	IonGrid, IonCol, IonRow,
 } from '@ionic/vue';
 import { shieldHalf } from 'ionicons/icons';
-import { useNodeStore, type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
+import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
-import NodeService from '@/services/NodeService';
+import LoadingButton from '@components/LoadingButton.vue';
 
 const isConnected = ref(BluetoothService.isConnected());
 const messages = ref<{ text: string; time: number }[]>([]);
@@ -447,6 +448,108 @@ const readMnemonic = async () =>
 	}
 };
 
+const startNode = async () => 
+{
+	if(await BluetoothService.startNode())
+	{
+		console.log('Node started successfully.');
+	}
+	else
+	{
+		console.error('Failed to start the node.');
+	}
+};
+const stopNode = async () => 
+{
+	if(await BluetoothService.stopNode())
+	{
+		console.log('Node stopped successfully.');
+	}
+	else
+	{
+		console.error('Failed to stop the node.');
+	}
+};
+const restartNode = async () => 
+{
+	if(await BluetoothService.restartNode())
+	{
+		console.log('Node restarted successfully.');
+	}
+	else
+	{
+		console.error('Failed to restart the node.');
+	}
+};
+const removeNode = async () => 
+{
+	if(await BluetoothService.removeNode())
+	{
+		console.log('Node removed successfully.');
+	}
+	else
+	{
+		console.error('Failed to remove the node.');
+	}
+};
+
+const updateSystem = async () => 
+{
+	if(await BluetoothService.updateSystem())
+	{
+		console.log('System updated successfully.');
+	}
+	else
+	{
+		console.error('Failed to update the system.');
+	}
+};
+const resetSystem = async () => 
+{
+	if(await BluetoothService.resetSystem())
+	{
+		console.log('System reset successfully.');
+	}
+	else
+	{
+		console.error('Failed to reset the system.');
+	}
+};
+const rebootSystem = async () => 
+{
+	if(await BluetoothService.rebootSystem())
+	{
+		console.log('System rebooted successfully.');
+	}
+	else
+	{
+		console.error('Failed to reboot the system.');
+	}
+};
+const shutdownSystem = async () => 
+{
+	if(await BluetoothService.shutdownSystem())
+	{
+		console.log('System shutdown successfully.');
+	}
+	else
+	{
+		console.error('Failed to shutdown the system.');
+	}
+};
+
+const renewCertificate = async () =>
+{
+	if(await BluetoothService.renewCertificate())
+	{
+		console.log('Certificate renewed successfully.');
+	}
+	else
+	{
+		console.error('Failed to renew the certificate.');
+	}
+};
+
 </script>
 
 <template>
@@ -482,9 +585,42 @@ const readMnemonic = async () =>
 			<ion-grid>
 				<ion-row v-if="isConnected">
 					<ion-col size="12">
+						<ion-label>
+							<h2>Wallet Mnemonic</h2>
+						</ion-label>
 						<ion-item>
 							<ion-button @click="sendMnemonic">Send Mnemonic</ion-button>
 							<ion-button @click="readMnemonic">Read Mnemonic</ion-button>
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-label>
+							<h2>Node Actions</h2>
+						</ion-label>
+						<ion-item>
+							<loading-button label="Start" :callback="startNode" />
+							<loading-button label="Stop" :callback="stopNode" />
+							<loading-button label="Restart" :callback="restartNode" />
+							<loading-button label="Remove" :callback="removeNode" />
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-label>
+							<h2>System Actions</h2>
+						</ion-label>
+						<ion-item>
+							<loading-button label="Update" :callback="updateSystem" />
+							<loading-button label="Reset" :callback="resetSystem" />
+							<loading-button label="Reboot" :callback="rebootSystem" />
+							<loading-button label="Shutdown" :callback="shutdownSystem" />
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-label>
+							<h2>Certificate Actions</h2>
+						</ion-label>
+						<ion-item>
+							<loading-button label="Renew Certificate" :callback="renewCertificate" />
 						</ion-item>
 					</ion-col>
 				</ion-row>
