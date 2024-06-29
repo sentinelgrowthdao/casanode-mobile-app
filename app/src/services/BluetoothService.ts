@@ -31,16 +31,12 @@ const CHAR_NODE_STATUS_UUID = '0000180d-0000-1000-8000-00805f9b3512';
 const CHAR_CHECK_INSTALL_UUID = '0000180d-0000-1000-8000-00805f9b3513';
 const CHAR_INSTALL_IMAGE_UUID = '0000180d-0000-1000-8000-00805f9b3514';
 const CHAR_INSTALL_CONFIGS_UUID = '0000180d-0000-1000-8000-00805f9b3515';
-const CHAR_NODE_START_UUID = '0000180d-0000-1000-8000-00805f9b3516';
-const CHAR_NODE_STOP_UUID = '0000180d-0000-1000-8000-00805f9b3517';
-const CHAR_SYSTEM_UPDATE_UUID = '0000180d-0000-1000-8000-00805f9b3518';
-const CHAR_SYSTEM_RESET_UUID = '0000180d-0000-1000-8000-00805f9b3519';
-const CHAR_SYSTEM_RESTART_UUID = '0000180d-0000-1000-8000-00805f9b351a';
-const CHAR_SYSTEM_HALT_UUID = '0000180d-0000-1000-8000-00805f9b351b';
-const CHAR_CERTIFICATE_RENEW_UUID = '0000180d-0000-1000-8000-00805f9b351c';
-const CHAR_WALLET_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b351d';
-const CHAR_WALLET_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b351e';
-const CHAR_NODE_KEYRING_BACKEND_UUID = '0000180d-0000-1000-8000-00805f9b351f';
+const CHAR_NODE_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b3516';
+const CHAR_SYSTEM_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b3517';
+const CHAR_CERTIFICATE_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b3518';
+const CHAR_WALLET_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b3519';
+const CHAR_WALLET_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b351a';
+const CHAR_NODE_KEYRING_BACKEND_UUID = '0000180d-0000-1000-8000-00805f9b351b';
 
 /**
  * Encode a string into a DataView
@@ -954,16 +950,16 @@ class BluetoothService
 	
 	/**
 	 * Send start node command to the BLE server.
-	 * @returns Promise<number>
+	 * @returns Promise<boolean>
 	 */
-	public async startNode(): Promise<number>
+	public async startNode(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_START_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('start'));
+				return true;
 			}
 		}
 		catch (error)
@@ -971,21 +967,21 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
 	}
 	
 	/**
 	 * Send stop node command to the BLE server.
-	 * @returns Promise<number>
+	 * @returns Promise<boolean>
 	 */
-	public async stopNode(): Promise<number>
+	public async stopNode(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_STOP_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('stop'));
+				return true;
 			}
 		}
 		catch (error)
@@ -993,21 +989,65 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
+	}
+	
+	/**
+	 * Send restart node command to the BLE server.
+	 * @returns Promise<boolean>
+	 */
+	public async restartNode(): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('restart'));
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Send remove node command to the BLE server.
+	 * @returns Promise<boolean>
+	 */
+	public async removeNode(): Promise<boolean>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('remove'));
+				return true;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return false;
 	}
 	
 	/**
 	 * Send update system command to the BLE server.
-	 * @returns Promise<number>
+	 * @returns Promise<boolean>
 	 */
-	public async updateSystem(): Promise<number>
+	public async updateSystem(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_UPDATE_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('update'));
+				return true;
 			}
 		}
 		catch (error)
@@ -1015,21 +1055,21 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
 	}
 	
 	/**
 	 * Send reset system command to the BLE server.
-	 * @returns Promise<number>
+	 * @returns Promise<boolean>
 	 */
-	public async resetSystem(): Promise<number>
+	public async resetSystem(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_RESET_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('reset'));
+				return true;
 			}
 		}
 		catch (error)
@@ -1037,21 +1077,21 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
 	}
 	
 	/**
-	 * Send restart system command to the BLE server.
-	 * @returns Promise<number>
+	 * Send reboot system command to the BLE server.
+	 * @returns Promise<boolean>
 	 */
-	public async restartSystem(): Promise<number>
+	public async rebootSystem(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_RESTART_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('reboot'));
+				return true;
 			}
 		}
 		catch (error)
@@ -1059,21 +1099,21 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
 	}
 	
 	/**
-	 * Send halt system command to the BLE server.
-	 * @returns Promise<number>
+	 * Send shutdown system command to the BLE server.
+	 * @returns Promise<boolean>
 	 */
-	public async haltSystem(): Promise<number>
+	public async shutdownSystem(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_HALT_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('halt'));
+				return true;
 			}
 		}
 		catch (error)
@@ -1081,21 +1121,21 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
 	}
 	
 	/**
 	 * Send renew certificate command to the BLE server.
-	 * @returns Promise<number>
+	 * @returns Promise<boolean>
 	 */
-	public async renewCertificate(): Promise<number>
+	public async renewCertificate(): Promise<boolean>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CERTIFICATE_RENEW_UUID);
-				return parseInt(decodeDataView(value));
+				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_CERTIFICATE_ACTIONS_UUID, encodeDataView('renew'));
+				return true;
 			}
 		}
 		catch (error)
@@ -1103,7 +1143,7 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return -1;
+		return false;
 	}
 	
 	/**
