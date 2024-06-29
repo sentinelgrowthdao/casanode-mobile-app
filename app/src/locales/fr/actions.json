@@ -2,22 +2,25 @@
 	"node-tab": "Nœud",
 	"maintenance-tab": "Maintenance",
 	"system-tab": "Système",
-
+	
+	"start-node-description": "Démarrer le nœud pour permettre aux utilisateurs de se connecter et de naviguer en toute sécurité.",
+	"start-node-button": "Démarrer le nœud",
+	
 	"stop-node-description": "Interrompt toutes les activités et opérations actuelles du VPN, tout en gardant l'appareil actif.",
 	"stop-node-button": "Arrêter le nœud",
-
+	
 	"restart-node-description": "Redémarre le nœud, rafraîchissant tous les processus sans supprimer aucune donnée.",
 	"restart-node-button": "Redémarrer le nœud",
-
+	
 	"regenerate-ssl-description": "Renouvelle le certificat SSL du nœud pour maintenir des connexions VPN sécurisées avant le 6 mai 2025.",
 	"regenerate-ssl-button": "Régénérer le certificat SSL",
-
+	
 	"upgrade-system-description": "Applique les dernières mises à jour au système d'exploitation et à l'application. Cela garantit que le système est optimisé pour les performances, la sécurité et les nouvelles fonctionnalités.",
 	"upgrade-system-button": "Mettre à jour le système",
-
+	
 	"factory-reset-description": "Réinitialise le nœud à ses paramètres d'usine d'origine, effaçant toutes les données et configurations pour repartir à neuf.",
 	"factory-reset-button": "Réinitialisation d'usine",
-
+	
 	"hard-reboot-description": "Redémarre complètement l'appareil, ce qui équivaut à éteindre et rallumer le matériel.",
 	"hard-reboot-button": "Redémarrage complet",
 	
