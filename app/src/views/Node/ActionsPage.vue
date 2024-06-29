@@ -94,16 +94,6 @@ const segmentChanged = (event: CustomEvent) =>
 				</div>
 
 				<div v-if="segmentSelected === 'system'">
-					<!-- Soft Reboot -->
-					<ion-card class="container">
-						<ion-card-content>
-							<p>{{ $t('actions.soft-reboot-description') }}</p>
-							<ion-button expand="block" color="primary">
-								{{ $t('actions.soft-reboot-button') }}
-							</ion-button>
-						</ion-card-content>
-					</ion-card>
-
 					<!-- Hard Reboot -->
 					<ion-card class="container">
 						<ion-card-content>

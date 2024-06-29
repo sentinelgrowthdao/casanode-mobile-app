@@ -18,9 +18,6 @@
 	"factory-reset-description": "Resets the node to its original factory settings, erasing all data and configurations to start afresh.",
 	"factory-reset-button": "Factory Reset",
 
-	"soft-reboot-description": "Restarts only the VPN service without fully rebooting the device, ideal for a quick refresh.",
-	"soft-reboot-button": "Soft Reboot",
-
 	"hard-reboot-description": "Fully restarts the device, which is equivalent to switching the hardware off and back on.",
 	"hard-reboot-button": "Hard Reboot",
 	

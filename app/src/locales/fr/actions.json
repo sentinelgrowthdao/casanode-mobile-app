@@ -18,9 +18,6 @@
 	"factory-reset-description": "Réinitialise le nœud à ses paramètres d'usine d'origine, effaçant toutes les données et configurations pour repartir à neuf.",
 	"factory-reset-button": "Réinitialisation d'usine",
 
-	"soft-reboot-description": "Redémarre uniquement le service VPN sans redémarrer complètement l'appareil, idéal pour un rafraîchissement rapide.",
-	"soft-reboot-button": "Redémarrage soft",
-
 	"hard-reboot-description": "Redémarre complètement l'appareil, ce qui équivaut à éteindre et rallumer le matériel.",
 	"hard-reboot-button": "Redémarrage complet",
 	
