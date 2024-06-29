@@ -7,13 +7,17 @@ import {
 import { computed } from 'vue';
 import { refresh, link, copy } from 'ionicons/icons';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import AppToolbar from '@/components/AppToolbar.vue';
+import BluetoothService from '@/services/BluetoothService';
 import { copyToClipboard } from '@/utils/clipboard';
 import { useNodeStore } from '@stores/NodeStore';
 
 // Import the useI18n composable function.
 const { t, locale } = useI18n();
 
+// Router
+const router = useRouter();
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
 
@@ -36,6 +40,31 @@ function formatNumber(amount: number, locale: string): string
 	return new Intl.NumberFormat(locale).format(amount);
 }
 
+/**
+ * Update the wallet balance.
+ */
+const updateWalletBalance = async () =>
+{
+	// Get the node balance
+	const nodeBalance = await BluetoothService.readNodeBalance();
+	nodeStore.setNodeBalance(nodeBalance);
+};
+
+/**
+ * Remove the wallet.
+ */
+const removeWallet = async () =>
+{
+	// Remove the wallet
+	const success = await BluetoothService.performWalletAction('remove');
+	// Check if the wallet was removed
+	if (success)
+	{
+		// Go back to the home page
+		router.replace({ name: 'Home' });
+	}
+};
+
 </script>
 <template>
 	<ion-page>
@@ -54,7 +83,7 @@ function formatNumber(amount: number, locale: string): string
 									<p class="amount">{{ formattedAmount }}<span class="unit">{{ nodeStore.nodeBalance.denom }}</span></p>
 								</ion-col>
 								<ion-col size="3" class="ion-text-right">
-									<ion-button fill="clear" size="large" class="refresh-button">
+									<ion-button fill="clear" size="large" class="refresh-button" @click="updateWalletBalance">
 										<ion-icon :icon="refresh" size="large"
 											aria-label="{{ $t('wallet.balance-refresh') }}" />
 									</ion-button>
@@ -113,7 +142,7 @@ function formatNumber(amount: number, locale: string): string
 				<!-- Delete Wallet -->
 				<ion-card class="container nobg">
 					<ion-card-content>
-						<ion-button color="danger" fill="outline" expand="block">
+						<ion-button color="danger" fill="outline" expand="block" @click="removeWallet">
 							{{ $t('wallet.delete-wallet-label') }}
 						</ion-button>
 					</ion-card-content>
