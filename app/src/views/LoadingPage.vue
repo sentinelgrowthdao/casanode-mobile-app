@@ -71,6 +71,7 @@ const connectToBluetooth = async () =>
 		const imageAvailable = checkInstallation[0] === '1';
 		const nodeConfig = checkInstallation[2] === '1';
 		const vpnConfig = checkInstallation[3] === '1';
+		const certificateKey = checkInstallation[4] === '1';
 		
 		// If the image is unavailable
 		if(!imageAvailable)
@@ -89,7 +90,7 @@ const connectToBluetooth = async () =>
 		}
 		
 		// If the node or VPN configuration does not exist
-		if(!nodeConfig || !vpnConfig)
+		if(!nodeConfig || !vpnConfig || !certificateKey)
 		{
 			// Set the waiting message
 			connectingMessage.value = t('loading.wait-config') as string;
@@ -97,7 +98,7 @@ const connectToBluetooth = async () =>
 			const installConfigs = await BluetoothService.readInstallConfigs();
 			
 			// If an error occurred
-			if(installConfigs !== '11')
+			if(installConfigs !== '111')
 			{
 				// Set the connecting message
 				connectingMessage.value = t('loading.error-message') as string;
