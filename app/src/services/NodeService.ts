@@ -1,6 +1,11 @@
 // src/services/NodeService.ts
 import BluetoothService from './BluetoothService';
 import { useNodeStore } from '@/stores/NodeStore';
+import {
+	refreshPublicAddress,
+	refreshNodeAddress,
+	refreshNodeBalance
+} from '@/utils/node';
 
 class NodeService
 {
@@ -74,17 +79,13 @@ class NodeService
 			
 			// Check if passphrase is available
 			const passphraseAvailable = await BluetoothService.readNodePassphrase();
-			// If passphrase is available, load the node address, public address and balance
+			// If passphrase is available
 			if (passphraseAvailable)
 			{
-				const publicAddress = await BluetoothService.readPublicAddress();
-				const nodeAddress = await BluetoothService.readNodeAddress();
-				const nodeBalance = await BluetoothService.readNodeBalance();
-				
-				// Update the node store
-				nodeStore.setPublicAddress(publicAddress || '');
-				nodeStore.setNodeAddress(nodeAddress || '');
-				nodeStore.setNodeBalance(nodeBalance);
+				// Load node address, public address and balance
+				await refreshNodeAddress();
+				await refreshPublicAddress();
+				await refreshNodeBalance();
 			}
 		
 		}
