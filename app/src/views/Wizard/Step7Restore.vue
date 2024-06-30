@@ -11,6 +11,7 @@ import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
+import { refreshPublicAddress, refreshNodeAddress } from '@/utils/node';
 
 // Router
 const router = useRouter();
@@ -46,17 +47,12 @@ const requestRestoreWallet = async () =>
 		if(await BluetoothService.writeMnemonic(mnemonicValue) && await BluetoothService.performWalletAction('restore'))
 		{
 			// Read public address
-			const publicAddress: string|null = await BluetoothService.readPublicAddress();
+			const publicAddress: string|null = await refreshPublicAddress();
 			// Read node address
-			const nodeAddress: string|null = await BluetoothService.readNodeAddress();
+			const nodeAddress: string|null = await refreshNodeAddress();
 			// If all values are not null
 			if(publicAddress !== null && nodeAddress !== null)
 			{
-				// Set the public address
-				nodeStore.setPublicAddress(publicAddress);
-				// Set the node address
-				nodeStore.setNodeAddress(nodeAddress);
-				
 				// Navigate to the next step
 				router.push({ name: 'Wizard8Fund' });
 			}
