@@ -36,6 +36,8 @@ onMounted(async () =>
 // Send a request to restore a wallet
 const requestRestoreWallet = async () =>
 {
+	// Reset error message
+	errorMessage.value = '';
 	// Mnemonic regex
 	const mnemonicRegex = /^(\b\w+\b\s*){24}$/;
 	// Trim the mnemonic value
