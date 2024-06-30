@@ -11,6 +11,7 @@ import { copyToClipboard } from '@/utils/clipboard';
 import { useNodeStore } from '@/stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
+import { refreshNodeStatus, refreshNodeBalance } from '@/utils/node';
 
 // Router
 const router = useRouter();
@@ -25,7 +26,7 @@ const checkWalletBalance = async () =>
 	// Clear the balance message
 	balanceMessage.value = '';
 	// Get wallet balance
-	const balance = await BluetoothService.readNodeBalance();
+	const balance = await refreshNodeBalance();
 	// Check if the balance is not empty
 	if(balance && balance.amount >= 10)
 	{
@@ -33,12 +34,10 @@ const checkWalletBalance = async () =>
 		if(await BluetoothService.startNode())
 		{
 			// Get Node status
-			const status = await BluetoothService.readNodeStatus();
+			const status = await refreshNodeStatus();
 			// Check if the status is not null
 			if(status !== null)
 			{
-				// Store the node status
-				nodeStore.setNodeStatus(status);
 				// Navigate to the next step
 				router.push({ name: 'Wizard9Ports' });
 			}
