@@ -141,8 +141,12 @@ const finishConnection = async () =>
 	
 	// Get installation status
 	const checkInstallation = await BluetoothService.readCheckInstallation();
-	// If the container does not exist
-	if(checkInstallation[1] === '0')
+	
+	// 
+	const containerExists = checkInstallation[0] === '1';
+	const walletAvailable = checkInstallation[5] === '1';
+	// If the container does not exist or the wallet is not available
+	if(!containerExists || !walletAvailable)
 	{
 		// Launch the wizard
 		router.replace({ name: 'Wizard1Welcome' });
