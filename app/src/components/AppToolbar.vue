@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import { useNodeStore } from '@stores/NodeStore';
 import { computed } from 'vue';
 
-import BluetoothService from '@/services/BluetoothService';
+import { refreshNodeStatus } from '@/utils/node';
 
 // Import pictures
 import statusRunning from '@assets/icons/status-running.svg';
@@ -29,30 +29,12 @@ const statusImage = computed(() =>
 	}
 });
 
-/**
- * Update the node status
- */
-const updateNodeStatus = async () =>
-{
-	// Read the node status
-	const status = await BluetoothService.readNodeStatus();
-	// Update the node status
-	if (status)
-	{
-		nodeStore.status = status;
-	}
-	else
-	{
-		console.error('Failed to update the node status.');
-	}
-};
-
 </script>
 
 <template>
 	<ion-toolbar>
 		<ion-buttons slot="primary">
-			<ion-button fill="clear" @click="updateNodeStatus">
+			<ion-button fill="clear" @click="refreshNodeStatus">
 				<img :src="statusImage" alt="Status" />
 			</ion-button>
 		</ion-buttons>
