@@ -8,6 +8,7 @@ import {
 import AppToolbar from '@/components/AppToolbar.vue';
 import BluetoothService from '@/services/BluetoothService';
 import { useNodeStore } from '@stores/NodeStore';
+import { refreshNodeStatus } from '@/utils/node';
 
 // Variable to store the selected segment
 const segmentSelected: Ref<string> = ref('node');
@@ -59,6 +60,9 @@ const nodeAction = async(action: string) =>
 			console.error('Failed to restart the node.');
 		}
 	}
+	
+	// Update the node status
+	await refreshNodeStatus();
 };
 
 /**
