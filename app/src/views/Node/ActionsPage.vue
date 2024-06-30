@@ -7,12 +7,15 @@ import {
 } from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
 import BluetoothService from '@/services/BluetoothService';
+import { useRouter } from 'vue-router';
 import { useNodeStore } from '@stores/NodeStore';
 import { refreshNodeStatus } from '@/utils/node';
 
 // Variable to store the selected segment
 const segmentSelected: Ref<string> = ref('node');
 
+// Router
+const router = useRouter();
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
 
@@ -104,6 +107,8 @@ const systemAction = async(action: string) =>
 		if(await BluetoothService.resetSystem())
 		{
 			console.log('System reset successfully.');
+			// Go back to the home page
+			router.replace({ name: 'Home' });
 		}
 		else
 		{
@@ -115,6 +120,8 @@ const systemAction = async(action: string) =>
 		if(await BluetoothService.rebootSystem())
 		{
 			console.log('System rebooted successfully.');
+			// Go back to the home page
+			router.replace({ name: 'Home' });
 		}
 		else
 		{
@@ -126,6 +133,8 @@ const systemAction = async(action: string) =>
 		if(await BluetoothService.shutdownSystem())
 		{
 			console.log('System shutdown successfully.');
+			// Go back to the home page
+			router.replace({ name: 'Home' });
 		}
 		else
 		{
