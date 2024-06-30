@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n';
 import { ref, type Ref, onMounted } from 'vue';
 import BluetoothService from '@/services/BluetoothService';
 import NodeService from '@/services/NodeService';
+import { refreshPublicAddress } from '@/utils/node';
 
 // Router
 const router = useRouter();
@@ -108,7 +109,7 @@ const connectToBluetooth = async () =>
 		
 		// Check if passphrase is needed
 		const keyringBackend = await BluetoothService.readKeyringBackend();
-		const publicAddress = await BluetoothService.readPublicAddress();
+		const publicAddress = await refreshPublicAddress();
 		
 		// If passphrase is needed and wallet already exists
 		if(keyringBackend === 'file' && publicAddress !== null)
