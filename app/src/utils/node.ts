@@ -2,14 +2,15 @@ import BluetoothService from '@/services/BluetoothService';
 import { useNodeStore } from '@stores/NodeStore';
 import { type NodeBalance } from '@stores/NodeStore';
 
+// Import the store
+const nodeStore = useNodeStore();
+
 /**
  * Refresh the node status.
  * @returns string
  */
 export async function refreshNodeStatus(): Promise<string | null>
 {
-	// Import the store
-	const nodeStore = useNodeStore();
 	// Read the node status
 	const status = await BluetoothService.readNodeStatus();
 
@@ -29,8 +30,6 @@ export async function refreshNodeStatus(): Promise<string | null>
  */
 export async function refreshNodeBalance(): Promise<NodeBalance | null>
 {
-	// Import the store
-	const nodeStore = useNodeStore();
 	// Read the node balance
 	const balance = await BluetoothService.readNodeBalance();
 	
@@ -42,4 +41,42 @@ export async function refreshNodeBalance(): Promise<NodeBalance | null>
 	
 	// Return the node balance
 	return balance;
+}
+
+/**
+ * Refresh the node address.
+ * @returns string
+ */
+export async function refreshNodeAddress(): Promise<string | null>
+{
+	// Read the node address
+	const address = await BluetoothService.readNodeAddress();
+	
+	// Update the node address
+	if (address)
+		nodeStore.setNodeAddress(address);
+	else
+		console.error('Failed to update the node address.');
+	
+	// Return the node address
+	return address;
+}
+
+/**
+ * Refresh the node address.
+ * @returns string
+ */
+export async function refreshPublicAddress(): Promise<string | null>
+{
+	// Read the public address
+	const address = await BluetoothService.readPublicAddress();
+	
+	// Update the public address
+	if (address)
+		nodeStore.setPublicAddress(address);
+	else
+		console.error('Failed to update the public address.');
+	
+	// Return the public address
+	return address;
 }
