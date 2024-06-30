@@ -11,6 +11,12 @@ import {
 import { shieldHalf } from 'ionicons/icons';
 import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
+import {
+	refreshNodeStatus,
+	refreshNodeBalance,
+	refreshNodeAddress,
+	refreshPublicAddress,
+} from '@/utils/node';
 import LoadingButton from '@components/LoadingButton.vue';
 
 const isConnected = ref(BluetoothService.isConnected());
@@ -32,13 +38,14 @@ const isLoading = ref(false);
  */
 async function loadNodeInformations(): Promise<void>
 {
-	const publicAddress = await BluetoothService.readPublicAddress();
-	const nodeAddress = await BluetoothService.readNodeAddress();
-	const nodeBalance = await BluetoothService.readNodeBalance();
-	
-	nodeStore.setPublicAddress(publicAddress || '');
-	nodeStore.setNodeAddress(nodeAddress || '');
-	nodeStore.setNodeBalance(nodeBalance);
+	// Get the public address
+	await refreshPublicAddress();
+	// Get the node address
+	await refreshNodeAddress();
+	// Get the node status
+	await refreshNodeStatus();
+	// Get the node balance
+	await refreshNodeBalance();
 }
 
 /**
