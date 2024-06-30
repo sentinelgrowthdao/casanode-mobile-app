@@ -12,6 +12,7 @@ import AppToolbar from '@/components/AppToolbar.vue';
 import BluetoothService from '@/services/BluetoothService';
 import { copyToClipboard } from '@/utils/clipboard';
 import { useNodeStore } from '@stores/NodeStore';
+import { refreshNodeBalance } from '@/utils/node';
 
 // Import the useI18n composable function.
 const { t, locale } = useI18n();
@@ -39,16 +40,6 @@ function formatNumber(amount: number, locale: string): string
 {
 	return new Intl.NumberFormat(locale).format(amount);
 }
-
-/**
- * Update the wallet balance.
- */
-const updateWalletBalance = async () =>
-{
-	// Get the node balance
-	const nodeBalance = await BluetoothService.readNodeBalance();
-	nodeStore.setNodeBalance(nodeBalance);
-};
 
 /**
  * Remove the wallet.
@@ -83,7 +74,7 @@ const removeWallet = async () =>
 									<p class="amount">{{ formattedAmount }}<span class="unit">{{ nodeStore.nodeBalance.denom }}</span></p>
 								</ion-col>
 								<ion-col size="3" class="ion-text-right">
-									<ion-button fill="clear" size="large" class="refresh-button" @click="updateWalletBalance">
+									<ion-button fill="clear" size="large" class="refresh-button" @click="refreshNodeBalance">
 										<ion-icon :icon="refresh" size="large"
 											aria-label="{{ $t('wallet.balance-refresh') }}" />
 									</ion-button>
