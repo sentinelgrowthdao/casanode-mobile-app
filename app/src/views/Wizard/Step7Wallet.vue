@@ -11,6 +11,7 @@ import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
 import LoadingButton from '@components/LoadingButton.vue';
+import { refreshPublicAddress, refreshNodeAddress } from '@/utils/node';
 
 // Router
 const router = useRouter();
@@ -40,18 +41,14 @@ const requestCreateWallet = async () =>
 		// Read mnemonic
 		const mnemonic: string|null = await BluetoothService.readMnemonic();
 		// Read public address
-		const publicAddress: string|null = await BluetoothService.readPublicAddress();
+		const publicAddress: string|null = await refreshPublicAddress();
 		// Read node address
-		const nodeAddress: string|null = await BluetoothService.readNodeAddress();
+		const nodeAddress: string|null = await refreshNodeAddress();
 		// If all values are not null
 		if(mnemonic !== null && publicAddress !== null && nodeAddress !== null)
 		{
 			// Set the mnemonic
 			nodeStore.setMnemonic(mnemonic.split(' '));
-			// Set the public address
-			nodeStore.setPublicAddress(publicAddress);
-			// Set the node address
-			nodeStore.setNodeAddress(nodeAddress);
 			
 			// Navigate to the next step
 			router.push({ name: 'Wizard7Create' });
