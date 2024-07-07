@@ -39,3 +39,33 @@ Launch the application
 ```bash
 ionic serve
 ```
+
+
+# Running on Android
+
+To run the application on an Android device or emulator, follow these steps:
+
+1. Build the Ionic project:
+
+```bash
+ionic build
+```
+
+2. Sync the web assets to the native Android project:
+
+```bash
+ionic capacitor copy android
+````
+
+3. Open the project in Android Studio:
+```bash
+ionic capacitor open android
+```
+
+4. Build and run the application in Android Studio:
+
+- In Android Studio, click on `Build > Make Project` to ensure the project builds correctly.
+- Select your target device (emulator or connected device).
+- Click on the Run button (green play icon) to compile and launch the application on your selected device.
+
+Ensure that you have the necessary Android SDK and tools installed in Android Studio to successfully build and run the project.
