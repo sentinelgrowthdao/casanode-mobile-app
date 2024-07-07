@@ -71,17 +71,17 @@ const messages : MessageFile =
 
 /**
  * Get the locale language
- * @returns {string}
+ * @returns {Promise<string>}
  */
-async function localeLanguage() : Promise<string>
+async function localeLanguage(): Promise<string>
 {
 	const systemLocale = await Device.getLanguageCode();
 	return systemLocale.value || 'en';
 }
 
-// Create a new i18n instance
+// Create a new i18n instance with a default locale
 const i18n = createI18n({
-	locale: await localeLanguage(),
+	locale: 'en', // await localeLanguage()
 	fallbackLocale: 'en',
 	messages: messages
 });
