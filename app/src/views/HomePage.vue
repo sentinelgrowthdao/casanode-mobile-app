@@ -2,13 +2,35 @@
 import { IonPage, IonContent, IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { Browser } from '@capacitor/browser';
+import BluetoothService from '@/services/BluetoothService';
 
+// Router
 const router = useRouter();
 
 // Open the Sentinel website
 const openNodeLink = async () =>
 {
 	await Browser.open({ url: 'https://sentinel.co' });
+};
+
+/**
+ * Connect to the Bluetooth device
+ * @returns {Promise<void>}
+ */
+const tryConnection = async () =>
+{
+	// Check if the device is connected
+	const isConnected = await BluetoothService.isConnected();
+	// If connected, disconnect
+	if(isConnected)
+	{
+		await BluetoothService.disconnect();
+	}
+	
+	// Connect to the Bluetooth device
+	await BluetoothService.connect();
+	// Redirect to the loading page
+	router.replace({ name: 'Loading' });
 };
 
 </script>
@@ -25,8 +47,8 @@ const openNodeLink = async () =>
 					<div class="start">
 						<p class="message">{{ $t('welcome.start-text') }}</p>
 						<p class="button">
-							<ion-button @click="router.replace({ name: 'Loading' })">
-								{{ $t('welcome.start-button') }}
+							<ion-button @click="tryConnection">
+								{{ $t('welcome.start-button-alt') }}
 							</ion-button>
 						</p>
 					</div>

@@ -31,7 +31,7 @@ const passphraseErrorMessage: Ref<string> = ref('');
 // On mounted
 onMounted(async () =>
 {
-	tryConnection();
+	connectionToNode();
 });
 
 /**
@@ -46,15 +46,16 @@ const tryConnection = async () =>
 	{
 		await BluetoothService.disconnect();
 	}
-	
 	// Connect to the Bluetooth device
-	await connectToBluetooth();
+	await BluetoothService.connect();
+	// Continue the connection process
+	await connectionToNode();
 };
 
 /**
- * Connect to the Bluetooth device
+ * Process the connection to the Bluetooth device
  */
-const connectToBluetooth = async () =>
+const connectionToNode = async () =>
 {
 	// Set the connecting message
 	connectingMessage.value = t('loading.wait-connection') as string;
@@ -62,8 +63,8 @@ const connectToBluetooth = async () =>
 	errorMessage.value = '';
 	passphraseErrorMessage.value = '';
 	
-	// Connect to the Bluetooth device
-	if(await BluetoothService.connect())
+	// If the device is connected
+	if(await BluetoothService.isConnected())
 	{
 		// Get installation status
 		const checkInstallation = await BluetoothService.readCheckInstallation();

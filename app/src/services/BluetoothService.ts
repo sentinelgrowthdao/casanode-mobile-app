@@ -1,5 +1,7 @@
 // src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { Geolocation } from '@capacitor/geolocation';
+import { Capacitor } from '@capacitor/core';
 import { Buffer } from 'buffer';
 import * as cryptoJs from 'crypto-js';
 import { type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
@@ -87,11 +89,83 @@ class BluetoothService
 	}
 	
 	/**
+	 * Request permissions for location and Bluetooth.
+	 * @returns void
+	 */
+	private async requestPermissions()
+	{
+		// Ignore permissions if not running on a native platform
+		if(!Capacitor.isNativePlatform())
+			return true;
+		
+		try
+		{
+			console.log("Requesting location permissions");
+			const locationStatus = await Geolocation.requestPermissions();
+			if (locationStatus.location !== 'granted' && locationStatus.coarseLocation !== 'granted')
+			{
+				console.log("Location permissions not granted");
+				console.error('Permissions Required: Location permissions are required to use Bluetooth features.');
+				return false;
+			}
+			
+			console.log("Checking if location services are enabled");
+			const locationEnabled = await BleClient.isLocationEnabled();
+			if (!locationEnabled)
+			{
+				console.error('Location Services Disabled: Please enable location services to use Bluetooth features.');
+				await BleClient.openLocationSettings();
+				return false;
+			}
+			else
+			{
+				console.log("Location services enabled");
+			}
+			
+			return true;
+		}
+		catch (error)
+		{
+			console.error("Error requesting permissions:", error);
+			return false;
+		}
+	}
+	
+	/**
 	 * Initialize the BLE client.
 	 */
 	public async initialize()
 	{
+		// Request permissions
+		const permissionsGranted = await this.requestPermissions();
+		if (!permissionsGranted)
+		{
+			console.error("Permissions not granted or location services not enabled");
+			return;
+		}
+		else
+		{
+			console.log("Permissions granted");
+		}
+		
+		// Initialize the BLE client
+		console.log("Initializing BLE client");
 		await BleClient.initialize();
+		
+		if(Capacitor.isNativePlatform())
+		{
+			console.log("Checking if Bluetooth is enabled");
+			const bluetoothEnabled = await BleClient.isEnabled();
+			if (!bluetoothEnabled)
+			{
+				console.error('Bluetooth Disabled: Please enable Bluetooth to use Bluetooth features.');
+				await BleClient.openBluetoothSettings();
+			}
+			else
+			{
+				console.log("Bluetooth is enabled");
+			}
+		}
 	}
 	
 	/**
@@ -105,18 +179,23 @@ class BluetoothService
 		
 		try
 		{
+			console.log("Requesting BLE device...");
 			const device = await BleClient.requestDevice({
 				services: [NODE_BLE_UUID],
 			});
+			console.log("Device found:", device);
 			
+			console.log("Connecting to device...");
 			await BleClient.connect(device.deviceId);
+			console.log("Connected to device");
+			
 			this.deviceId = device.deviceId;
 			this.connected = true;
 			console.log('Connected to the BLE device!');
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('BLE connect (2) error:', error);
 		}
 		
 		return this.connected;
