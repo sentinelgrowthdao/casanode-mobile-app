@@ -33,17 +33,17 @@ const statusImage = computed(() =>
 
 <template>
 	<ion-toolbar>
-		<ion-buttons slot="primary">
-			<ion-button fill="clear" @click="refreshNodeStatus">
-				<img :src="statusImage" alt="Status" />
-			</ion-button>
-		</ion-buttons>
-		<ion-buttons slot="secondary">
+		<ion-buttons slot="start">
 			<ion-button fill="outline" class="logo" @click="router.replace({ name: 'Home' })">
 				<img class="logo" src="@assets/images/casanode-logo.png" alt="Casanode" />
 			</ion-button>
 		</ion-buttons>
 		<ion-title>{{ nodeStore.moniker }}</ion-title>
+		<ion-buttons slot="end">
+			<ion-button fill="clear" @click="refreshNodeStatus">
+				<img :src="statusImage" alt="Status" />
+			</ion-button>
+		</ion-buttons>
 	</ion-toolbar>
 </template>
 
@@ -61,6 +61,11 @@ const statusImage = computed(() =>
 		display: inline-block;
 		height: 3rem;
 	}
+}
+
+ion-title
+{
+	text-align: center;
 }
 
 ion-button img
