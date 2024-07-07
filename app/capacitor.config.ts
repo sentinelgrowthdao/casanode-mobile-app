@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-	appId: 'com.casanode.sentinel',
+	appId: 'com.sentinel.casanode',
 	appName: 'Casanode',
 	webDir: 'dist'
 };
