@@ -950,7 +950,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, {timeout: 120000});
 				const valueString = decodeDataView(value);
 				// Split the string to get the amount and the denom
 				const balance = valueString.split(' ');
