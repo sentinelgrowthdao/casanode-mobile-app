@@ -5,6 +5,8 @@
 	"wait-passphrase": "Vérification de la passphrase...",
 	
 	"error-message": "Une erreur s'est produite au cours du processus de connexion au nœud.",
+	"error-message-docker": "Une erreur s'est produite lors du processus d'installation de l'image docker.",
+	"error-message-config": "Une erreur s'est produite lors du processus de création de fichiers de configuration.",
 	"retry": "Recommencer",
 	
 	"passphrase-message": "Vous devez saisir la phrase de passe protégeant le portefeuille du nœud avant de continuer.",

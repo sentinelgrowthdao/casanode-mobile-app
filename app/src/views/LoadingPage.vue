@@ -10,6 +10,7 @@ import { ref, type Ref, onMounted } from 'vue';
 import BluetoothService from '@/services/BluetoothService';
 import NodeService from '@/services/NodeService';
 import { refreshPublicAddress } from '@/utils/node';
+import { scanAndConnect } from '@/utils/scan';
 
 // Router
 const router = useRouter();
@@ -39,15 +40,7 @@ onMounted(async () =>
  */
 const tryConnection = async () =>
 {
-	// Check if the device is connected
-	const isConnected = await BluetoothService.isConnected();
-	// If connected, disconnect
-	if(isConnected)
-	{
-		await BluetoothService.disconnect();
-	}
-	// Connect to the Bluetooth device
-	await BluetoothService.connect();
+	await scanAndConnect();
 	// Continue the connection process
 	await connectionToNode();
 };
@@ -86,7 +79,7 @@ const connectionToNode = async () =>
 			if(installImage !== 1)
 			{
 				// Set the connecting message
-				connectingMessage.value = t('loading.error-message') as string;
+				connectingMessage.value = t('loading.error-message-docker') as string;
 				return;
 			}
 		}
@@ -103,7 +96,7 @@ const connectionToNode = async () =>
 			if(installConfigs !== '111')
 			{
 				// Set the connecting message
-				connectingMessage.value = t('loading.error-message') as string;
+				connectingMessage.value = t('loading.error-message-config') as string;
 				return;
 			}
 		}
@@ -205,11 +198,7 @@ const submitPassphrase = async () =>
 					<p class="spinner"><ion-spinner name="crescent" /></p>
 					<p class="message">{{ connectingMessage }}</p>
 				</div>
-				<div v-else-if="passphraseFormOpen === false" class="error">
-					<p class="message">{{ errorMessage }}</p>
-					<p class="button"><ion-button @click="tryConnection">{{ $t('loading.retry') }}</ion-button></p>
-				</div>
-				<div v-else class="passphrase">
+				<div v-else-if="errorMessage.length === 0 && passphraseFormOpen === true" class="passphrase">
 					<p v-if="passphraseErrorMessage.length > 0" class="error">{{ passphraseErrorMessage }}</p>
 					<p v-else class="message">{{ $t('loading.passphrase-message') }}</p>
 					<ion-item>
@@ -221,6 +210,10 @@ const submitPassphrase = async () =>
 							{{ $t('loading.passphrase-button') }}
 						</ion-button>
 					</p>
+				</div>
+				<div v-else class="error">
+					<p class="message">{{ errorMessage }}</p>
+					<p class="button"><ion-button @click="tryConnection">{{ $t('loading.retry') }}</ion-button></p>
 				</div>
 			</div>
 		</ion-content>

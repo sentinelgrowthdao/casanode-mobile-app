@@ -5,6 +5,8 @@
 	"wait-passphrase": "Checking the passphrase...",
 	
 	"error-message": "An error has occurred during the node connection process.",
+	"error-message-docker": "An error has occurred during the docker image installation process.",
+	"error-message-config": "An error has occurred during the configuration file creation process.",
 	"retry": "Retry",
 	
 	"passphrase-message": "You must enter the passphrase protecting the node's wallet before continuing.",

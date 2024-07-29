@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, modalController } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { Browser } from '@capacitor/browser';
-import BluetoothService from '@/services/BluetoothService';
+import ConnectHelpModal from '@components/ConnectHelpModal.vue';
+import { scanAndConnect } from '@/utils/scan';
 
 // Router
 const router = useRouter();
@@ -14,25 +15,27 @@ const openNodeLink = async () =>
 };
 
 /**
- * Connect to the Bluetooth device
+ * Try to connect to the Bluetooth device using scanned QR code
  * @returns {Promise<void>}
  */
 const tryConnection = async () =>
 {
-	// Check if the device is connected
-	const isConnected = await BluetoothService.isConnected();
-	// If connected, disconnect
-	if(isConnected)
-	{
-		await BluetoothService.disconnect();
-	}
-	
-	// Connect to the Bluetooth device
-	await BluetoothService.connect();
+	await scanAndConnect();
 	// Redirect to the loading page
 	router.replace({ name: 'Loading' });
 };
 
+// Open the help modal
+const openHelpModal = async () =>
+{
+	// Create the modal
+	const modal = await modalController.create({
+		component: ConnectHelpModal
+	});
+
+	// Present the modal
+	modal.present();
+};
 </script>
 <template>
 	<ion-page>
@@ -40,7 +43,9 @@ const tryConnection = async () =>
 			<div class="homepage">
 				<div class="header">
 					<h1>{{ $t('app.name') }}</h1>
-					<p class="logo"><img src="@assets/images/casanode-logo.png" alt="Logo" /></p>
+					<p class="logo">
+						<img src="@assets/images/casanode-logo.png" alt="Logo" />
+					</p>
 				</div>
 				<div class="welcome">
 					<h2>{{ $t('welcome.start-title') }}</h2>
@@ -48,12 +53,17 @@ const tryConnection = async () =>
 						<p class="message">{{ $t('welcome.start-text') }}</p>
 						<p class="button">
 							<ion-button @click="tryConnection">
-								{{ $t('welcome.start-button-alt') }}
+								{{ $t('welcome.start-button') }}
+							</ion-button>
+						</p>
+						<p class="help">
+							<ion-button size="small" fill="clear" @click="openHelpModal">
+								{{ $t('welcome.start-help-button') }}
 							</ion-button>
 						</p>
 					</div>
 				</div>
-				<div class=" footer">
+				<div class="footer">
 					<p class="title">{{ $t('welcome.get-node-title') }}</p>
 					<p class="message">{{ $t('welcome.get-node-text') }}</p>
 					<p class="button">

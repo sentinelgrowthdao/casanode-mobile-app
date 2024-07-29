@@ -3,7 +3,10 @@
 	"start-text": "To start connecting to your node, please scan the QR code located on your device.",
 	"start-button": "Scan QR code",
 	"start-button-alt": "Connect",
+	"start-help-button": "Where can I find the QR Code?",
 	"get-node-title": "Don't have your node yet?",
 	"get-node-text": "Visit our website to find out how to get one!",
-	"get-node-button": "Get Your Node"
+	"get-node-button": "Get Your Node",
+	"help-title": "Find the QR Code",
+	"help-text": "Connect to your DVPN node using your browser to display the connection QR code by entering the following in the address bar:"
 }

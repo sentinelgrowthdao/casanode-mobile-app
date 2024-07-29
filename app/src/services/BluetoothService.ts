@@ -6,39 +6,39 @@ import { Buffer } from 'buffer';
 import * as cryptoJs from 'crypto-js';
 import { type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
 
-const NODE_BLE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
-const CHAR_HELLO_UUID = '0000180d-0000-1000-8000-00805f9b34fc';
-const CHAR_MONIKER_UUID = '0000180d-0000-1000-8000-00805f9b34fd';
-const CHAR_NODE_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b34fe';
-const CHAR_NODE_IP_UUID = '0000180d-0000-1000-8000-00805f9b34ff';
-const CHAR_NODE_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3500';
-const CHAR_VPN_TYPE_UUID = '0000180d-0000-1000-8000-00805f9b3501';
-const CHAR_VPN_PORT_UUID = '0000180d-0000-1000-8000-00805f9b3502';
-const CHAR_MAX_PEERS_UUID = '0000180d-0000-1000-8000-00805f9b3503';
-const CHAR_NODE_CONFIG_UUID = '0000180d-0000-1000-8000-00805f9b3504';
-const CHAR_NODE_LOCATION_UUID = '0000180d-0000-1000-8000-00805f9b3505';
-const CHAR_CERT_EXPIRITY_UUID = '0000180d-0000-1000-8000-00805f9b3506';
-const CHAR_BANDWIDTH_SPEED_UUID = '0000180d-0000-1000-8000-00805f9b3507';
-const CHAR_SYSTEM_UPTIME_UUID = '0000180d-0000-1000-8000-00805f9b3508';
-const CHAR_CASANODE_VERSION_UUID = '0000180d-0000-1000-8000-00805f9b3509';
-const CHAR_DOCKER_IMAGE_UUID = '0000180d-0000-1000-8000-00805f9b350a';
-const CHAR_SYSTEM_OS_UUID = '0000180d-0000-1000-8000-00805f9b350b';
-const CHAR_SYSTEM_ARCH_UUID = '0000180d-0000-1000-8000-00805f9b350c';
-const CHAR_SYSTEM_KERNEL_UUID = '0000180d-0000-1000-8000-00805f9b350d';
-const CHAR_NODE_PASSPHRASE_UUID = '0000180d-0000-1000-8000-00805f9b350e';
-const CHAR_PUBLIC_ADDRESS_UUID = '0000180d-0000-1000-8000-00805f9b350f';
-const CHAR_ADDRESS_NODE_UUID = '0000180d-0000-1000-8000-00805f9b3510';
-const CHAR_NODE_BALANCE_UUID = '0000180d-0000-1000-8000-00805f9b3511';
-const CHAR_NODE_STATUS_UUID = '0000180d-0000-1000-8000-00805f9b3512';
-const CHAR_CHECK_INSTALL_UUID = '0000180d-0000-1000-8000-00805f9b3513';
-const CHAR_INSTALL_IMAGE_UUID = '0000180d-0000-1000-8000-00805f9b3514';
-const CHAR_INSTALL_CONFIGS_UUID = '0000180d-0000-1000-8000-00805f9b3515';
-const CHAR_NODE_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b3516';
-const CHAR_SYSTEM_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b3517';
-const CHAR_CERTIFICATE_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b3518';
-const CHAR_WALLET_MNEMONIC_UUID = '0000180d-0000-1000-8000-00805f9b3519';
-const CHAR_WALLET_ACTIONS_UUID = '0000180d-0000-1000-8000-00805f9b351a';
-const CHAR_NODE_KEYRING_BACKEND_UUID = '0000180d-0000-1000-8000-00805f9b351b';
+const NODE_BLE_UUID = '00805f9b34fb';
+const CHAR_HELLO_UUID = '00805f9b34fc';
+const CHAR_MONIKER_UUID = '00805f9b34fd';
+const CHAR_NODE_TYPE_UUID = '00805f9b34fe';
+const CHAR_NODE_IP_UUID = '00805f9b34ff';
+const CHAR_NODE_PORT_UUID = '00805f9b3500';
+const CHAR_VPN_TYPE_UUID = '00805f9b3501';
+const CHAR_VPN_PORT_UUID = '00805f9b3502';
+const CHAR_MAX_PEERS_UUID = '00805f9b3503';
+const CHAR_NODE_CONFIG_UUID = '00805f9b3504';
+const CHAR_NODE_LOCATION_UUID = '00805f9b3505';
+const CHAR_CERT_EXPIRITY_UUID = '00805f9b3506';
+const CHAR_BANDWIDTH_SPEED_UUID = '00805f9b3507';
+const CHAR_SYSTEM_UPTIME_UUID = '00805f9b3508';
+const CHAR_CASANODE_VERSION_UUID = '00805f9b3509';
+const CHAR_DOCKER_IMAGE_UUID = '00805f9b350a';
+const CHAR_SYSTEM_OS_UUID = '00805f9b350b';
+const CHAR_SYSTEM_ARCH_UUID = '00805f9b350c';
+const CHAR_SYSTEM_KERNEL_UUID = '00805f9b350d';
+const CHAR_NODE_PASSPHRASE_UUID = '00805f9b350e';
+const CHAR_PUBLIC_ADDRESS_UUID = '00805f9b350f';
+const CHAR_ADDRESS_NODE_UUID = '00805f9b3510';
+const CHAR_NODE_BALANCE_UUID = '00805f9b3511';
+const CHAR_NODE_STATUS_UUID = '00805f9b3512';
+const CHAR_CHECK_INSTALL_UUID = '00805f9b3513';
+const CHAR_INSTALL_IMAGE_UUID = '00805f9b3514';
+const CHAR_INSTALL_CONFIGS_UUID = '00805f9b3515';
+const CHAR_NODE_ACTIONS_UUID = '00805f9b3516';
+const CHAR_SYSTEM_ACTIONS_UUID = '00805f9b3517';
+const CHAR_CERTIFICATE_ACTIONS_UUID = '00805f9b3518';
+const CHAR_WALLET_MNEMONIC_UUID = '00805f9b3519';
+const CHAR_WALLET_ACTIONS_UUID = '00805f9b351a';
+const CHAR_NODE_KEYRING_BACKEND_UUID = '00805f9b351b';
 
 /**
  * Encode a string into a DataView
@@ -75,6 +75,7 @@ class BluetoothService
 	private static instance: BluetoothService;
 	private deviceId: string | null = null;
 	private connected = false;
+	private BLE_UUID: string = '';
 	
 	private constructor() {}
 	
@@ -170,18 +171,24 @@ class BluetoothService
 	
 	/**
 	 * Connect to the BLE server.
+	 * @param bluetoothUuid string
 	 * @returns boolean
 	 */
-	public async connect(): Promise<boolean>
+	public async connect(bluetoothUuid: string): Promise<boolean>
 	{
 		if(this.connected)
 			this.disconnect();
 		
+		// Set the BLE UUID
+		this.BLE_UUID = bluetoothUuid;
+		
 		try
 		{
-			console.log("Requesting BLE device...");
+			console.log("Requesting BLE device...", {
+				services: [`${this.BLE_UUID}-${NODE_BLE_UUID}`],
+			});
 			const device = await BleClient.requestDevice({
-				services: [NODE_BLE_UUID],
+				services: [`${this.BLE_UUID}-${NODE_BLE_UUID}`],
 			});
 			console.log("Device found:", device);
 			
@@ -244,7 +251,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_HELLO_UUID, encodeDataView(message), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, encodeDataView(message), {timeout: 30000});
 				return true;
 			}
 		}
@@ -266,7 +273,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_HELLO_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -289,7 +296,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.startNotifications(this.deviceId, NODE_BLE_UUID, CHAR_HELLO_UUID, callback, {timeout: 30000});
+				await BleClient.startNotifications(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, callback, {timeout: 30000});
 				console.log('Subscribed to the BLE server.');
 				return true;
 			}
@@ -312,7 +319,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_STATUS_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_STATUS_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -334,7 +341,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MONIKER_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MONIKER_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -356,7 +363,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MONIKER_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MONIKER_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -377,7 +384,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_TYPE_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_TYPE_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -399,7 +406,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_TYPE_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_TYPE_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -420,7 +427,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_IP_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_IP_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -442,7 +449,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_IP_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_IP_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -463,7 +470,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PORT_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PORT_UUID}`, {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -485,7 +492,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PORT_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PORT_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -506,7 +513,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_VPN_TYPE_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_TYPE_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -528,7 +535,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_VPN_TYPE_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_TYPE_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -549,7 +556,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_VPN_PORT_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_PORT_UUID}`, {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -571,7 +578,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_VPN_PORT_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_PORT_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -592,7 +599,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_MAX_PEERS_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MAX_PEERS_UUID}`, {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -614,7 +621,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_MAX_PEERS_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MAX_PEERS_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -636,7 +643,7 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				const data: string = 'apply';
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_CONFIG_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_CONFIG_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -657,7 +664,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_LOCATION_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_LOCATION_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -679,7 +686,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CERT_EXPIRITY_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERT_EXPIRITY_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -701,7 +708,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_BANDWIDTH_SPEED_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_BANDWIDTH_SPEED_UUID}`, {timeout: 30000});
 				const data = JSON.parse(decodeDataView(value)) as BandwidthSpeed;
 				return data;
 			}
@@ -724,7 +731,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_UPTIME_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_UPTIME_UUID}`, {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -746,7 +753,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CASANODE_VERSION_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CASANODE_VERSION_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -768,7 +775,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_DOCKER_IMAGE_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_DOCKER_IMAGE_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -790,7 +797,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_OS_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_OS_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -812,7 +819,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ARCH_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ARCH_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -834,7 +841,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_KERNEL_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_KERNEL_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -855,7 +862,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PASSPHRASE_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PASSPHRASE_UUID}`, {timeout: 30000});
 				return decodeDataView(value) === 'true';
 			}
 		}
@@ -878,7 +885,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_PASSPHRASE_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PASSPHRASE_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -899,7 +906,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_PUBLIC_ADDRESS_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_PUBLIC_ADDRESS_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -921,7 +928,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_ADDRESS_NODE_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_ADDRESS_NODE_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -943,7 +950,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_BALANCE_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, {timeout: 30000});
 				const valueString = decodeDataView(value);
 				// Split the string to get the amount and the denom
 				const balance = valueString.split(' ');
@@ -971,7 +978,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_CHECK_INSTALL_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHECK_INSTALL_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -993,10 +1000,10 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_INSTALL_IMAGE_UUID, {timeout: 300000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`, {timeout: 300000});
 				/*
 				const value = await this.retryAsyncOperation(
-					() => BleClient.read(this.deviceId!, NODE_BLE_UUID, CHAR_INSTALL_IMAGE_UUID), 7
+					() => BleClient.read(this.deviceId!, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`), 7
 				);
 				*/
 				return parseInt(decodeDataView(value));
@@ -1020,7 +1027,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_INSTALL_CONFIGS_UUID, {timeout: 120000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_CONFIGS_UUID}`, {timeout: 120000});
 				return decodeDataView(value);
 			}
 		}
@@ -1042,7 +1049,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('start'), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('start'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1064,7 +1071,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('stop'), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('stop'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1086,7 +1093,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('restart'), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('restart'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1108,7 +1115,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_ACTIONS_UUID, encodeDataView('remove'), {timeout: 120000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('remove'), {timeout: 120000});
 				return true;
 			}
 		}
@@ -1130,7 +1137,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('update'), {timeout: 900000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('update'), {timeout: 900000});
 				return true;
 			}
 		}
@@ -1152,7 +1159,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('reset'), {timeout: 120000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('reset'), {timeout: 120000});
 				return true;
 			}
 		}
@@ -1174,7 +1181,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('reboot'), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('reboot'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1196,7 +1203,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_SYSTEM_ACTIONS_UUID, encodeDataView('halt'), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('halt'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1218,7 +1225,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_CERTIFICATE_ACTIONS_UUID, encodeDataView('renew'), {timeout: 300000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERTIFICATE_ACTIONS_UUID}`, encodeDataView('renew'), {timeout: 300000});
 				return true;
 			}
 		}
@@ -1266,14 +1273,14 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Read the length of the data first
-				const lengthBuffer = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID, {timeout: 30000});
+				const lengthBuffer = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, {timeout: 30000});
 				const length = lengthBuffer.getUint32(0, true);
 				let dataBuffer = Buffer.alloc(0);
 				
 				do
 				{
 					// Read the next chunk
-					const chunk = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID, {timeout: 30000});
+					const chunk = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, {timeout: 30000});
 					// console.log(`Received chunk: ${chunk.buffer.toString()} (${chunk.buffer.length} bytes)`);
 					dataBuffer = Buffer.concat([dataBuffer, Buffer.from(chunk.buffer)]);
 				}
@@ -1325,14 +1332,14 @@ class BluetoothService
 				// Send the length of the data first
 				const lengthBuffer = Buffer.alloc(4);
 				lengthBuffer.writeUInt32LE(dataBuffer.length, 0);
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID, new DataView(lengthBuffer.buffer), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, new DataView(lengthBuffer.buffer), {timeout: 30000});
 				
 				// Send the data in chunks
 				const chunks = this.splitIntoChunks(dataBuffer, 20);
 				for (const chunk of chunks)
 				{
 					// console.log(`Sending chunk: ${chunk.toString('utf-8')} (${chunk.length} bytes)`)
-					await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_MNEMONIC_UUID, new DataView(chunk.buffer), {timeout: 30000});
+					await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, new DataView(chunk.buffer), {timeout: 30000});
 				}
 				
 				// Return true if the mnemonic was sent successfully
@@ -1363,7 +1370,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_WALLET_ACTIONS_UUID, encodeDataView(action), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_ACTIONS_UUID}`, encodeDataView(action), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1384,7 +1391,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, NODE_BLE_UUID, CHAR_NODE_KEYRING_BACKEND_UUID, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_KEYRING_BACKEND_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -1407,7 +1414,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, NODE_BLE_UUID, CHAR_NODE_KEYRING_BACKEND_UUID, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_KEYRING_BACKEND_UUID}`, encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
