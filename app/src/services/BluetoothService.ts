@@ -297,7 +297,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.startNotifications(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, callback, {timeout: 30000});
+				await BleClient.startNotifications(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, callback);
 				console.log('Subscribed to the BLE server.');
 				return true;
 			}
