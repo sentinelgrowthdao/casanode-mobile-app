@@ -22,7 +22,7 @@ export const useNodeStore = defineStore('node',
 		
 		// Node Status
 		status: 'unknown',
-		connectedUsers: 0,
+		onlineUsers: 0,
 		
 		// Node Information
 		nodeIp: '',
@@ -79,9 +79,9 @@ export const useNodeStore = defineStore('node',
 			this.status = status;
 		},
 		// Set the number of connected users
-		setConnectedUsers(users: number)
+		setOnlineUsers(users: number)
 		{
-			this.connectedUsers = users;
+			this.onlineUsers = users;
 		},
 		// Set the node balance
 		setMoniker(moniker: string)

@@ -39,7 +39,7 @@ const nodeStatus = computed(() =>
 								</ion-col>
 								<ion-col class="item right">
 									<p class="label">{{ $t('dashboard.status-users') }}</p>
-									<p class="value">{{ nodeStore.connectedUsers }}</p>
+									<p class="value">{{ nodeStore.onlineUsers }}</p>
 								</ion-col>
 							</ion-row>
 						</ion-grid>

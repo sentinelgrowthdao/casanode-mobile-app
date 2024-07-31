@@ -111,6 +111,7 @@ const connectToBLE = async () =>
 		const maximumPeers = await BluetoothService.readMaximumPeers();
 		const nodeLocation = await BluetoothService.readNodeLocation();
 		const certExpiry = await BluetoothService.readCertExpiry();
+		const onlineUsers = await BluetoothService.readOnlineUsers();
 		const bandwidthSpeed: BandwidthSpeed|null = await BluetoothService.readBandwidthSpeed();
 		const systemUptime = await BluetoothService.readSystemUptime();
 		const casanodeVersion = await BluetoothService.readCasanodeVersion();
@@ -154,6 +155,7 @@ const connectToBLE = async () =>
 		nodeStore.setMaximumPeers(maximumPeers || 0);
 		nodeStore.setNodeLocation(nodeLocation || '');
 		nodeStore.setCertExpiry(certExpiry || '');
+		nodeStore.setOnlineUsers(onlineUsers || 0);
 		nodeStore.setBandwidthSpeed(bandwidthSpeed?.upload || 'N/A', bandwidthSpeed?.download || 'N/A');
 		nodeStore.setSystemUptime(systemUptime || -1);
 		nodeStore.setCasanodeVersion(casanodeVersion || '');

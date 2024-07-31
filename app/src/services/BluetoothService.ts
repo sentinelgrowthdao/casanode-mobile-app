@@ -39,6 +39,7 @@ const CHAR_CERTIFICATE_ACTIONS_UUID = '00805f9b3518';
 const CHAR_WALLET_MNEMONIC_UUID = '00805f9b3519';
 const CHAR_WALLET_ACTIONS_UUID = '00805f9b351a';
 const CHAR_NODE_KEYRING_BACKEND_UUID = '00805f9b351b';
+const CHAR_ONLINE_USERS_UUID = '00805f9b351c';
 
 /**
  * Encode a string into a DataView
@@ -688,6 +689,28 @@ class BluetoothService
 			{
 				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERT_EXPIRITY_UUID}`, {timeout: 30000});
 				return decodeDataView(value);
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Read online users from the BLE server.
+	 * @returns Promise<number|null>
+	 */
+	public async readOnlineUsers(): Promise<number | null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_ONLINE_USERS_UUID}`, {timeout: 30000});
+				return parseInt(decodeDataView(value));
 			}
 		}
 		catch (error)
