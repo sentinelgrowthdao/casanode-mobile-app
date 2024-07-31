@@ -95,9 +95,12 @@ const connectToBLE = async () =>
 	
 	// Update the loading state
 	isLoading.value = true;
+
+	// Default Bluetooth ID
+	const defaultBluetoothId = "0000180d-0000-1000-8000";
 	
 	// Connect to the BLE device
-	if(await BluetoothService.connect())
+	if(await BluetoothService.connect(defaultBluetoothId))
 	{
 		// Load the node status
 		const nodeStatus = await BluetoothService.readNodeStatus();
