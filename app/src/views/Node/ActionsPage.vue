@@ -3,21 +3,29 @@ import { type Ref, ref } from 'vue';
 import {
 	IonPage, IonContent, IonHeader,
 	IonSegment, IonSegmentButton,
-	IonCard, IonCardContent, IonButton
+	IonCard, IonCardContent,
+	toastController,
 } from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
 import BluetoothService from '@/services/BluetoothService';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
 import { refreshNodeStatus } from '@/utils/node';
+import LoadingButton from '@components/LoadingButton.vue';
 
 // Variable to store the selected segment
 const segmentSelected: Ref<string> = ref('node');
 
 // Router
 const router = useRouter();
+// Import the useI18n composable function.
+const { t } = useI18n();
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
+
+// Request in progress reference
+const requestInProgress = ref<boolean>(false);
 
 // Segment change event
 const segmentChanged = (event: CustomEvent) =>
@@ -26,46 +34,80 @@ const segmentChanged = (event: CustomEvent) =>
 };
 
 /**
+ * Show a toast message
+ * @param message Message to show
+ * @returns Promise<void>
+ */
+const showToastMessage = async(message: string) =>
+{
+	// Show a toast message
+	const toast = await toastController.create({
+				message: message,
+				duration: 1500,
+				position: 'bottom',
+			});
+	// Wait for the toast to be dismissed
+	await toast.present();
+};
+
+/**
+ * Redirect to the home page
+ * @returns void
+ */
+const redirectToHome = () =>
+{
+	// Unlock the buttons
+	requestInProgress.value = false;
+	// Redirect to the home page
+	router.replace({ name: 'Home' });
+};
+
+/**
  * Send request to stop the node
+ * @param action Action to perform
+ * @returns Promise<void>
  */
 const nodeAction = async(action: string) => 
 {
+	// Toast message
+	let message = '';
+	
+	// Lock the buttons
+	requestInProgress.value = true;
+	
 	if(action === 'start')
 	{
+		// Start the node
 		if(await BluetoothService.startNode())
-		{
-			console.log('Node started successfully.');
-		}
+			message = t('actions.start-node-success');
 		else
-		{
-			console.error('Failed to start the node.');
-		}
+			message = t('actions.start-node-failure');
 	}
 	else if (action === 'stop')
 	{
+		// Stop the node
 		if(await BluetoothService.stopNode())
-		{
-			console.log('Node stopped successfully.');
-		}
+			message = t('actions.stop-node-success');
 		else
-		{
-			console.error('Failed to stop the node.');
-		}
+			message = t('actions.stop-node-failure');
 	}
 	else if(action === 'restart')
 	{
+		// Restart the node
 		if(await BluetoothService.restartNode())
-		{
-			console.log('Node restarted successfully.');
-		}
+			message = t('actions.restart-node-success');
 		else
-		{
-			console.error('Failed to restart the node.');
-		}
+			message = t('actions.restart-node-failure');
 	}
+	
+	// Show a toast message
+	await showToastMessage(message);
 	
 	// Update the node status
 	await refreshNodeStatus();
+	
+	// Unlock the buttons
+	requestInProgress.value = false;
 };
 
 /**
@@ -73,17 +115,26 @@ const nodeAction = async(action: string) =>
  */
 const certificateAction = async(action: string) =>
 {
+	// Toast message
+	let message = '';
+	
+	// Lock the buttons
+	requestInProgress.value = true;
+	
 	if(action === 'renew')
 	{
+		// Renew the certificate
 		if(await BluetoothService.renewCertificate())
-		{
-			console.log('Certificate renewed successfully.');
-		}
+			message = t('actions.regenerate-ssl-success');
 		else
-		{
-			console.error('Failed to renew the certificate.');
-		}
+			message = t('actions.regenerate-ssl-failure');
 	}
+	
+	// Show a toast message
+	await showToastMessage(message);
+	
+	// Unlock the buttons
+	requestInProgress.value = false;
 };
 
 /**
@@ -91,56 +142,76 @@ const certificateAction = async(action: string) =>
  */
 const systemAction = async(action: string) =>
 {
+	// Toast message
+	let message = '';
+	
+	// Lock the buttons
+	requestInProgress.value = true;
+	
 	if(action === 'update')
 	{
 		if(await BluetoothService.updateSystem())
-		{
-			console.log('System updated successfully.');
-		}
+			message = t('actions.upgrade-system-success');
 		else
-		{
-			console.error('Failed to update the system.');
-		}
+			message = t('actions.upgrade-system-failure');
 	}
 	else if(action === 'reset')
 	{
 		if(await BluetoothService.resetSystem())
 		{
-			console.log('System reset successfully.');
-			// Go back to the home page
-			router.replace({ name: 'Home' });
+			// Show a toast message
+			await showToastMessage(t('actions.factory-reset-success'));
+			// Redirect to the home page
+			redirectToHome();
+			// Exit the function
+			return ;
 		}
 		else
 		{
-			console.error('Failed to reset the system.');
+			// Failed to reset the system
+			message = t('actions.factory-reset-failure');
 		}
 	}
 	else if(action === 'reboot')
 	{
 		if(await BluetoothService.rebootSystem())
 		{
-			console.log('System rebooted successfully.');
-			// Go back to the home page
-			router.replace({ name: 'Home' });
+			// Show a toast message
+			await showToastMessage(t('actions.hard-reboot-success'));
+			// Redirect to the home page
+			redirectToHome();
+			// Exit the function
+			return ;
 		}
 		else
 		{
-			console.error('Failed to reboot the system.');
+			// Failed to reboot the system
+			message = t('actions.hard-reboot-failure');
 		}
 	}
 	else if(action === 'shutdown')
 	{
 		if(await BluetoothService.shutdownSystem())
 		{
-			console.log('System shutdown successfully.');
-			// Go back to the home page
-			router.replace({ name: 'Home' });
+			// Show a toast message
+			await showToastMessage(t('actions.shutdown-success'));
+			// Redirect to the home page
+			redirectToHome();
+			// Exit the function
+			return ;
 		}
 		else
 		{
-			console.error('Failed to shutdown the system.');
+			// Failed to shutdown the system
+			message = t('actions.shutdown-failure');
 		}
 	}
+	
+	// Show a toast message
+	await showToastMessage(message);
+	
+	// Unlock the buttons
+	requestInProgress.value = false;
 };
 
 </script>
@@ -171,9 +242,7 @@ const systemAction = async(action: string) =>
 					<ion-card v-if="nodeStore.status === 'stopped'" class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.start-node-description') }}</p>
-							<ion-button expand="block" color="primary" @click="nodeAction('start')">
-								{{ $t('actions.start-node-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.start-node-button')" :disabled="requestInProgress" :callback="async() => await nodeAction('start')" />
 						</ion-card-content>
 					</ion-card>
 					
@@ -181,9 +250,7 @@ const systemAction = async(action: string) =>
 					<ion-card v-if="nodeStore.status === 'running'" class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.stop-node-description') }}</p>
-							<ion-button expand="block" color="primary" @click="nodeAction('stop')">
-								{{ $t('actions.stop-node-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.stop-node-button')" :disabled="requestInProgress" :callback="async() => await nodeAction('stop')" />
 						</ion-card-content>
 					</ion-card>
 					
@@ -191,9 +258,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.restart-node-description') }}</p>
-							<ion-button expand="block" color="primary" @click="nodeAction('restart')">
-								{{ $t('actions.restart-node-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.restart-node-button')" :disabled="requestInProgress" :callback="async() => await nodeAction('restart')" />
 						</ion-card-content>
 					</ion-card>
 
@@ -201,9 +266,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.regenerate-ssl-description') }}</p>
-							<ion-button expand="block" color="primary" @click="certificateAction('renew')">
-								{{ $t('actions.regenerate-ssl-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.regenerate-ssl-button')" :disabled="requestInProgress" :callback="async() => await certificateAction('renew')" />
 						</ion-card-content>
 					</ion-card>
 				</div>
@@ -213,9 +276,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.upgrade-system-description') }}</p>
-							<ion-button expand="block" color="primary" @click="systemAction('update')">
-								{{ $t('actions.upgrade-system-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.upgrade-system-button')" :disabled="requestInProgress" :callback="async() => await systemAction('update')" />
 						</ion-card-content>
 					</ion-card>
 
@@ -223,9 +284,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.factory-reset-description') }}</p>
-							<ion-button expand="block" color="danger" @click="systemAction('reset')">
-								{{ $t('actions.factory-reset-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.factory-reset-button')" :disabled="requestInProgress" :callback="async() => await systemAction('reset')" />
 						</ion-card-content>
 					</ion-card>
 				</div>
@@ -235,9 +294,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.hard-reboot-description') }}</p>
-							<ion-button expand="block" color="primary" @click="systemAction('reboot')">
-								{{ $t('actions.hard-reboot-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.hard-reboot-button')" :disabled="requestInProgress" :callback="async() => await systemAction('reboot')" />
 						</ion-card-content>
 					</ion-card>
 
@@ -245,9 +302,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.shutdown-description') }}</p>
-							<ion-button expand="block" color="primary" @click="systemAction('shutdown')">
-								{{ $t('actions.shutdown-button') }}
-							</ion-button>
+							<loading-button :label="$t('actions.shutdown-button')" :disabled="requestInProgress" :callback="async() => await systemAction('shutdown')" />
 						</ion-card-content>
 					</ion-card>
 				</div>

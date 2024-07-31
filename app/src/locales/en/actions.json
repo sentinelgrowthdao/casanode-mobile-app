@@ -5,25 +5,42 @@
 	
 	"start-node-description": "Start the node to enable users to log in and navigate safely.",
 	"start-node-button": "Start node",
+	"start-node-success": "Node started successfully.",
+	"start-node-failure": "Failed to start node.",
 	
 	"stop-node-description": "Halts all current activities and operations of the VPN, while keeping the device active.",
 	"stop-node-button": "Stop Node",
+	"stop-node-success": "Node stopped successfully.",
+	"stop-node-failure": "Failed to stop node.",
 	
 	"restart-node-description": "Reboots the node, refreshing all processes without deleting any data.",
 	"restart-node-button": "Restart Node",
+	"restart-node-success": "Node restarted successfully.",
+	"restart-node-failure": "Failed to restart node.",
 	
 	"regenerate-ssl-description": "Renews the node’s SSL certificate to maintain secure VPN connections before May 6, 2025.",
 	"regenerate-ssl-button": "Regenerate SSL Certificate",
+	"regenerate-ssl-success": "SSL certificate regenerated successfully.",
+	"regenerate-ssl-failure": "Failed to regenerate SSL certificate.",
 	
 	"upgrade-system-description": "Applies the latest updates to both the operating system and the application. This ensures the system is optimized for performance, security, and new features.",
 	"upgrade-system-button": "Upgrade System",
+	"upgrade-system-success": "System upgraded successfully.",
+	"upgrade-system-failure": "Failed to upgrade system.",
 	
 	"factory-reset-description": "Resets the node to its original factory settings, erasing all data and configurations to start afresh.",
 	"factory-reset-button": "Factory Reset",
+	"factory-reset-success": "Node reset to factory settings successfully.",
+	"factory-reset-failure": "Failed to reset node to factory settings.",
 	
 	"hard-reboot-description": "Fully restarts the device, which is equivalent to switching the hardware off and back on.",
 	"hard-reboot-button": "Hard Reboot",
+	"hard-reboot-success": "Device rebooted successfully.",
+	"hard-reboot-failure": "Failed to reboot device.",
 	
 	"shutdown-description": "Powers down the system completely, safely turning off all services and ensuring data isn't corrupted.",
-	"shutdown-button": "Shutdown"
+	"shutdown-button": "Shutdown",
+	"shutdown-success": "Device shut down successfully.",
+	"shutdown-failure": "Failed to shut down device."
+	
 }

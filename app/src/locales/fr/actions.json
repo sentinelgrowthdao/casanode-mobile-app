@@ -5,25 +5,42 @@
 	
 	"start-node-description": "Démarrer le nœud pour permettre aux utilisateurs de se connecter et de naviguer en toute sécurité.",
 	"start-node-button": "Démarrer le nœud",
+	"start-node-success": "Nœud démarré avec succès.",
+	"start-node-failure": "Impossible de démarrer le nœud.",
 	
 	"stop-node-description": "Interrompt toutes les activités et opérations actuelles du VPN, tout en gardant l'appareil actif.",
 	"stop-node-button": "Arrêter le nœud",
+	"stop-node-success": "Nœud arrêté avec succès.",
+	"stop-node-failure": "Impossible d'arrêter le nœud.",
 	
 	"restart-node-description": "Redémarre le nœud, rafraîchissant tous les processus sans supprimer aucune donnée.",
 	"restart-node-button": "Redémarrer le nœud",
+	"restart-node-success": "Nœud redémarré avec succès.",
+	"restart-node-failure": "Impossible de redémarrer le nœud.",
 	
 	"regenerate-ssl-description": "Renouvelle le certificat SSL du nœud pour maintenir des connexions VPN sécurisées avant le 6 mai 2025.",
 	"regenerate-ssl-button": "Régénérer le certificat SSL",
+	"regenerate-ssl-success": "Certificat SSL régénéré avec succès.",
+	"regenerate-ssl-failure": "Impossible de régénérer le certificat SSL.",
 	
 	"upgrade-system-description": "Applique les dernières mises à jour au système d'exploitation et à l'application. Cela garantit que le système est optimisé pour les performances, la sécurité et les nouvelles fonctionnalités.",
 	"upgrade-system-button": "Mettre à jour le système",
+	"upgrade-system-success": "Système mis à jour avec succès.",
+	"upgrade-system-failure": "Impossible de mettre à jour le système.",
 	
 	"factory-reset-description": "Réinitialise le nœud à ses paramètres d'usine d'origine, effaçant toutes les données et configurations pour repartir à neuf.",
 	"factory-reset-button": "Réinitialisation d'usine",
+	"factory-reset-success": "Nœud réinitialisé aux paramètres d'usine avec succès.",
+	"factory-reset-failure": "Impossible de réinitialiser le nœud aux paramètres d'usine.",
 	
 	"hard-reboot-description": "Redémarre complètement l'appareil, ce qui équivaut à éteindre et rallumer le matériel.",
 	"hard-reboot-button": "Redémarrage complet",
+	"hard-reboot-success": "Appareil redémarré avec succès.",
+	"hard-reboot-failure": "Impossible de redémarrer l'appareil.",
 	
 	"shutdown-description": "Éteint complètement le système, en arrêtant en toute sécurité tous les services et en veillant à ce que les données ne soient pas corrompues.",
-	"shutdown-button": "Arrêter"
+	"shutdown-button": "Arrêter",
+	"shutdown-success": "Appareil éteint avec succès.",
+	"shutdown-failure": "Impossible d'éteindre l'appareil."
+	
 }
