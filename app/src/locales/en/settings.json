@@ -13,5 +13,9 @@
 	"maximum-peers-label": "Maximum peers",
 	"vpn-type-label": "Type",
 
-	"save-button": "Save and Restart Node"
+	"save-button": "Save and Restart Node",
+	"save-success": "Settings saved successfully",
+	"save-failed": "Failed to save settings",
+	"restart-success": "Node restarted successfully",
+	"restart-failed": "Failed to restart node"
 }

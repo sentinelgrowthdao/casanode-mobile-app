@@ -13,5 +13,9 @@
 	"maximum-peers-label": "Pairs maximum",
 	"vpn-type-label": "Type",
 
-	"save-button": "Sauvegarder et redémarrer le nœud"
+	"save-button": "Sauvegarder et redémarrer le nœud",
+	"save-success": "Paramètres sauvegardés avec succès",
+	"save-failed": "Échec de la sauvegarde des paramètres",
+	"restart-success": "Nœud redémarré avec succès",
+	"restart-failed": "Échec du redémarrage du nœud"
 }

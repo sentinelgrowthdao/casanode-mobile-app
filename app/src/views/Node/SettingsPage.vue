@@ -2,16 +2,36 @@
 import {
 	IonPage, IonContent, IonHeader, IonItem,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-	IonButton, IonLabel, IonSelect, IonSelectOption, IonInput
+	IonLabel, IonSelect, IonSelectOption, IonInput,
+	toastController
 } from '@ionic/vue';
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
+import BluetoothService from '@/services/BluetoothService';
 import AppToolbar from '@/components/AppToolbar.vue';
+import LoadingButton from '@components/LoadingButton.vue';
+import { refreshNodeStatus } from '@/utils/node';
 
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
+// Import the useI18n composable function.
+const { t } = useI18n();
 
-const nodeSettings = ref({
+// Node settings interface
+interface NodeSettings
+{
+	moniker: string;
+	nodeType: string;
+	nodeIp: string;
+	nodePort: number;
+	vpnPort: number;
+	maximumPeers: number;
+	vpnType: string;
+}
+
+// Node settings
+const nodeSettings = ref<NodeSettings>({
 	moniker: nodeStore.moniker,
 	nodeType: nodeStore.nodeType,
 	nodeIp: nodeStore.nodeIp,
@@ -21,9 +41,85 @@ const nodeSettings = ref({
 	vpnType: nodeStore.vpnType
 });
 
-const saveSettings = () =>
+// Save in progress reference
+const saveInProgress = ref<boolean>(false);
+
+// Save function
+const saveSettings = async () =>
 {
-	console.log('Settings saved:', nodeSettings.value);
+	// Save and restart success flags
+	let saveSuccess = false;
+	let restartSuccess = false;
+	
+	// Lock the save button
+	saveInProgress.value = true;
+	
+	try
+	{
+		// Save the settings
+		await BluetoothService.writeMoniker(nodeSettings.value.moniker);
+		nodeStore.setMoniker(nodeSettings.value.moniker);
+		
+		await BluetoothService.writeNodeType(nodeSettings.value.nodeType);
+		nodeStore.setNodeType(nodeSettings.value.nodeType);
+		
+		await BluetoothService.writeNodeIp(nodeSettings.value.nodeIp);
+		nodeStore.setNodeIp(nodeSettings.value.nodeIp);
+		
+		await BluetoothService.writeNodePort(nodeSettings.value.nodePort.toString());
+		nodeStore.setNodePort(nodeSettings.value.nodePort);
+		
+		await BluetoothService.writeVpnPort(nodeSettings.value.vpnPort.toString());
+		nodeStore.setVpnPort(nodeSettings.value.vpnPort);
+		
+		await BluetoothService.writeMaximumPeers(nodeSettings.value.maximumPeers.toString());
+		nodeStore.setMaximumPeers(nodeSettings.value.maximumPeers);
+		
+		await BluetoothService.writeVpnType(nodeSettings.value.vpnType);
+		nodeStore.setVpnType(nodeSettings.value.vpnType);
+		
+		// Save success
+		saveSuccess = true;
+	}
+	catch(error)
+	{
+		console.error('Failed to save settings:', error);
+	}
+	
+	// Show a toast message
+	const toastSave = await toastController.create({
+				message: t(saveSuccess ? 'settings.save-success' : 'settings.save-failed'),
+				duration: 1500,
+				position: 'bottom',
+			});
+	// Wait for the toast to be dismissed
+	await toastSave.present();
+	
+	try
+	{
+		// Restart the node
+		await BluetoothService.restartNode();
+		restartSuccess = true;
+	}
+	catch(error)
+	{
+		console.error('Failed to restart the node:', error);
+	}
+	
+	// Show a toast message
+	const toastRestart = await toastController.create({
+				message: t(restartSuccess ? 'settings.restart-success' : 'settings.restart-failed'),
+				duration: 1500,
+				position: 'bottom',
+			});
+	// Wait for the toast to be dismissed
+	await toastRestart.present();
+	
+	// Update the node status
+	await refreshNodeStatus();
+	
+	// Unlock the save button
+	saveInProgress.value = false;
 };
 
 </script>
@@ -52,7 +148,7 @@ const saveSettings = () =>
 					</ion-item>
 				</ion-card-content>
 			</ion-card>
-
+			
 			<!-- Network Section -->
 			<ion-card class="container">
 				<ion-card-header>
@@ -77,7 +173,7 @@ const saveSettings = () =>
 					</ion-item>
 				</ion-card-content>
 			</ion-card>
-
+			
 			<!-- VPN Section -->
 			<ion-card class="container">
 				<ion-card-header>
@@ -97,13 +193,11 @@ const saveSettings = () =>
 					</ion-item>
 				</ion-card-content>
 			</ion-card>
-
+			
 			<!-- Save Button -->
 			<ion-card class="container nobg">
 				<ion-card-content>
-					<ion-button expand="block" color="primary" @click="saveSettings">
-						{{ $t('settings.save-button') }}
-					</ion-button>
+					<loading-button :label="$t('settings.save-button')" :callback="saveSettings" :disabled="saveInProgress" />
 				</ion-card-content>
 			</ion-card>
 		</ion-content>
