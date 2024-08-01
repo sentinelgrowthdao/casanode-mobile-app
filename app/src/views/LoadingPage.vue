@@ -11,6 +11,7 @@ import BluetoothService from '@/services/BluetoothService';
 import NodeService from '@/services/NodeService';
 import { refreshPublicAddress } from '@/utils/node';
 import { scanAndConnect } from '@/utils/scan';
+import { toggleKeepAwake } from '@/utils/awake';
 
 // Router
 const router = useRouter();
@@ -40,9 +41,14 @@ onMounted(async () =>
  */
 const tryConnection = async () =>
 {
+	// Keep the device awake
+	await toggleKeepAwake(true);
+	// Scan and connect to the device
 	await scanAndConnect();
 	// Continue the connection process
 	await connectionToNode();
+	// Disable the keep awake
+	await toggleKeepAwake(false);
 };
 
 /**
