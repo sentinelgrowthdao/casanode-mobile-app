@@ -17,7 +17,7 @@ export async function copyToClipboard(message: string, data: string)
 			const toast = await toastController.create({
 				message: message,
 				duration: 1500,
-				position: 'top',
+				position: 'bottom',
 			});
 			await toast.present();
 		}
