@@ -112,7 +112,7 @@ const connectionToNode = async () =>
 		const publicAddress = await refreshPublicAddress();
 		
 		// If passphrase is needed and wallet already exists
-		if(keyringBackend === 'file' && publicAddress !== null)
+		if(keyringBackend === 'file' && publicAddress === null)
 		{
 			errorMessage.value = '';
 			// Open the passphrase form
