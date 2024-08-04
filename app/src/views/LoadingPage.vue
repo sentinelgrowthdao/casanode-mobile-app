@@ -73,6 +73,7 @@ const connectionToNode = async () =>
 		const nodeConfig = checkInstallation[2] === '1';
 		const vpnConfig = checkInstallation[3] === '1';
 		const certificateKey = checkInstallation[4] === '1';
+		const walletAvailable = checkInstallation[5] === '1';
 		
 		// If the image is unavailable
 		if(!imageAvailable)
@@ -112,7 +113,7 @@ const connectionToNode = async () =>
 		const publicAddress = await refreshPublicAddress();
 		
 		// If passphrase is needed and wallet already exists
-		if(keyringBackend === 'file' && publicAddress === null)
+		if(keyringBackend === 'file' && publicAddress === null && walletAvailable === true)
 		{
 			errorMessage.value = '';
 			// Open the passphrase form
