@@ -3,6 +3,10 @@
 	"welcome-text": "This wizard will guide you through the setup process step by step,  ensuring a smooth and easy configuration.",
 	"welcome-next": "Click \"Next\" to begin your  journey to decentralized internet access!",
 	
+	"reset-title": "Configuration already started",
+	"reset-text": "An installation seems to have been started but not completed.",
+	"reset-question": "Reset node configuration before starting?",
+	
 	"moniker-title": "Set Your Node's Moniker",
 	"moniker-text": "Give your node a unique name to identify it within the decentralized VPN  network.",
 	"moniker-explain": "This name will represent your node to others, so choose a  moniker that is memorable and distinctive.",
@@ -81,5 +85,6 @@
 	"error-wallet-creation": "An error occurred while creating the wallet.",
 	"error-wallet-restore": "An error occurred while restoring the wallet.",
 	"error-mnemonic-format": "Your mnemonic must be 24 words separated by spaces.",
+	"error-reset": "An error occurred while resetting the node.",
 	"warning-wallet-fund": "The node's wallet does not have enough dVPNs to start."
 }

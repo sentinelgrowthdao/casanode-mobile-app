@@ -3,6 +3,10 @@
 	"welcome-text": "Cet assistant vous guidera tout au long du processus d'installation étape par étape, pour garantir une configuration simple et fluide.",
 	"welcome-next": "Cliquez sur \"Suivant\" pour commencer votre voyage vers un accès Internet décentralisé !",
 	
+	"reset-title": "Configuration déjà démarrée",
+	"reset-text": "Une installation semble avoir été démarrée mais pas terminée.",
+	"reset-question": "Réinitialiser la configuration du nœud avant de commencer ?",
+	
 	"moniker-title": "Définissez le moniker de votre nœud",
 	"moniker-text": "Donnez à votre nœud un nom unique pour l'identifier au sein du réseau VPN décentralisé.",
 	"moniker-explain": "Ce nom représentera votre nœud auprès des autres, alors choisissez un moniker mémorable et distinctif.",
@@ -81,5 +85,6 @@
 	"error-wallet-creation": "Une erreur s'est produite lors de la création du portefeuille.",
 	"error-wallet-restore": "Une erreur s'est produite lors de la restauration du portefeuille.",
 	"error-mnemonic-format": "Votre mnémonic doit être composé de 24 mots séparés par des espaces.",
+	"error-reset": "Une erreur s'est produite lors de la réinitialisation du nœud.",
 	"warning-wallet-fund": "Le portefeuille du nœud n'a pas assez de dVPN pour démarrer."
 }

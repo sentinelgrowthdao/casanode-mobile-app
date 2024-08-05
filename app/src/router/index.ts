@@ -64,6 +64,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@views/Wizard/Step1Welcome.vue')
 	},
 	{
+		path: '/wizard/reset',
+		name: 'Wizard1Reset',
+		component: () => import('@views/Wizard/Step1Reset.vue')
+	},
+	{
 		path: '/wizard/moniker',
 		name: 'Wizard2Moniker',
 		component: () => import('@views/Wizard/Step2Moniker.vue')
