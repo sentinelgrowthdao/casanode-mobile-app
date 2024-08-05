@@ -10,7 +10,6 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
 import BluetoothService from '@/services/BluetoothService';
-import NodeService from '@/services/NodeService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
