@@ -159,6 +159,8 @@ const systemAction = async(action: string) =>
 	{
 		if(await BluetoothService.resetSystem())
 		{
+			// Reset store
+			nodeStore.resetStore();
 			// Show a toast message
 			await showToastMessage(t('actions.factory-reset-success'));
 			// Redirect to the home page
