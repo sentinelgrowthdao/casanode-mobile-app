@@ -40,6 +40,7 @@ const CHAR_WALLET_MNEMONIC_UUID = '00805f9b3519';
 const CHAR_WALLET_ACTIONS_UUID = '00805f9b351a';
 const CHAR_NODE_KEYRING_BACKEND_UUID = '00805f9b351b';
 const CHAR_ONLINE_USERS_UUID = '00805f9b351c';
+const CHAR_CHANGE_VPN_TYPE_UUID = '00805f9b351d';
 
 /**
  * Encode a string into a DataView
@@ -545,6 +546,27 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		return false;
+	}
+	
+	/**
+	 * Change VPN configuration file and delete unnecessary one.
+	 * @returns Promise<number|null>
+	 */
+	public async readChangeVpnType(): Promise<number|null>
+	{
+		try
+		{
+			if(this.deviceId)
+			{
+				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHANGE_VPN_TYPE_UUID}`, {timeout: 30000});
+				return parseInt(decodeDataView(value));
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		return null;
 	}
 	
 	/**

@@ -31,7 +31,9 @@ const setVpnTypeAndNavigate = async () =>
 	if(vpnType.value === 'wireguard' || vpnType.value === 'v2ray')
 	{
 		// Send to the server and apply the value
-		if(await BluetoothService.writeVpnType(vpnType.value) && await BluetoothService.writeNodeConfig())
+		if(await BluetoothService.writeVpnType(vpnType.value)
+			&& await BluetoothService.readChangeVpnType() === 0
+			&& await BluetoothService.writeNodeConfig())
 		{
 			nodeStore.setVpnType(vpnType.value);
 			router.push({ name: 'Wizard5Network' });
