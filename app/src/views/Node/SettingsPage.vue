@@ -98,28 +98,32 @@ const saveSettings = async () =>
 	// Wait for the toast to be dismissed
 	await toastSave.present();
 	
-	try
+	// If node is already running
+	if(nodeStore.status === 'running')
 	{
-		// Restart the node
-		await BluetoothService.restartNode();
-		restartSuccess = true;
+		try
+		{
+			// Restart the node
+			await BluetoothService.restartNode();
+			restartSuccess = true;
+		}
+		catch(error)
+		{
+			console.error('Failed to restart the node:', error);
+		}
+		
+		// Show a toast message
+		const toastRestart = await toastController.create({
+					message: t(restartSuccess ? 'settings.restart-success' : 'settings.restart-failed'),
+					duration: 1500,
+					position: 'bottom',
+				});
+		// Wait for the toast to be dismissed
+		await toastRestart.present();
+		
+		// Update the node status
+		await refreshNodeStatus();
 	}
-	catch(error)
-	{
-		console.error('Failed to restart the node:', error);
-	}
-	
-	// Show a toast message
-	const toastRestart = await toastController.create({
-				message: t(restartSuccess ? 'settings.restart-success' : 'settings.restart-failed'),
-				duration: 1500,
-				position: 'bottom',
-			});
-	// Wait for the toast to be dismissed
-	await toastRestart.present();
-	
-	// Update the node status
-	await refreshNodeStatus();
 	
 	// Unlock the save button
 	saveInProgress.value = false;
