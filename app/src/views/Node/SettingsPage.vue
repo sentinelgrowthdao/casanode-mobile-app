@@ -197,7 +197,7 @@ const saveSettings = async () =>
 			<!-- Save Button -->
 			<ion-card class="container nobg">
 				<ion-card-content>
-					<loading-button :label="$t('settings.save-button')" :callback="saveSettings" :disabled="saveInProgress" />
+					<loading-button :label="$t(nodeStore.status === 'running' ? 'settings.save-restart-button' : 'settings.save-button')" :callback="saveSettings" :disabled="saveInProgress" />
 				</ion-card-content>
 			</ion-card>
 		</ion-content>
