@@ -13,52 +13,54 @@ export interface NodeBalance
 	denom: string;
 }
 
+const initialState = {
+	
+	// Counter of modified configurations to be applied
+	applyCounter: 0,
+	
+	// Node Status
+	status: 'unknown',
+	onlineUsers: 0,
+	
+	// Node Information
+	nodeIp: '',
+	nodeLocation: '',
+	nodePort: -1,
+	vpnPort: -1,
+	certExpiry: '',
+	uploadSpeed: '',
+	downloadSpeed: '',
+	
+	// Node Settings
+	moniker: '',
+	nodeType: '',
+	
+	// VPN Settings
+	vpnType: '',
+	maximumPeers: 0,
+	
+	// Wallet
+	nodeBalance: {
+		amount: 0,
+		denom: ''
+	} as NodeBalance,
+	publicAddress: '',
+	nodeAddress: '',
+	mnemonic: [] as string[],
+	transactions: [],
+	
+	// System Information
+	casanodeVersion: '',
+	systemOs: '',
+	systemKernel: '',
+	systemArch: '',
+	dockerImage: '',
+	uptime: 0
+};
+
 export const useNodeStore = defineStore('node',
 {
-	state: () => ({
-		
-		// Counter of modified configurations to be applied
-		applyCounter: 0,
-		
-		// Node Status
-		status: 'unknown',
-		onlineUsers: 0,
-		
-		// Node Information
-		nodeIp: '',
-		nodeLocation: '',
-		nodePort: -1,
-		vpnPort: -1,
-		certExpiry: '',
-		uploadSpeed: '',
-		downloadSpeed: '',
-		
-		// Node Settings
-		moniker: '',
-		nodeType: '',
-		
-		// VPN Settings
-		vpnType: '',
-		maximumPeers: 0,
-		
-		// Wallet
-		nodeBalance: {
-			amount: 0,
-			denom: ''
-		} as NodeBalance,
-		publicAddress: '',
-		nodeAddress: '',
-		mnemonic: [] as string[],
-		transactions: [],
-		
-		// System Information
-		casanodeVersion: '',
-		systemOs: '',
-		systemKernel: '',
-		systemArch: '',
-		dockerImage: '',
-		uptime: 0
-	}),
+	state: () => ({ ...initialState }),
 	
 	actions:
 	{
@@ -71,6 +73,12 @@ export const useNodeStore = defineStore('node',
 		resetApplyCounter(): void
 		{
 			this.applyCounter = 0;
+		},
+		
+		// Reset store
+		resetStore(): void
+		{
+			this.$reset();
 		},
 		
 		// Set the node status
