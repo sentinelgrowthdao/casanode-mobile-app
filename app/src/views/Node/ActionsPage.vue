@@ -241,7 +241,7 @@ const systemAction = async(action: string) =>
 				
 				<div v-if="segmentSelected === 'node'">
 					<!-- Start Node -->
-					<ion-card v-if="nodeStore.status === 'stopped'" class="container">
+					<ion-card v-if="nodeStore.status !== 'running'" class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.start-node-description') }}</p>
 							<loading-button :label="$t('actions.start-node-button')" :disabled="requestInProgress" :callback="async() => await nodeAction('start')" />
