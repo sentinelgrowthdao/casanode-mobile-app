@@ -21,7 +21,10 @@ const { t } = useI18n();
 const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
 
-// On mounted
+/**
+ * On mounted
+ * @returns void
+ */
 onMounted(async () =>
 {
 	// Check if public address is already exist
@@ -32,7 +35,10 @@ onMounted(async () =>
 	}
 });
 
-// Send a request to create a wallet
+/**
+ * Send a request to create a wallet
+ * @returns void
+ */
 const requestCreateWallet = async () =>
 {
 	// Create a new wallet

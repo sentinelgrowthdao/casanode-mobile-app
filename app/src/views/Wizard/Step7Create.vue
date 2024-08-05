@@ -12,7 +12,10 @@ const router = useRouter();
 // Node store
 const nodeStore = useNodeStore();
 
-// Remove mnemonic store
+/**
+ * Remove mnemonic store
+ * @returns void
+ */
 const removeMnemonicStore = async () =>
 {
 	// Clear the store

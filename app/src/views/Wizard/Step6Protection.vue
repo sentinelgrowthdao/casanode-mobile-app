@@ -20,7 +20,10 @@ const { t } = useI18n();
 const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
 
-// On mounted
+/**
+ * On mounted
+ * @returns void
+ */
 onMounted(async () =>
 {
 	// Check if public address is already exist
@@ -32,7 +35,11 @@ onMounted(async () =>
 });
 
 
-// Set the keyring backend value and navigate to the next step
+/**
+ * Set the keyring backend value and navigate to the next step
+ * @param value string
+ * @returns void
+ */
 const setKeyringBackendValue = async (value: string) =>
 {
 	// Send to the server and apply the value

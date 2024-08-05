@@ -23,6 +23,10 @@ const nodeIp: Ref<string> = ref(nodeStore.nodeIp);
 const nodePort: Ref<string> = ref(nodeStore.nodePort.toString());
 const vpnPort: Ref<string> = ref(nodeStore.vpnPort.toString());
 
+/**
+ * Set the values and navigate to the next step
+ * @returns void
+ */
 const setValuesAndNavigate = async () =>
 {
 	const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;

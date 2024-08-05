@@ -22,7 +22,10 @@ const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
 const passphrase: Ref<string> = ref('');
 
-// On mounted
+/**
+ * On mounted
+ * @returns void
+ */
 onMounted(async () =>
 {
 	// Check if public address is already exist
@@ -33,7 +36,10 @@ onMounted(async () =>
 	}
 });
 
-// Set the passphrase and navigate to the next step
+/**
+ * Set the passphrase and navigate to the next step
+ * @returns void
+ */
 const setPassphraseAndNavigate = async () =>
 {
 	// Trim the passphrase value

@@ -12,6 +12,7 @@ const router = useRouter();
 
 /**
  * Refresh the store and navigate to the next step
+ * @returns void
  */
 const refreshStoreAndNavigate = async () =>
 {

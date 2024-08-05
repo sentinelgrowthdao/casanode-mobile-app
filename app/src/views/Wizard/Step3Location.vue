@@ -21,6 +21,10 @@ const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
 const nodeType: Ref<string> = ref(nodeStore.nodeType);
 
+/**
+ * Set the node type value and navigate to the next step
+ * @returns void
+ */
 const setNodeTypeAndNavigate = async () =>
 {
 	// Check if the node type is residential or datacenter

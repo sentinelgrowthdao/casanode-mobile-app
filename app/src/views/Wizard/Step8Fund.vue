@@ -21,6 +21,10 @@ const { t } = useI18n();
 const nodeStore = useNodeStore();
 const balanceMessage: Ref<string> = ref('');
 
+/**
+ * Check the wallet balance and navigate to the next step
+ * @returns void
+ */
 const checkWalletBalance = async () => 
 {
 	// Clear the balance message

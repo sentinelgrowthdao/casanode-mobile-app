@@ -21,6 +21,10 @@ const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
 const vpnType: Ref<string> = ref(nodeStore.vpnType);
 
+/**
+ * Set the VPN type value and navigate to the next step
+ * @returns void
+ */
 const setVpnTypeAndNavigate = async () =>
 {
 	// Check if the node type is wireguard or v2ray
