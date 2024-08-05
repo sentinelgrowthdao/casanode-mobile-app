@@ -55,6 +55,8 @@ const requestRestoreWallet = async () =>
 			// If all values are not null
 			if(publicAddress !== null && nodeAddress !== null)
 			{
+				// Reset the mnemonic value
+				mnemonic.value = '';
 				// Navigate to the next step
 				router.push({ name: 'Wizard8Fund' });
 			}
