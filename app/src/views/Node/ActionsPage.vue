@@ -255,7 +255,7 @@ const systemAction = async(action: string) =>
 					</ion-card>
 					
 					<!-- Restart Node -->
-					<ion-card class="container">
+					<ion-card v-if="nodeStore.status === 'running'" class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.restart-node-description') }}</p>
 							<loading-button :label="$t('actions.restart-node-button')" :disabled="requestInProgress" :callback="async() => await nodeAction('restart')" />
