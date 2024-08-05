@@ -22,6 +22,10 @@ const nodeStore = useNodeStore();
 const errorMessage: Ref<string> = ref('');
 const moniker: Ref<string> = ref(nodeStore.moniker);
 
+/**
+ * Set the moniker value and navigate to the next step
+ * @returns void
+ */
 const setValueAndNavigate = async () =>
 {
 	// Clear the error message
