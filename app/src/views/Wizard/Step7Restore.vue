@@ -87,7 +87,7 @@ const requestRestoreWallet = async () =>
 					<p class="text">{{ $t('wizard.wallet-restore-text') }}</p>
 					<div class="mnemonic">
 						<ion-textarea v-model="mnemonic" aria-label="Mnemonic" fill="outline"
-							:placeholder="$t('wizard.wallet-restore-placeholder')" class="mnemonic"></ion-textarea>
+							:rows="5" :placeholder="$t('wizard.wallet-restore-placeholder')" class="mnemonic"></ion-textarea>
 					</div>
 					<p class="caption">{{ $t('wizard.wallet-restore-warning') }}</p>
 				</div>
