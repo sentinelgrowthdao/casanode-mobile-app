@@ -78,6 +78,9 @@ const saveSettings = async () =>
 		await BluetoothService.writeVpnType(nodeSettings.value.vpnType);
 		nodeStore.setVpnType(nodeSettings.value.vpnType);
 		
+		// Apply configuration
+		await BluetoothService.writeNodeConfig();
+		
 		// Save success
 		saveSuccess = true;
 	}
