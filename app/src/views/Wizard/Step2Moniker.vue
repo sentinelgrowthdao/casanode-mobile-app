@@ -37,6 +37,8 @@ const setValueAndNavigate = async () =>
 		{
 			// Set the moniker value
 			nodeStore.setMoniker(monikerValue);
+			// Reset input
+			moniker.value = '';
 			// Navigate to the next step
 			router.push({ name: 'Wizard3Location' });
 		}
