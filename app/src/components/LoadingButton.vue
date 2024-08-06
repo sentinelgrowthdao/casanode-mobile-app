@@ -41,6 +41,14 @@ ion-button
 	justify-content: center;
 	align-items: center;
 	
+	&.ion-color-danger
+	{
+		&> .button-content > span
+		{
+			color:var(--text-color-normal-light);
+		}
+	}
+	
 	.button-content
 	{
 		display: flex;
