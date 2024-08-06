@@ -4,16 +4,42 @@ import {
 	IonGrid, IonRow, IonCol,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
 import { useNodeStore } from '@stores/NodeStore';
+import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
+import BluetoothService from '@/services/BluetoothService';
 
 // Import the useI18n composable function.
 const { t } = useI18n();
 
-// Import the useNodeStore composable function.
+// Node Store
 const nodeStore = useNodeStore();
+// Device Store
+const deviceStore = useDeviceStore();
+
+/**
+ * On mounted, get the last device
+ */
+onMounted(() =>
+{
+	// Check if the Bluetooth is connected
+	if(BluetoothService.isConnected())
+	{
+		// Get the last device
+		const bleUuid = BluetoothService.getBleUuid();
+		if(bleUuid)
+		{
+			// Add the device to the store
+			deviceStore.addDevice({
+				uuid: bleUuid,
+				name: nodeStore.moniker,
+				address: nodeStore.nodeIp,
+			} as DeviceEntry);
+		}
+	}
+});
 
 // Define the node status text
 const nodeStatus = computed(() =>
