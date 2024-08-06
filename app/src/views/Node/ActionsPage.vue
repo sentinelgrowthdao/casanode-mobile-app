@@ -286,7 +286,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.factory-reset-description') }}</p>
-							<loading-button :label="$t('actions.factory-reset-button')" :disabled="requestInProgress" :callback="async() => await systemAction('reset')" />
+							<loading-button color="danger" :label="$t('actions.factory-reset-button')" :disabled="requestInProgress" :callback="async() => await systemAction('reset')" />
 						</ion-card-content>
 					</ion-card>
 				</div>
