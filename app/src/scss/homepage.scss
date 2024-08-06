@@ -70,6 +70,48 @@
 				padding: 0 1rem;
 				text-align: center;
 			}
+			
+			&.device
+			{
+				position:relative;
+				
+				&> .close
+				{
+					position:absolute;
+					top: 0;
+					right: 0;
+					margin: 0;
+					padding: 0;
+					
+					ion-icon {
+						color: var(--text-color-normal-light);
+					}
+				}
+				&> .name
+				{
+					margin: 0 0 0.5rem;
+					text-align: center;
+					font-size: 1.25rem;
+					font-weight: 700;
+				}
+				&> .address
+				{
+					margin: 0 0 0.5rem;
+					text-align: center;
+					font-size: 0.8rem;
+				}
+				&> .button
+				{
+					margin: 0 auto;
+					max-width: 8rem;
+				}
+				&> .scan
+				{
+					margin: 1rem 0 0;
+					padding: 0 1rem;
+					text-align: center;
+				}
+			}
 		}
 	}
 
