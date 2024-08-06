@@ -236,6 +236,15 @@ class BluetoothService
 	}
 	
 	/**
+	 * Get the bluetooth UUID.
+	 * @returns string|null
+	 */
+	public getBleUuid(): string|null
+	{
+		return this.BLE_UUID;
+	}
+	
+	/**
 	 * Check if the device is connected to the BLE server.
 	 * @returns boolean
 	 */
