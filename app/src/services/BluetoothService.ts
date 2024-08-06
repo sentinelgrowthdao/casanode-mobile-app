@@ -77,7 +77,7 @@ class BluetoothService
 	private static instance: BluetoothService;
 	private deviceId: string | null = null;
 	private connected = false;
-	private BLE_UUID: string = '';
+	private BLE_UUID: string | null = null;
 	
 	private constructor() {}
 	
@@ -205,6 +205,7 @@ class BluetoothService
 		catch (error)
 		{
 			console.error('BLE connect (2) error:', error);
+			this.BLE_UUID = null;
 		}
 		
 		return this.connected;
@@ -224,6 +225,7 @@ class BluetoothService
 				// Disconnect from the BLE server
 				await BleClient.disconnect(this.deviceId);
 				this.deviceId = null;
+				this.BLE_UUID = null;
 				this.connected = false;
 			}
 		}
