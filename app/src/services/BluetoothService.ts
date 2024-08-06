@@ -205,7 +205,9 @@ class BluetoothService
 		catch (error)
 		{
 			console.error('BLE connect (2) error:', error);
+			this.deviceId = null;
 			this.BLE_UUID = null;
+			this.connected = false;
 		}
 		
 		return this.connected;
