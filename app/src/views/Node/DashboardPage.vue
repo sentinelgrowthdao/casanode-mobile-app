@@ -4,6 +4,7 @@ import {
 	IonGrid, IonRow, IonCol,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
@@ -11,6 +12,8 @@ import { useNodeStore } from '@stores/NodeStore';
 import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
 import BluetoothService from '@/services/BluetoothService';
 
+// Router
+const router = useRouter();
 // Import the useI18n composable function.
 const { t } = useI18n();
 
@@ -41,11 +44,26 @@ onMounted(() =>
 	}
 });
 
-// Define the node status text
+/**
+ * Define the node status text
+ * @returns string
+ */
 const nodeStatus = computed(() =>
 {
 	return t(`dashboard.status-${nodeStore.status}`);
 });
+
+/**
+ * Disconnect the node
+ * @returns Promise<void>
+ */
+const nodeDisconnect = async() =>
+{
+	// Disconnect the node
+	await BluetoothService.disconnect();
+	// Redirect to the home page
+	router.replace({ name: 'Home' });
+};
 
 </script>
 <template>
@@ -71,7 +89,7 @@ const nodeStatus = computed(() =>
 						</ion-grid>
 					</ion-card-content>
 				</ion-card>
-
+				
 				<ion-card class="container">
 					<ion-card-header>
 						<ion-card-title>{{ $t('dashboard.node-title') }}</ion-card-title>
@@ -101,6 +119,14 @@ const nodeStatus = computed(() =>
 						<p class="item">
 							<strong>{{ $t('dashboard.node-download-speed') }}</strong>{{ nodeStore.downloadSpeed }}
 						</p>
+					</ion-card-content>
+				</ion-card>
+				
+				<ion-card class="container nobg">
+					<ion-card-content>
+						<ion-button fill="outline" expand="block" @click="nodeDisconnect">
+							{{ $t('dashboard.disconnect-button') }}
+						</ion-button>
 					</ion-card-content>
 				</ion-card>
 			</div>

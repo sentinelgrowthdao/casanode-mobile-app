@@ -12,5 +12,7 @@
 	"node-v2ray-port": "Port V2Ray :",
 	"node-ssl-expiry": "Expiration du certificat SSL :",
 	"node-upload-speed": "Vitesse d'upload :",
-	"node-download-speed": "Vitesse de téléchargement :"
+	"node-download-speed": "Vitesse de téléchargement :",
+
+	"disconnect-button": "Se déconnecter"
 }
