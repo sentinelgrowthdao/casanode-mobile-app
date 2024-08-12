@@ -999,23 +999,63 @@ class BluetoothService
 	}
 	
 	/**
-	 * Read node balance from the BLE server.
+	 * Start fetching the node balance from the BLE server and wait until it's ready.
 	 * @returns Promise<NodeBalance|null>
 	 */
-	public async readNodeBalance(): Promise<NodeBalance|null>
+	public async fetchNodeBalance(): Promise<NodeBalance|null>
 	{
 		try
 		{
-			if(this.deviceId)
+			if (this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, {timeout: 120000});
-				const valueString = decodeDataView(value);
-				// Split the string to get the amount and the denom
-				const balance = valueString.split(' ');
-				return {
-					amount: parseFloat(balance[0]) ?? 0.0,
-					denom: balance[1] ?? 'udvpn',
-				};
+				// Start the balance fetching process by writing a command to the characteristic
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, encodeDataView('udvpn'), {timeout: 30000});
+				
+				let status = 0;
+				// Check the balance status every 5 seconds
+				const interval = 5000;
+				// Timeout after 3 minutes
+				const timeout = 180000;
+				const startTime = Date.now();
+				
+				while (status !== -1 && (Date.now() - startTime) < timeout)
+				{
+					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, {timeout: 30000});
+					const valueString = decodeDataView(value);
+					
+					// Regex to match a string that starts with a number followed by a space and a currency code
+					const balanceRegex = /^(\d+(\.\d+)?)\s([A-Za-z]+)$/;
+					
+					// Check if the result is a valid balance format
+					const match = valueString.match(balanceRegex);
+					if (match)
+					{
+						const balance = match.slice(1, 3); // Extract the amount and denom from the match
+						return {
+							amount: parseFloat(balance[0]),
+							denom: balance[2],
+						};
+					}
+					else
+					{
+						// If the result is a status code (0, 1, -1)
+						status = parseInt(valueString);
+						
+						// Error fetching balance
+						if (status === -1)
+						{
+							console.error('Balance fetch failed.');
+							return null;
+						}
+					}
+					
+					// Wait before checking again
+					await this.delay(interval);
+				}
+				
+				// If the timeout is reached
+				console.error('Balance fetch timed out.');
+				return null;
 			}
 		}
 		catch (error)

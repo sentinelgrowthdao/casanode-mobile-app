@@ -31,7 +31,7 @@ export async function refreshNodeStatus(): Promise<string | null>
 export async function refreshNodeBalance(): Promise<NodeBalance | null>
 {
 	// Read the node balance
-	const balance = await BluetoothService.readNodeBalance();
+	const balance = await BluetoothService.fetchNodeBalance();
 	
 	// Update the node balance
 	if (balance)
