@@ -81,7 +81,7 @@ const connectionToNode = async () =>
 			// Set the waiting message
 			connectingMessage.value = t('loading.wait-docker') as string;
 			// Request to install the image
-			const installImage = await BluetoothService.readInstallImage();
+			const installImage = await BluetoothService.installDockerImage();
 			// If an error occurred
 			if(installImage !== 1)
 			{
