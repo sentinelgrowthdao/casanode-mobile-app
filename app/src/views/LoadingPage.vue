@@ -86,7 +86,7 @@ const connectionToNode = async () =>
 			if(installImage !== 1)
 			{
 				// Set the connecting message
-				connectingMessage.value = t('loading.error-message-docker') as string;
+				errorMessage.value = t('loading.error-message-docker') as string;
 				return;
 			}
 		}
@@ -103,7 +103,7 @@ const connectionToNode = async () =>
 			if(installConfigs !== '111')
 			{
 				// Set the connecting message
-				connectingMessage.value = t('loading.error-message-config') as string;
+				errorMessage.value = t('loading.error-message-config') as string;
 				return;
 			}
 		}
