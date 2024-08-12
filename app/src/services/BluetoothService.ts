@@ -1381,17 +1381,50 @@ class BluetoothService
 	}
 	
 	/**
-	 * Send renew certificate command to the BLE server.
+	 * Send renew certificate command to the BLE server and wait for completion.
 	 * @returns Promise<boolean>
 	 */
 	public async renewCertificate(): Promise<boolean>
 	{
 		try
 		{
-			if(this.deviceId)
+			if (this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERTIFICATE_ACTIONS_UUID}`, encodeDataView('renew'), {timeout: 300000});
-				return true;
+				// Start the certificate renewal process by writing to the characteristic
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERTIFICATE_ACTIONS_UUID}`, encodeDataView('renew'), {timeout: 30000});
+				
+				let status = '0';
+				// Check the certificate status every 5 seconds
+				const interval = 5000;
+				// Timeout after 3 minutes
+				const timeout = 180000;
+				const startTime = Date.now();
+				
+				while (status === '0' || status === '1')
+				{
+					if ((Date.now() - startTime) > timeout)
+					{
+						console.error('Certificate renewal timed out.');
+						return false;
+					}
+					
+					// Read the status from the BLE server
+					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERTIFICATE_ACTIONS_UUID}`, {timeout: 30000});
+					status = decodeDataView(value);
+
+					// Check if the status indicates an error
+					if (status === '-1')
+					{
+						console.error('Certificate renewal failed.');
+						return false;
+					}
+					
+					// Wait before checking again
+					await this.delay(interval);
+				}
+				
+				// If the status is '2', it means the certificate renewal was successful
+				return status === '2';
 			}
 		}
 		catch (error)
