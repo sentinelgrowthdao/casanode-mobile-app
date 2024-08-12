@@ -97,7 +97,7 @@ const connectionToNode = async () =>
 			// Set the waiting message
 			connectingMessage.value = t('loading.wait-config') as string;
 			// Request to install the node configuration
-			const installConfigs = await BluetoothService.readInstallConfigs();
+			const installConfigs = await BluetoothService.installConfigs();
 			
 			// If an error occurred
 			if(installConfigs !== '111')

@@ -1150,17 +1150,50 @@ class BluetoothService
 	}
 	
 	/**
-	 * Send create config files to the BLE server.
+	 * Send create config files to the BLE server and wait for completion.
 	 * @returns Promise<string>
 	 */
-	public async readInstallConfigs(): Promise<string>
+	public async installConfigs(): Promise<string>
 	{
 		try
 		{
-			if(this.deviceId)
+			if (this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_CONFIGS_UUID}`, {timeout: 120000});
-				return decodeDataView(value);
+				// Start the configuration installation process by writing to the characteristic
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_CONFIGS_UUID}`, encodeDataView('create'), {timeout: 30000});
+				
+				let status = '0';
+				// Check the configuration status every 5 seconds
+				const interval = 5000;
+				// Timeout after 3 minutes
+				const timeout = 180000;
+				const startTime = Date.now();
+				
+				while (status === '0' || status === '1')
+				{
+					if ((Date.now() - startTime) > timeout)
+					{
+						console.error('Configuration installation timed out.');
+						return '000';
+					}
+					
+					// Read the status from the BLE server
+					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_CONFIGS_UUID}`, {timeout: 30000});
+					status = decodeDataView(value);
+					
+					// Check if the status indicates an error
+					if (status === '-1')
+					{
+						console.error('Configuration installation failed.');
+						return '000';
+					}
+					
+					// Wait before checking again
+					await this.delay(interval);
+				}
+				
+				// Return the final status after the process is complete
+				return status;
 			}
 		}
 		catch (error)
@@ -1168,7 +1201,7 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		
-		return '00';
+		return '000';
 	}
 	
 	/**
