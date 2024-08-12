@@ -1049,22 +1049,56 @@ class BluetoothService
 	}
 	
 	/**
-	 * Send install image to the BLE server.
+	 * Start the installation of the Docker image and check the status.
 	 * @returns Promise<number>
 	 */
-	public async readInstallImage(): Promise<number>
+	public async installDockerImage(): Promise<number>
 	{
 		try
 		{
-			if(this.deviceId)
+			if (this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`, {timeout: 300000});
-				/*
-				const value = await this.retryAsyncOperation(
-					() => BleClient.read(this.deviceId!, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`), 7
-				);
-				*/
-				return parseInt(decodeDataView(value));
+				// Start the installation by writing to the characteristic
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`, encodeDataView('install'), {timeout: 30000});
+				
+				let status = 0;
+				// Check the installation status every 5 seconds
+				const interval = 5000;
+				// Timeout after 5 minutes
+				const timeout = 300000;
+				const startTime = Date.now();
+				
+				// Wait for the installation to complete
+				while (status !== 2 && status !== -1 && (Date.now() - startTime) < timeout)
+				{
+					// Read the status from the BLE server
+					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`);
+					// Parse the status
+					status = parseInt(decodeDataView(value));
+					// If the installation is successful
+					if (status === 2)
+					{
+						console.log('Installation completed successfully.');
+						return 1;
+					}
+					// If the installation failed
+					else if (status === -1)
+					{
+						console.error('Installation failed.');
+						return -1;
+					}
+					
+					// Wait for the next check
+					await this.delay(interval);
+				}
+				
+				// If the installation timed out
+				if (status !== 2 && status !== -1)
+				{
+					return -1;
+				}
+				
+				return status;
 			}
 		}
 		catch (error)
@@ -1481,6 +1515,16 @@ class BluetoothService
 			console.error('BLE error:', error);
 		}
 		return false;
+	}
+	
+	/**
+	 * Delay function to wait for a specified amount of time
+	 * @param ms number
+	 * @returns Promise<void>
+	 */
+	private delay(ms: number): Promise<void>
+	{
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 	
 }
