@@ -1280,7 +1280,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('remove'), {timeout: 120000});
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('remove'), {timeout: 30000});
 				return true;
 			}
 		}
