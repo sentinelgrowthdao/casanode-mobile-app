@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-	IonPage, IonContent, IonHeader, IonItem,
+	IonPage, IonContent, IonHeader, IonItem, IonNote,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent,
 	IonLabel, IonSelect, IonSelectOption, IonInput,
 	toastController
@@ -17,6 +17,9 @@ import { refreshNodeStatus } from '@/utils/node';
 const nodeStore = useNodeStore();
 // Import the useI18n composable function.
 const { t } = useI18n();
+
+// Error class
+const savingError = ref<string|null>(null);
 
 // Node settings interface
 interface NodeSettings
@@ -51,31 +54,54 @@ const saveSettings = async () =>
 	let saveSuccess = false;
 	let restartSuccess = false;
 	
+	// Reset the error class
+	savingError.value = null;
+	
 	// Lock the save button
 	saveInProgress.value = true;
 	
 	try
 	{
-		// Save the settings
-		await BluetoothService.writeMoniker(nodeSettings.value.moniker);
+		// Save the moniker
+		if(await BluetoothService.writeMoniker(nodeSettings.value.moniker) === false)
+			throw new Error('moniker');
+		// Update the moniker
 		nodeStore.setMoniker(nodeSettings.value.moniker);
 		
-		await BluetoothService.writeNodeType(nodeSettings.value.nodeType);
+		// Save the node settings
+		if(await BluetoothService.writeNodeType(nodeSettings.value.nodeType) === false)
+			throw new Error('nodeType');
+		// Update the node settings
 		nodeStore.setNodeType(nodeSettings.value.nodeType);
 		
-		await BluetoothService.writeNodeIp(nodeSettings.value.nodeIp);
+		// Save the node IP
+		if(await BluetoothService.writeNodeIp(nodeSettings.value.nodeIp) === false)
+			throw new Error('nodeIp');
+		// Update the node IP
 		nodeStore.setNodeIp(nodeSettings.value.nodeIp);
 		
-		await BluetoothService.writeNodePort(nodeSettings.value.nodePort.toString());
+		// Save the node port
+		if(await BluetoothService.writeNodePort(nodeSettings.value.nodePort.toString()) === false)
+			throw new Error('nodePort');
+		// Update the node port
 		nodeStore.setNodePort(nodeSettings.value.nodePort);
 		
-		await BluetoothService.writeVpnPort(nodeSettings.value.vpnPort.toString());
+		// Save the VPN port
+		if(await BluetoothService.writeVpnPort(nodeSettings.value.vpnPort.toString()) === false)
+			throw new Error('vpnPort');
+		// Update the VPN port
 		nodeStore.setVpnPort(nodeSettings.value.vpnPort);
 		
-		await BluetoothService.writeMaximumPeers(nodeSettings.value.maximumPeers.toString());
+		// Save the maximum peers
+		if(await BluetoothService.writeMaximumPeers(nodeSettings.value.maximumPeers.toString()) === false)
+			throw new Error('maximumPeers');
+		// Update the maximum peers
 		nodeStore.setMaximumPeers(nodeSettings.value.maximumPeers);
 		
-		await BluetoothService.writeVpnType(nodeSettings.value.vpnType);
+		// Save the VPN type
+		if(await BluetoothService.writeVpnType(nodeSettings.value.vpnType) === false)
+			throw new Error('vpnType');
+		// Update the VPN type
 		nodeStore.setVpnType(nodeSettings.value.vpnType);
 		
 		// Apply configuration
@@ -84,9 +110,11 @@ const saveSettings = async () =>
 		// Save success
 		saveSuccess = true;
 	}
-	catch(error)
+	catch(error: any)
 	{
 		console.error('Failed to save settings:', error);
+		// Set the error message
+		savingError.value = error?.message;
 	}
 	
 	// Show a toast message
@@ -144,7 +172,12 @@ const saveSettings = async () =>
 				<ion-card-content>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.moniker-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.moniker" placeholder=""></ion-input>
+						<ion-input
+							v-model="nodeSettings.moniker"
+							placeholder=""
+							:error-text="$t('settings.moniker-error')"
+							:class="{ 'ion-touched ion-invalid': savingError === 'moniker' }">
+						</ion-input>
 					</ion-item>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.type-label') }}</ion-label>
@@ -152,6 +185,7 @@ const saveSettings = async () =>
 							<ion-select-option value="residential">{{ $t('settings.type-residential') }}</ion-select-option>
 							<ion-select-option value="datacenter">{{ $t('settings.type-datacenter') }}</ion-select-option>
 						</ion-select>
+						<ion-note v-if="savingError === 'nodeType'" color="danger">{{ $t('settings.type-error') }}</ion-note>
 					</ion-item>
 				</ion-card-content>
 			</ion-card>
@@ -164,19 +198,38 @@ const saveSettings = async () =>
 				<ion-card-content>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.ip-address-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.nodeIp" placeholder=""></ion-input>
+						<ion-input
+							v-model="nodeSettings.nodeIp"
+							placeholder=""
+							:error-text="$t('settings.ip-address-error')"
+							:class="{ 'ion-touched ion-invalid': savingError === 'nodeIp' }" />
 					</ion-item>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.node-port-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.nodePort" type="number" placeholder=""></ion-input>
+						<ion-input
+							v-model="nodeSettings.nodePort"
+							type="number"
+							placeholder=""
+							:error-text="$t('settings.node-port-error')"
+							:class="{ 'ion-touched ion-invalid': savingError === 'nodePort' }" />
 					</ion-item>
 					<ion-item v-if="nodeSettings.vpnType === 'wireguard'">
 						<ion-label position="stacked">{{ $t('settings.wireguard-port-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.vpnPort" type="number" placeholder=""></ion-input>
+						<ion-input
+							v-model="nodeSettings.vpnPort"
+							type="number"
+							placeholder=""
+							:error-text="$t('settings.wireguard-port-error')"
+							:class="{ 'ion-touched ion-invalid': savingError === 'vpnPort' }" />
 					</ion-item>
 					<ion-item v-if="nodeSettings.vpnType === 'v2ray'">
 						<ion-label position="stacked">{{ $t('settings.v2ray-port-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.vpnPort" type="number" placeholder=""></ion-input>
+						<ion-input
+							v-model="nodeSettings.vpnPort"
+							type="number"
+							placeholder=""
+							:error-text="$t('settings.v2ray-port-error')"
+							:class="{ 'ion-touched ion-invalid': savingError === 'vpnPort' }" />
 					</ion-item>
 				</ion-card-content>
 			</ion-card>
@@ -189,14 +242,20 @@ const saveSettings = async () =>
 				<ion-card-content>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.maximum-peers-label') }}</ion-label>
-						<ion-input v-model="nodeSettings.maximumPeers" type="number" placeholder="250"></ion-input>
+						<ion-input
+							v-model="nodeSettings.maximumPeers"
+							type="number"
+							placeholder="250"
+							:error-text="$t('settings.maximum-peers-error')"
+							:class="{ 'ion-touched ion-invalid': savingError === 'maximumPeers' }" />
 					</ion-item>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.vpn-type-label') }}</ion-label>
 						<ion-select v-model="nodeSettings.vpnType">
-							<ion-select-option value="wireguard">Wireguard</ion-select-option>
-							<ion-select-option value="v2ray">V2Ray</ion-select-option>
+								<ion-select-option value="wireguard">Wireguard</ion-select-option>
+								<ion-select-option value="v2ray">V2Ray</ion-select-option>
 						</ion-select>
+						<ion-note v-if="savingError === 'vpnType'" color="danger">{{ $t('settings.vpn-type-error') }}</ion-note>
 					</ion-item>
 				</ion-card-content>
 			</ion-card>
@@ -216,5 +275,6 @@ const saveSettings = async () =>
 ion-item
 {
 	--background: transparent;
+	--border-color: transparent;
 }
 </style>

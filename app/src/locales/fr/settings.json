@@ -1,19 +1,27 @@
 {
 	"node-section-title": "Nœud",
 	"moniker-label": "Moniker",
+	"moniker-error": "Veuillez entrer un moniker d'au moins 9 caractères",
 	"type-label": "Type",
 	"type-residential": "Résidentiel",
 	"type-datacenter": "Datacenter",
+	"type-error": "Veuillez sélectionner un type de noeud valide",
 	
 	"network-section-title": "Réseau",
 	"ip-address-label": "Adresse IP",
+	"ip-address-error": "Veuillez entrer une adresse IP ou un domaine valide",
 	"node-port-label": "Port du nœud (TCP)",
+	"node-port-error": "Veuillez entrer un port de nœud valide",
 	"wireguard-port-label": "Port Wireguard (UDP)",
+	"wireguard-port-error": "Veuillez entrer un port Wireguard valide",
 	"v2ray-port-label": "Port V2Ray (TCP)",
-
+	"v2ray-port-error": "Veuillez entrer un port V2Ray valide",
+	
 	"vpn-section-title": "VPN",
 	"maximum-peers-label": "Pairs maximum",
+	"maximum-peers-error": "Veuillez entrer une valeur de pairs maximum valide",
 	"vpn-type-label": "Type",
+	"vpn-type-error": "Veuillez sélectionner un type de VPN valide",
 
 	"save-button": "Sauvegarder la configuration",
 	"save-restart-button": "Sauvegarder et redémarrer le nœud",

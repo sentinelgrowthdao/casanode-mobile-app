@@ -1,19 +1,27 @@
 {
 	"node-section-title": "Node",
 	"moniker-label": "Moniker",
+	"moniker-error": "Please enter a moniker with at least 9 characters",
 	"type-label": "Type",
 	"type-residential": "Residential",
 	"type-datacenter": "Datacenter",
+	"type-error": "Please select a valid node type",
 	
 	"network-section-title": "Network",
 	"ip-address-label": "IP Address",
+	"ip-address-error": "Please enter a valid IP address or domain",
 	"node-port-label": "Node Port (TCP)",
+	"node-port-error": "Please enter a valid node port",
 	"wireguard-port-label": "Wireguard Port (UDP)",
+	"wireguard-port-error": "Please enter a valid Wireguard port",
 	"v2ray-port-label": "V2Ray Port (TCP)",
-
+	"v2ray-port-error": "Please enter a valid V2Ray port",
+	
 	"vpn-section-title": "VPN",
 	"maximum-peers-label": "Maximum peers",
+	"maximum-peers-error": "Please enter a valid maximum peers value",
 	"vpn-type-label": "Type",
+	"vpn-type-error": "Please select a valid VPN type",
 	
 	"save-button": "Save configuration",
 	"save-restart-button": "Save and Restart Node",
