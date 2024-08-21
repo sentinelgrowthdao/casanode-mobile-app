@@ -149,8 +149,8 @@ const saveSettings = async () =>
 					<ion-item>
 						<ion-label position="stacked">{{ $t('settings.type-label') }}</ion-label>
 						<ion-select v-model="nodeSettings.nodeType">
-							<ion-select-option value="residential">Residential</ion-select-option>
-							<ion-select-option value="datacenter">Datacenter</ion-select-option>
+							<ion-select-option value="residential">{{ $t('settings.type-residential') }}</ion-select-option>
+							<ion-select-option value="datacenter">{{ $t('settings.type-datacenter') }}</ion-select-option>
 						</ion-select>
 					</ion-item>
 				</ion-card-content>

@@ -2,7 +2,9 @@
 	"node-section-title": "Node",
 	"moniker-label": "Moniker",
 	"type-label": "Type",
-
+	"type-residential": "Residential",
+	"type-datacenter": "Datacenter",
+	
 	"network-section-title": "Network",
 	"ip-address-label": "IP Address",
 	"node-port-label": "Node Port (TCP)",

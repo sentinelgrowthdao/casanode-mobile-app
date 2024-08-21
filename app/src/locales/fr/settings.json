@@ -2,7 +2,9 @@
 	"node-section-title": "Nœud",
 	"moniker-label": "Moniker",
 	"type-label": "Type",
-
+	"type-residential": "Résidentiel",
+	"type-datacenter": "Datacenter",
+	
 	"network-section-title": "Réseau",
 	"ip-address-label": "Adresse IP",
 	"node-port-label": "Port du nœud (TCP)",
