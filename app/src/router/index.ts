@@ -9,11 +9,6 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@views/HomePage.vue')
 	},
 	{
-		path: '/loading',
-		name: 'Loading',
-		component: () => import('@views/LoadingPage.vue')
-	},
-	{
 		path: '/bluetooth',
 		name: 'BluetoothTester',
 		component: () => import('@views/BluetoothPage.vue')
