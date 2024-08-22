@@ -129,7 +129,9 @@ const openHelpModal = async () =>
  */
 const isLoading = () =>
 {
-	return connectingMessage.value.length > 0 || errorMessage.value.length > 0;
+	return connectingMessage.value.length > 0
+		|| errorMessage.value.length > 0
+		|| passphraseErrorMessage.value.length > 0;
 }
 
 /**
@@ -228,6 +230,15 @@ const finishConnection = async () =>
 	// Parse the installation status
 	const containerExists = checkInstallation[0] === '1';
 	const walletAvailable = checkInstallation[5] === '1';
+	
+	// Clear error messages
+	connectingMessage.value = '';
+	errorMessage.value = '';
+	passphraseErrorMessage.value = '';
+	
+	// Disable the keep awake
+	await toggleKeepAwake(false);
+	
 	// If the container does not exist or the wallet is not available
 	if(!containerExists || !walletAvailable)
 	{
