@@ -53,7 +53,7 @@ const deviceConnection = async () =>
 		// Connect to the device
 		await BluetoothService.connect(deviceRef.value.uuid);
 		// Redirect to the loading page
-		router.replace({ name: 'Loading' });
+		router.push({ name: 'Loading' });
 	}
 };
 
@@ -78,7 +78,7 @@ const tryConnection = async () =>
 {
 	await scanAndConnect();
 	// Redirect to the loading page
-	router.replace({ name: 'Loading' });
+	router.push({ name: 'Loading' });
 };
 
 // Open the help modal
