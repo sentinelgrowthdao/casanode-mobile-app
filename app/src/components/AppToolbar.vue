@@ -3,7 +3,7 @@ import { IonToolbar, IonTitle, IonButtons, IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useNodeStore } from '@stores/NodeStore';
 import { computed } from 'vue';
-
+import BluetoothService from '@/services/BluetoothService';
 import { refreshNodeStatus } from '@/utils/node';
 
 // Import pictures
@@ -29,12 +29,24 @@ const statusImage = computed(() =>
 	}
 });
 
+/**
+ * Disconnect the node
+ * @returns Promise<void>
+ */
+const nodeDisconnect = async() =>
+{
+	// Disconnect the node
+	await BluetoothService.disconnect();
+	// Redirect to the home page
+	router.replace({ name: 'Home' });
+};
+
 </script>
 
 <template>
 	<ion-toolbar>
 		<ion-buttons slot="start">
-			<ion-button fill="outline" class="logo" @click="router.replace({ name: 'Home' })">
+			<ion-button fill="outline" class="logo" @click="nodeDisconnect">
 				<img class="logo" src="@assets/images/casanode-logo.png" alt="Casanode" />
 			</ion-button>
 		</ion-buttons>
