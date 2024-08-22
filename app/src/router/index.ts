@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import NodeManager from '@views/NodePage.vue';
+import BluetoothService from '@/services/BluetoothService';
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -129,5 +130,33 @@ const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes
 })
+
+
+router.beforeEach(async (to, from, next) =>
+{
+	// List of pages that require bluetooth connection
+	const requiresBluetooth = [
+		'Node', 'NodeDashboard', 'NodeSettings', 'NodeWallet', 'NodeActions', 'NodeAbout',
+		'Wizard1Welcome', 'Wizard1Reset', 'Wizard2Moniker', 'Wizard3Location', 'Wizard4Protocol',
+		'Wizard5Network', 'Wizard6Protection', 'Wizard6Passphrase', 'Wizard7Wallet', 'Wizard7Restore',
+		'Wizard7Create', 'Wizard8Fund', 'Wizard9Ports', 'Wizard10Congratulations',
+	];
+	
+	// If the page requires bluetooth connection
+	if(requiresBluetooth.includes(to.name as string))
+	{
+		// Check if the bluetooth is connected
+		const isConnected = await BluetoothService.isConnected();
+		console.log('Bluetooth connected:', isConnected);
+		// If not connected, redirect to home
+		if (!isConnected)
+		{
+			return next({ name: 'Home' });
+		}
+	}
+	
+	// Si tout est en ordre, autorise la navigation
+	next();
+});
 
 export default router
