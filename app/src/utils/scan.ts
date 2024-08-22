@@ -3,9 +3,9 @@ import BluetoothService from '@/services/BluetoothService';
 
 /**
  * Scan a QR code and connect to the Bluetooth device if found
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
-export async function scanAndConnect(): Promise<void>
+export async function scanAndConnect(): Promise<boolean>
 {
 	try
 	{
@@ -30,7 +30,7 @@ export async function scanAndConnect(): Promise<void>
 				console.log('Connecting to Bluetooth device', qrData.bluetooth);
 				
 				// Connect to the Bluetooth device
-				await BluetoothService.connect(qrData.bluetooth);
+				return await BluetoothService.connect(qrData.bluetooth);
 			}
 			else
 			{
@@ -57,7 +57,9 @@ export async function scanAndConnect(): Promise<void>
 			
 			console.log('Connecting to Bluetooth device', defaultBluetoothId);
 			// Connect to the Bluetooth device
-			await BluetoothService.connect(defaultBluetoothId);
+			return await BluetoothService.connect(defaultBluetoothId);
 		}
 	}
+	
+	return false;
 }
