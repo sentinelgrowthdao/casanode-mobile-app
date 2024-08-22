@@ -195,8 +195,8 @@ const submitPassphrase = async () =>
 </script>
 <template>
 	<ion-page>
-		<ion-content :fullscreen="true">
-			<div class="loading">
+		<ion-content class="loading" :fullscreen="true">
+			<div class="content">
 				<div class="header">
 					<h1>{{ $t('app.name') }}</h1>
 					<p class="logo"><img src="@assets/images/casanode-logo.png" alt="Logo" /></p>

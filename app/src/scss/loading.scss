@@ -1,130 +1,130 @@
 .loading
 {
-	margin: 0;
-	padding: 3rem 0 0;
-	background-image: url(@assets/images/welcome-background.png);
-	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+	--background: transparent url(@assets/images/welcome-background.png) center center / cover no-repeat fixed;
 	
-	&>.header
+	&> .content
 	{
-		margin: 0 0 3rem;
-		width: 100%;
+		margin: 0;
+		padding: 3rem 0 0;
 		
-		&>h1
+		&>.header
 		{
-			margin: 0;
-			font-size: 2.5rem;
-			text-align: center;
+			margin: 0 0 3rem;
+			width: 100%;
+			
+			&>h1
+			{
+				margin: 0;
+				font-size: 2.5rem;
+				text-align: center;
+			}
+			
+			&>.logo
+			{
+				margin: 0 auto;
+				width: 100%;
+				max-width: 15rem;
+				
+				&>img
+				{
+					width: 100%;
+				}
+			}
 		}
 		
-		&>.logo
+		&> .connecting
 		{
 			margin: 0 auto;
 			width: 100%;
 			max-width: 15rem;
+			text-align: center;
 			
-			&>img
+			&> .spinner
 			{
-				width: 100%;
+				margin: 0 0 1.5rem;
+				text-align:center;
+				
+				&> ion-spinner
+				{
+					width: 5rem;
+					height: 5rem;
+				}
+			}
+			
+			&> .message
+			{
+				margin: 0;
+				font-size: 1.2rem;
+				line-height:1.6rem;
+				text-align: center;
+				font-weight: 300;
 			}
 		}
-	}
-	
-	&> .connecting
-	{
-		margin: 0 auto;
-		width: 100%;
-		max-width: 15rem;
-		text-align: center;
-		
-		&> .spinner
+		&> .error
 		{
-			margin: 0 0 1.5rem;
-			text-align:center;
+			position: absolute;
+			bottom: 3rem;
+			left: 50%;
+			transform: translateX(-50%);
+			margin: var(--content-margin);
+			padding: var(--content-padding);
+			width: var(--content-width);
+			max-width: var(--content-max-width);
+			border-radius: var(--content-radius);
+			background: var(--app-background-color-secondary-alt);
 			
-			&> ion-spinner
+			&>.message
 			{
-				width: 5rem;
-				height: 5rem;
+				margin: 0 0 0.65rem;
+				padding: 0.35rem 1rem;
+				text-align: center;
+				color: var(--app-background-color-alert);
+			}
+			
+			&>.button
+			{
+				margin: 0;
+				padding: 0;
+				text-align: center;
 			}
 		}
 		
-		&> .message
+		&> .passphrase
 		{
-			margin: 0;
-			font-size: 1.2rem;
-			line-height:1.6rem;
-			text-align: center;
-			font-weight: 300;
-		}
-	}
-	&> .error
-	{
-		position: absolute;
-		bottom: 3rem;
-		left: 50%;
-		transform: translateX(-50%);
-		margin: var(--content-margin);
-		padding: var(--content-padding);
-		width: var(--content-width);
-		max-width: var(--content-max-width);
-		border-radius: var(--content-radius);
-		background: var(--app-background-color-secondary-alt);
-		
-		&>.message
-		{
-			margin: 0 0 0.65rem;
-			padding: 0.35rem 1rem;
-			text-align: center;
-			color: var(--app-background-color-alert);
-		}
-		
-		&>.button
-		{
-			margin: 0;
-			padding: 0;
-			text-align: center;
-		}
-	}
-	
-	&> .passphrase
-	{
-		margin: var(--content-margin);
-		padding: var(--content-padding);
-		width: var(--content-width);
-		max-width: var(--content-max-width);
-		border-radius: var(--content-radius);
-		background: var(--app-background-color-secondary-alt);
-		
-		&>.message
-		{
-			margin: 0 0 0.65rem;
-			padding: 0.35rem 1rem;
-			text-align: center;
-		}
-		
-		&> ion-item
-		{
-			--background:transparent;
-			margin:0 2rem 2rem;
-		}
-		
-		&>.button
-		{
-			margin: 0;
-			padding: 0;
-			text-align: center;
-		}
+			margin: var(--content-margin);
+			padding: var(--content-padding);
+			width: var(--content-width);
+			max-width: var(--content-max-width);
+			border-radius: var(--content-radius);
+			background: var(--app-background-color-secondary-alt);
+			
+			&>.message
+			{
+				margin: 0 0 0.65rem;
+				padding: 0.35rem 1rem;
+				text-align: center;
+			}
+			
+			&> ion-item
+			{
+				--background:transparent;
+				margin:0 2rem 2rem;
+			}
+			
+			&>.button
+			{
+				margin: 0;
+				padding: 0;
+				text-align: center;
+			}
 
-		&>.error
-		{
-			margin: 0 0 0.65rem;
-			padding: 0.35rem 1rem;
-			text-align: center;
-			color: var(--app-background-color-alert);
+			&>.error
+			{
+				margin: 0 0 0.65rem;
+				padding: 0.35rem 1rem;
+				text-align: center;
+				color: var(--app-background-color-alert);
+			}
 		}
 	}
 }

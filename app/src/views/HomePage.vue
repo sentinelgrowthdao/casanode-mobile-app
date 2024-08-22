@@ -95,8 +95,8 @@ const openHelpModal = async () =>
 </script>
 <template>
 	<ion-page>
-		<ion-content :fullscreen="true">
-			<div class="homepage">
+		<ion-content class="homepage" :fullscreen="true">
+			<div class="content">
 				<div class="header">
 					<h1>{{ $t('app.name') }}</h1>
 					<p class="logo">
