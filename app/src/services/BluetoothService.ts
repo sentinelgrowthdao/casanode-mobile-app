@@ -179,7 +179,7 @@ class BluetoothService
 	public async connect(bluetoothUuid: string): Promise<boolean>
 	{
 		if(this.connected)
-			this.disconnect();
+			await this.disconnect();
 		
 		// Set the BLE UUID
 		this.BLE_UUID = bluetoothUuid;
