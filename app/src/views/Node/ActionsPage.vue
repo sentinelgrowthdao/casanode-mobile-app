@@ -11,6 +11,7 @@ import BluetoothService from '@/services/BluetoothService';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
+import { useDeviceStore } from '@stores/DeviceStore';
 import { refreshNodeStatus } from '@/utils/node';
 import LoadingButton from '@components/LoadingButton.vue';
 
@@ -23,6 +24,8 @@ const router = useRouter();
 const { t } = useI18n();
 // Import the useNodeStore composable function.
 const nodeStore = useNodeStore();
+// Import the useDeviceStore composable function.
+const deviceStore = useDeviceStore();
 
 // Request in progress reference
 const requestInProgress = ref<boolean>(false);
@@ -161,6 +164,8 @@ const systemAction = async(action: string) =>
 		{
 			// Reset store
 			nodeStore.resetStore();
+			// Remove device from the store
+			deviceStore.removeDeviceByUuid(BluetoothService.getBleUuid() || '');
 			// Show a toast message
 			await showToastMessage(t('actions.factory-reset-success'));
 			// Redirect to the home page
