@@ -10,7 +10,9 @@
 	"get-node-text": "Visit our website to find out how to get one!",
 	"get-node-button": "Get Your Node",
 	"help-title": "Find the QR Code",
-	"help-text": "Connect to your DVPN node using your browser to display the connection QR code by entering the following in the address bar:",
+	"help-text": "Connect to your DVPN node using a web browser on your computer.",
+	"help-instruction": "To display the connection QR code, enter the node's local IP address in the web browser's address bar.",
+	"help-close": "Close",
 	"news-title": "Discover the latest news",
 	"news-text": "Stay up to date with new releases and updates!",
 	"news-button": "Go to dvpn.news"

@@ -10,7 +10,9 @@
 	"get-node-text": "Visitez notre site web pour découvrir comment en obtenir un !",
 	"get-node-button": "Obtenez votre nœud",
 	"help-title": "Trouver le QR Code",
-	"help-text": "Connectez-vous à votre nœud DVPN en utilisant votre navigateur pour afficher le code QR de connexion en entrant ce qui suit dans la barre d'adresse :",
+	"help-text": "Connectez-vous à votre nœud DVPN en utilisant un navigateur web sur votre ordinateur.",
+	"help-instruction": "Pour afficher le code QR de connexion, saisissez l'adresse IP locale du nœud dans la barre d'adresse du navigateur web.",
+	"help-close": "Fermer",
 	"news-title": "Découvrez les dernières actualités",
 	"news-text": "Restez informé des nouvelles versions et mises à jour !",
 	"news-button": "Accéder à dvpn.news"
