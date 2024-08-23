@@ -37,7 +37,7 @@ const resetConfiguration = async () =>
 		// Reset the node store
 		nodeStore.resetStore();
 		// Go to the next step
-		router.push({ name: 'Loading' });
+		router.push({ name: 'Home' });
 	}
 	else
 	{
