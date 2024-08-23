@@ -44,6 +44,16 @@ export const useDeviceStore = defineStore('device',
 		},
 		
 		/**
+		 * Remove a device from the store by UUID
+		 * @param uuid string
+		 * @returns void
+		 */
+		removeDeviceByUuid(uuid: string): void
+		{
+			this.aDevices = this.aDevices.filter((d) => d.uuid !== uuid);
+		},
+		
+		/**
 		 * Get last device in the store
 		 * @returns DeviceEntry | null
 		 */
