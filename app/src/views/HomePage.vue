@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { type Ref, ref, onMounted } from 'vue';
-import { IonPage, IonContent, IonButton, IonIcon, modalController } from '@ionic/vue';
+import {
+	IonPage, IonContent, IonButton, IonIcon,
+	IonItem, IonInput, IonSpinner,
+	modalController
+} from '@ionic/vue';
 import { closeOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
