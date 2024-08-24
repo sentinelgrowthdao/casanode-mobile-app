@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-	IonPage, IonContent, IonHeader,
+	IonPage, IonContent, IonHeader, IonButton,
 	IonGrid, IonRow, IonCol,
 	IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/vue';
