@@ -3,6 +3,14 @@ import { RouteRecordRaw } from 'vue-router';
 import NodeManager from '@views/NodePage.vue';
 import BluetoothService from '@/services/BluetoothService';
 
+// List of pages that require bluetooth connection
+export const requiresBluetooth = [
+	'Node', 'NodeDashboard', 'NodeSettings', 'NodeWallet', 'NodeActions', 'NodeAbout',
+	'Wizard1Welcome', 'Wizard1Reset', 'Wizard2Moniker', 'Wizard3Location', 'Wizard4Protocol',
+	'Wizard5Network', 'Wizard6Protection', 'Wizard6Passphrase', 'Wizard7Wallet', 'Wizard7Restore',
+	'Wizard7Create', 'Wizard8Fund', 'Wizard9Ports', 'Wizard10Congratulations',
+];
+
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
@@ -134,14 +142,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) =>
 {
-	// List of pages that require bluetooth connection
-	const requiresBluetooth = [
-		'Node', 'NodeDashboard', 'NodeSettings', 'NodeWallet', 'NodeActions', 'NodeAbout',
-		'Wizard1Welcome', 'Wizard1Reset', 'Wizard2Moniker', 'Wizard3Location', 'Wizard4Protocol',
-		'Wizard5Network', 'Wizard6Protection', 'Wizard6Passphrase', 'Wizard7Wallet', 'Wizard7Restore',
-		'Wizard7Create', 'Wizard8Fund', 'Wizard9Ports', 'Wizard10Congratulations',
-	];
-	
 	// If the page requires bluetooth connection
 	if(requiresBluetooth.includes(to.name as string))
 	{
