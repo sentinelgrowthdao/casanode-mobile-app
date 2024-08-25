@@ -2,18 +2,18 @@ import BluetoothService from '@/services/BluetoothService';
 import { useNodeStore } from '@stores/NodeStore';
 import { type NodeBalance } from '@stores/NodeStore';
 
-// Import the store
-const nodeStore = useNodeStore();
-
 /**
  * Refresh the node status.
  * @returns string
  */
 export async function refreshNodeStatus(): Promise<string | null>
 {
+	// Create a reference to the node store
+	const nodeStore = useNodeStore();
+	
 	// Read the node status
 	const status = await BluetoothService.readNodeStatus();
-
+	
 	// Update the node status
 	if (status)
 		nodeStore.setNodeStatus(status);
@@ -30,6 +30,9 @@ export async function refreshNodeStatus(): Promise<string | null>
  */
 export async function refreshNodeBalance(): Promise<NodeBalance | null>
 {
+	// Create a reference to the node store
+	const nodeStore = useNodeStore();
+	
 	// Read the node balance
 	const balance = await BluetoothService.fetchNodeBalance();
 	
@@ -49,6 +52,9 @@ export async function refreshNodeBalance(): Promise<NodeBalance | null>
  */
 export async function refreshNodeAddress(): Promise<string | null>
 {
+	// Create a reference to the node store
+	const nodeStore = useNodeStore();
+	
 	// Read the node address
 	const address = await BluetoothService.readNodeAddress();
 	
@@ -68,6 +74,9 @@ export async function refreshNodeAddress(): Promise<string | null>
  */
 export async function refreshPublicAddress(): Promise<string | null>
 {
+	// Create a reference to the node store
+	const nodeStore = useNodeStore();
+	
 	// Read the public address
 	const address = await BluetoothService.readPublicAddress();
 	
