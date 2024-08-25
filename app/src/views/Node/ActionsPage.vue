@@ -338,4 +338,11 @@ const systemAction = async(action: string) =>
 		}
 	}
 }
+ion-card-content
+{
+	&> p
+	{
+		color: var(--ion-text-color);
+	}
+}
 </style>
