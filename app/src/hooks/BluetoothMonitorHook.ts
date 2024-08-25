@@ -3,6 +3,7 @@ import { App } from '@capacitor/app';
 import { useRouter } from 'vue-router';
 import { requiresBluetooth } from '@/router';
 import BluetoothService from '@/services/BluetoothService';
+import { refreshNodeStatus } from '@/utils/node';
 
 export function startBluetoothMonitorHook() 
 {
@@ -22,11 +23,12 @@ export function startBluetoothMonitorHook()
 		
 		// Check if the user is connected to the Bluetooth device
 		const connected = await BluetoothService.isConnected();
+		
 		// Initialize the status variable
 		let status = null;
 		// If the user is connected, read the node status
 		if(connected)
-			status = await BluetoothService.readNodeStatus();
+			status = await refreshNodeStatus();
 		
 		console.log('Checking Bluetooth status', connected, status);
 		
