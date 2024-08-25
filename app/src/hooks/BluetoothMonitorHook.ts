@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { App } from '@capacitor/app';
 import { useRouter } from 'vue-router';
 import { requiresBluetooth } from '@/router';
