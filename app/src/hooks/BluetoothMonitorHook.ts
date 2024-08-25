@@ -31,8 +31,13 @@ export function startBluetoothMonitorHook()
 		console.log('Checking Bluetooth status', connected, status);
 		
 		// If the user is not connected or the status is null, redirect to the Home page
-		if (!connected || status === null) 
-			router.push({ name: 'Home' });
+		if (!connected || status === null)
+		{
+			// Disconnect the user from the Bluetooth device
+			await BluetoothService.disconnect();
+			// Redirect to the Home page
+			router.replace({ name: 'Home' });
+		}
 	};
 	
 	/**
