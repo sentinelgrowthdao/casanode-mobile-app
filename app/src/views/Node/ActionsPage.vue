@@ -151,7 +151,7 @@ const systemAction = async(action: string) =>
 	// Lock the buttons
 	requestInProgress.value = true;
 	
-	if(action === 'update')
+	if(action === 'update-system')
 	{
 		if(await BluetoothService.updateSystem())
 			message = t('actions.upgrade-system-success');
@@ -283,7 +283,7 @@ const systemAction = async(action: string) =>
 					<ion-card class="container">
 						<ion-card-content>
 							<p>{{ $t('actions.upgrade-system-description') }}</p>
-							<loading-button :label="$t('actions.upgrade-system-button')" :disabled="requestInProgress" :callback="async() => await systemAction('update')" />
+							<loading-button :label="$t('actions.upgrade-system-button')" :disabled="requestInProgress" :callback="async() => await systemAction('update-system')" />
 						</ion-card-content>
 					</ion-card>
 
