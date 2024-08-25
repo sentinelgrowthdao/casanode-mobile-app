@@ -28,6 +28,11 @@
 	"upgrade-system-success": "System upgraded successfully.",
 	"upgrade-system-failure": "Failed to upgrade system.",
 	
+	"update-sentinel-description": "Updates the Sentinel network settings with the latest bandwidth prices, RPC nodes for network access, and fees payable by the node.",
+	"update-sentinel-button": "Update Sentinel Parameters",
+	"update-sentinel-success": "Sentinel parameters updated successfully.",
+	"update-sentinel-failure": "Failed to update Sentinel parameters.",
+	
 	"factory-reset-description": "Resets the node to its original factory settings, erasing all data and configurations to start afresh.",
 	"factory-reset-button": "Factory Reset",
 	"factory-reset-success": "Node reset to factory settings successfully.",

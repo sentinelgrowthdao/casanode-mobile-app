@@ -1355,6 +1355,68 @@ class BluetoothService
 	}
 	
 	/**
+	 * Send update sentinel command to the BLE server and wait for completion.
+	 * @returns Promise<boolean>
+	 */
+	public async updateSentinel(): Promise<boolean>
+	{
+		try
+		{
+			if (this.deviceId)
+			{
+				// Start the system update process by writing to the characteristic
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('update-sentinel'), {timeout: 30000});
+				
+				let status = '0';
+				// Check the update status every 5 seconds
+				const interval = 5000;
+				// Timeout after 2 minutes
+				const timeout = 120000;
+				const startTime = Date.now();
+				
+				while (status === '0' || status === '1')
+				{
+					if ((Date.now() - startTime) > timeout)
+					{
+						console.error('Sentinel update timed out.');
+						return false;
+					}
+					
+					// Read the status from the BLE server
+					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, {timeout: 30000});
+					status = decodeDataView(value);
+					
+					// Check if the status indicates an error
+					if (status === '-1')
+					{
+						console.error('Sentinel update failed.');
+						return false;
+					}
+					
+					// Wait before checking again
+					await this.delay(interval);
+				}
+				
+				// If the status is '2', it means the sentinel update was successful
+				if (status === '2')
+				{
+					console.log('Sentinel update completed successfully.');
+					return true;
+				}
+				
+				// If the status is not '2', return false
+				return false;
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Send reset system command to the BLE server.
 	 * @returns Promise<boolean>
 	 */

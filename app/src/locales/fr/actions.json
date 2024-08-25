@@ -28,6 +28,11 @@
 	"upgrade-system-success": "Système mis à jour avec succès.",
 	"upgrade-system-failure": "Impossible de mettre à jour le système.",
 	
+	"update-sentinel-description": "Met à jour les paramètres du réseau Sentinel avec les derniers prix de la bande passante, les nœuds RPC pour l'accès au réseau et les frais payables par le nœud.",
+	"update-sentinel-button": "Mettre à jour les paramètres de Sentinel",
+	"update-sentinel-success": "Paramètres de Sentinel mis à jour avec succès.",
+	"update-sentinel-failure": "Impossible de mettre à jour les paramètres de Sentinel.",
+	
 	"factory-reset-description": "Réinitialise le nœud à ses paramètres d'usine d'origine, effaçant toutes les données et configurations pour repartir à neuf.",
 	"factory-reset-button": "Réinitialisation d'usine",
 	"factory-reset-success": "Nœud réinitialisé aux paramètres d'usine avec succès.",

@@ -158,6 +158,13 @@ const systemAction = async(action: string) =>
 		else
 			message = t('actions.upgrade-system-failure');
 	}
+	else if(action === 'update-sentinel')
+	{
+		if(await BluetoothService.updateSentinel())
+			message = t('actions.update-sentinel-success');
+		else
+			message = t('actions.update-sentinel-failure');
+	}
 	else if(action === 'reset')
 	{
 		if(await BluetoothService.resetSystem())
@@ -284,6 +291,14 @@ const systemAction = async(action: string) =>
 						<ion-card-content>
 							<p>{{ $t('actions.upgrade-system-description') }}</p>
 							<loading-button :label="$t('actions.upgrade-system-button')" :disabled="requestInProgress" :callback="async() => await systemAction('update-system')" />
+						</ion-card-content>
+					</ion-card>
+
+					<!-- Update Sentinel Parameters -->
+					<ion-card class="container">
+						<ion-card-content>
+							<p>{{ $t('actions.update-sentinel-description') }}</p>
+							<loading-button :label="$t('actions.update-sentinel-button')" :disabled="requestInProgress" :callback="async() => await systemAction('update-sentinel')" />
 						</ion-card-content>
 					</ion-card>
 
