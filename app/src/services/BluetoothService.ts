@@ -1117,16 +1117,10 @@ class BluetoothService
 					status = parseInt(decodeDataView(value));
 					// If the installation is successful
 					if (status === 2)
-					{
-						console.log('Installation completed successfully.');
 						return 1;
-					}
 					// If the installation failed
 					else if (status === -1)
-					{
-						console.error('Installation failed.');
 						return -1;
-					}
 					
 					// Wait for the next check
 					await this.delay(interval);
