@@ -562,6 +562,18 @@ const renewCertificate = async () =>
 	}
 };
 
+const checkPort = (portType: string) => async () =>
+{
+	if(await BluetoothService.checkPort(portType) === 'open')
+	{
+		console.log(`Port ${portType} is open.`);
+	}
+	else
+	{
+		console.error(`Port ${portType} is closed.`);
+	}
+};
+
 </script>
 
 <template>
@@ -635,8 +647,17 @@ const renewCertificate = async () =>
 							<loading-button label="Renew Certificate" :callback="renewCertificate" />
 						</ion-item>
 					</ion-col>
+					<ion-col size="12">
+						<ion-label>
+							<h2>Check Ports</h2>
+						</ion-label>
+						<ion-item>
+							<loading-button label="Node" :callback="checkPort('node')" />
+							<loading-button label="VPN" :callback="checkPort('vpn')" />
+						</ion-item>
+					</ion-col>
 				</ion-row>
-
+				
 				<ion-row v-if="passphraseFormOpen">
 					<ion-col size="12">
 						<ion-item>
