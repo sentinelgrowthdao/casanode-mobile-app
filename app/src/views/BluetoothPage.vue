@@ -655,6 +655,9 @@ const renewCertificate = async () =>
 					</ion-col>
 				</ion-row>
 				<ion-row v-if="isConnected">
+					<h1>Configuration</h1>
+				</ion-row>
+				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-item>
 						<ion-label position="stacked">Node Moniker</ion-label>
