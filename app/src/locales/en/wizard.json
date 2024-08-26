@@ -66,7 +66,8 @@
 	"ports-node": "Node Port: {port}/tcp",
 	"ports-wireguard": "WireGuard Port: {port}/udp",
 	"ports-v2ray": "V2Ray Port: {port}/tcp",
-	"ports-more": "For more detailed guidance, please refer to our documentation.",
+	"ports-more": "For more detailed guidance, please refer to our",
+	"ports-documentation": "documentation",
 	
 	"congratulations-title": "Congratulations, Your Node is Live!",
 	"congratulations-text": "Your dVPN node is successfully installed and fully operational, accessible from the Internet.",

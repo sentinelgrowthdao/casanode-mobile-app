@@ -66,7 +66,8 @@
 	"ports-node": "Port du nœud : {port}/tcp",
 	"ports-wireguard": "Port WireGuard : {port}/udp",
 	"ports-v2ray": "Port V2Ray : {port}/tcp",
-	"ports-more": "Pour des instructions plus détaillées, veuillez consulter notre documentation.",
+	"ports-more": "Pour des instructions plus détaillées, veuillez consulter notre",
+	"ports-documentation": "documentation",
 	
 	"congratulations-title": "Félicitations, votre nœud est en ligne !",
 	"congratulations-text": "Votre nœud dVPN est installé avec succès et entièrement opérationnel, accessible depuis Internet.",

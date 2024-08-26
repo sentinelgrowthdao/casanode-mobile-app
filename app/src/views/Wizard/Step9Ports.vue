@@ -19,7 +19,7 @@ const nodeStore = useNodeStore();
 						<li v-if="nodeStore.vpnType === 'wireguard'">{{ $t('wizard.ports-wireguard', {port: nodeStore.vpnPort }) }}</li>
 						<li v-if="nodeStore.vpnType === 'v2ray'">{{ $t('wizard.ports-v2ray', {port: nodeStore.vpnPort }) }}</li>
 					</ul>
-					<p class="text">{{ $t('wizard.ports-more') }}</p>
+					<p class="text">{{ $t('wizard.ports-more') }} <a href="https://docs.sentinel.co/node-setup/manual/node-config#enable-port-forwarding-for-residential-nodes" target="_blank" rel="noopener noreferrer">{{ $t('wizard.ports-documentation') }}</a>.</p>
 				</div>
 				<div class="submit">
 					<ion-grid>
