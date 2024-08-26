@@ -41,6 +41,7 @@ const CHAR_WALLET_ACTIONS_UUID = '00805f9b351a';
 const CHAR_NODE_KEYRING_BACKEND_UUID = '00805f9b351b';
 const CHAR_ONLINE_USERS_UUID = '00805f9b351c';
 const CHAR_CHANGE_VPN_TYPE_UUID = '00805f9b351d';
+const CHAR_CHECK_PORT_UUID = '00805f9b351e';
 
 /**
  * Encode a string into a DataView
@@ -1715,6 +1716,65 @@ class BluetoothService
 		}
 		return false;
 	}
+	/**
+	 * Send a check port command to the BLE server and wait for completion.
+	 * @param portType 'node' or 'vpn'
+	 * @returns Promise<string> - 'open' or 'closed'
+	 */
+	public async checkPort(portType: string): Promise<string | null>
+	{
+		try
+		{
+			if (this.deviceId)
+			{
+				// Start the port check process by writing to the characteristic
+				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHECK_PORT_UUID}`, encodeDataView(portType), {timeout: 30000});
+				
+				let status = '0';
+				const interval = 5000;
+				// 2 minutes timeout
+				const timeout = 120000;
+				const startTime = Date.now();
+				
+				// While NOT_STARTED or IN_PROGRESS
+				while (status === '0' || status === '1')
+				{
+					if ((Date.now() - startTime) > timeout)
+					{
+						console.error('Port check timed out.');
+						return null;
+					}
+					
+					// Read the status from the BLE server
+					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHECK_PORT_UUID}`, {timeout: 30000});
+					status = decodeDataView(value);
+					
+					// Check if the status indicates an error
+					if (status === '-1')
+					{
+						console.error('Port check failed.');
+						return 'closed';
+					}
+					
+					// Wait before checking again
+					await this.delay(interval);
+				}
+				
+				// Return the result based on the final status
+				if (status === '2')
+					return 'open';
+				else if (status === '3')
+					return 'closed';
+			}
+		}
+		catch (error)
+		{
+			console.error('BLE error:', error);
+		}
+		
+		return null;
+	}
+	
 	
 	/**
 	 * Delay function to wait for a specified amount of time
