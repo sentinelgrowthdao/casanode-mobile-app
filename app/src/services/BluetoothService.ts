@@ -1337,10 +1337,7 @@ class BluetoothService
 				
 				// If the status is '2', it means the system update was successful
 				if (status === '2')
-				{
-					console.log('System update completed successfully.');
 					return true;
-				}
 				
 				// If the status is not '2', return false
 				return false;
