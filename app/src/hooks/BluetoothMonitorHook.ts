@@ -60,7 +60,7 @@ export function startBluetoothMonitorHook()
 	 */
 	onMounted(async () => 
 	{
-		intervalId = window.setInterval(checkBluetoothStatus, 5000);
+		intervalId = window.setInterval(checkBluetoothStatus, 15000);
 		await checkBluetoothStatus();
 		
 		// Add the listener to the app state change event
