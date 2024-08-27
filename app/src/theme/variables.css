@@ -35,6 +35,7 @@ http://ionicframework.com/docs/theming/ */
 	--wizard-padding: 1rem;
 	--wizard-width: 80%;
 	--wizard-max-width: 20rem;
+	--wizard-color-error: #DC3545;
 	
 	/* Text */
 	--text-color-normal-light: #fff;

@@ -38,21 +38,54 @@
 			cursor:pointer;
 		}
 		
-		ul
+		.port
 		{
-			margin:0;
+			display:flex;
+			gap: 1rem;
+			margin:0 0 1.5rem;
 			padding: 0 0 0 1rem;
 			
-			&> li
+			&> .checkmarkcross
 			{
-				margin: 0 0 1rem;
-				font-size: 1.125rem;
-				line-height: 1.5rem;
+				margin:0;
+				padding:0;
+				width:2rem;
+				height:2rem;
+			}
+			&> .text
+			{
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+				
+				&> .label
+				{
+					margin:0;
+					padding:0;
+					font-size:1.125rem;
+					line-height:1.5rem;
+					color:var(--text-color-normal-light);
+				}
+				&> .value
+				{
+					margin:0;
+					padding:0;
+					font-size:1.125rem;
+					line-height:1.5rem;
+					font-weight:300;
+				}
 			}
 		}
 		
-		&> .input
+		&> .retry-block
 		{
+			&> .text
+			{
+				margin:0 0 0.5rem;
+				font-size:0.8rem;
+				line-height:1.2rem;
+				color:var(--wizard-color-error);
+			}
 		}
 		
 		&> .mnemonic

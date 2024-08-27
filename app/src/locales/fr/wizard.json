@@ -63,11 +63,15 @@
 	
 	"ports-title": "Configurer le transfert de port",
 	"ports-text": "Pour permettre l'accès externe à votre nœud, veuillez vous assurer que les ports appropriés sont transférés dans les paramètres de votre routeur.",
-	"ports-node": "Port du nœud : {port}/tcp",
-	"ports-wireguard": "Port WireGuard : {port}/udp",
-	"ports-v2ray": "Port V2Ray : {port}/tcp",
+	"ports-node-label": "Port du nœud",
+	"ports-wireguard-label": "Port WireGuard",
+	"ports-v2ray-label": "Port V2Ray",
+	"ports-node-tcp": "{port}/tcp",
+	"ports-node-udp": "{port}/udp",
 	"ports-more": "Pour des instructions plus détaillées, veuillez consulter notre",
 	"ports-documentation": "documentation",
+	"ports-error": "Il semble que tous les ports ne sont pas accessible sur Internet et cela va empêcher les utilisateurs d'accéder au service VPN.",
+	"ports-retry": "Tester les ports à nouveau",
 	
 	"congratulations-title": "Félicitations, votre nœud est en ligne !",
 	"congratulations-text": "Votre nœud dVPN est installé avec succès et entièrement opérationnel, accessible depuis Internet.",
