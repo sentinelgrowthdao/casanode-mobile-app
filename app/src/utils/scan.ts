@@ -2,6 +2,41 @@ import { BarcodeScanner, BarcodeFormat } from '@capacitor-mlkit/barcode-scanning
 import BluetoothService from '@/services/BluetoothService';
 
 /**
+ * Install Google Barcode Scanner module
+ * @returns {Promise<void>}
+ */
+/**
+ * Install Google Barcode Scanner module
+ * @returns {Promise<void>}
+ */
+export async function installScannerModule(): Promise<void>
+{
+	try
+	{
+		// Check camera permission
+		await BarcodeScanner.requestPermissions();
+		
+		// Check if the Google Barcode Scanner module is available
+		const module = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
+		// If not available, install the module
+		if (!module.available)
+		{
+			console.log('[SCANNER] Google Barcode Scanner module is not available');
+			// Install Google Barcode Scanner module
+			await BarcodeScanner.installGoogleBarcodeScannerModule();
+			console.log('[SCANNER] Google Barcode Scanner module installed');
+		}
+		else
+			console.log('[SCANNER] Google Barcode Scanner module is available');
+	}
+	catch (error)
+	{
+		console.error('[SCANNER] Failed to check or install Google Barcode Scanner module', error);
+	}
+}
+
+
+/**
  * Scan a QR code and connect to the Bluetooth device if found
  * @returns {Promise<boolean>}
  */
