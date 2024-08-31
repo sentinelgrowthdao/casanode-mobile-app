@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Browser } from '@capacitor/browser';
 import ConnectHelpModal from '@components/ConnectHelpModal.vue';
-import { scanAndConnect } from '@/utils/scan';
+import { installScannerModule, scanAndConnect } from '@/utils/scan';
 import { toggleKeepAwake } from '@/utils/awake';
 import { refreshPublicAddress } from '@/utils/node';
 import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
@@ -105,6 +105,8 @@ const tryConnection = async () =>
 {
 	// Keep the device awake
 	await toggleKeepAwake(true);
+	// Install the scanner if required
+	await installScannerModule();
 	// Scan and connect to the device
 	if(await scanAndConnect())
 	{
