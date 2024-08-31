@@ -1,3 +1,37 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import { IonButton, IonSpinner } from '@ionic/vue';
+import { toggleKeepAwake } from '@/utils/awake';
+
+interface Props
+{
+	label: string;
+	callback: () => Promise<void>;
+}
+
+const props = defineProps<Props>();
+const loading = ref(false);
+
+const handleClick = async () =>
+{
+	// Show the loading spinner
+	loading.value = true;
+	// Keep the device awake
+	await toggleKeepAwake(true);
+	try
+	{
+		// Call the callback function
+		await props.callback();
+	}
+	finally
+	{
+		// Disable the keep awake
+		await toggleKeepAwake(false);
+		// Hide the loading spinner
+		loading.value = false;
+	}
+};
+</script>
 <template>
 	<ion-button @click="handleClick" :disabled="loading" expand="block" :class="{ loading: loading }">
 		<div class="button-content">
@@ -6,34 +40,6 @@
 		</div>
 	</ion-button>
 </template>
-
-<script setup lang="ts">
-	import { ref } from 'vue';
-	import { IonButton, IonSpinner } from '@ionic/vue';
-	
-	interface Props
-	{
-		label: string;
-		callback: () => Promise<void>;
-	}
-	
-	const props = defineProps<Props>();
-	const loading = ref(false);
-	
-	const handleClick = async () =>
-	{
-		loading.value = true;
-		try
-		{
-			await props.callback();
-		}
-		finally
-		{
-			loading.value = false;
-		}
-	};
-</script>
-
 <style scoped lang="scss">
 ion-button
 {
