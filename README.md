@@ -4,6 +4,14 @@ Mobile application for installing and configuring a casanode node.
 
 ## Installation
 
+### Prerequisites
+
+- Node 22 or higher
+- NPM 10 or higher
+- Android Studio Koala (2024.1.1)
+
+### Development
+
 Clone the repository
 
 ```bash
