@@ -4,7 +4,7 @@ import { resolve } from 'path';
 const buildInfoPath = resolve('src/assets/build.json');
 const packageJsonPath = resolve('package.json');
 
-import packageJson from '../package.json' assert { type: 'json' };
+import packageJson from '../package.json' with { type: 'json' };
 
 const buildInfo = {
 	version: packageJson.version,
