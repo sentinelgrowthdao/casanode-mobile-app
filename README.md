@@ -59,18 +59,24 @@ To run the application on an Android device or emulator, follow these steps:
 ionic build
 ```
 
-2. Sync the web assets to the native Android project:
+2. Sync the Capacitor plugins and dependencies:
+
+```bash
+npx cap sync
+```
+
+3. Sync the web assets to the native Android project:
 
 ```bash
 ionic capacitor copy android
 ````
 
-3. Open the project in Android Studio:
+4. Open the project in Android Studio:
 ```bash
 ionic capacitor open android
 ```
 
-4. Build and run the application in Android Studio:
+5. Build and run the application in Android Studio:
 
 - In Android Studio, click on `Build > Make Project` to ensure the project builds correctly.
 - Select your target device (emulator or connected device).
