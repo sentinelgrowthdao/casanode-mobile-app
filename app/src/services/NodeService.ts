@@ -49,7 +49,7 @@ class NodeService
 			const vpnPort = await BluetoothService.readVpnPort();
 			const maximumPeers = await BluetoothService.readMaximumPeers();
 			const nodeLocation = await BluetoothService.readNodeLocation();
-			const certExpiry = await BluetoothService.readCertExpiry();
+			const certExpiry = await BluetoothService.readCertExpirity();
 			const onlineUsers = await BluetoothService.readOnlineUsers();
 			const bandwidthSpeed = await BluetoothService.readBandwidthSpeed();
 			const systemUptime = await BluetoothService.readSystemUptime();

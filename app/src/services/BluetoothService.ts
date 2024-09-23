@@ -4,44 +4,11 @@ import { Geolocation } from '@capacitor/geolocation';
 import { Capacitor } from '@capacitor/core';
 import { Buffer } from 'buffer';
 import * as cryptoJs from 'crypto-js';
+import { v5 as uuidv5 } from 'uuid';
 import { type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
 
-const NODE_BLE_UUID = '00805f9b34fb';
-const CHAR_HELLO_UUID = '00805f9b34fc';
-const CHAR_MONIKER_UUID = '00805f9b34fd';
-const CHAR_NODE_TYPE_UUID = '00805f9b34fe';
-const CHAR_NODE_IP_UUID = '00805f9b34ff';
-const CHAR_NODE_PORT_UUID = '00805f9b3500';
-const CHAR_VPN_TYPE_UUID = '00805f9b3501';
-const CHAR_VPN_PORT_UUID = '00805f9b3502';
-const CHAR_MAX_PEERS_UUID = '00805f9b3503';
-const CHAR_NODE_CONFIG_UUID = '00805f9b3504';
-const CHAR_NODE_LOCATION_UUID = '00805f9b3505';
-const CHAR_CERT_EXPIRITY_UUID = '00805f9b3506';
-const CHAR_BANDWIDTH_SPEED_UUID = '00805f9b3507';
-const CHAR_SYSTEM_UPTIME_UUID = '00805f9b3508';
-const CHAR_CASANODE_VERSION_UUID = '00805f9b3509';
-const CHAR_DOCKER_IMAGE_UUID = '00805f9b350a';
-const CHAR_SYSTEM_OS_UUID = '00805f9b350b';
-const CHAR_SYSTEM_ARCH_UUID = '00805f9b350c';
-const CHAR_SYSTEM_KERNEL_UUID = '00805f9b350d';
-const CHAR_NODE_PASSPHRASE_UUID = '00805f9b350e';
-const CHAR_PUBLIC_ADDRESS_UUID = '00805f9b350f';
-const CHAR_ADDRESS_NODE_UUID = '00805f9b3510';
-const CHAR_NODE_BALANCE_UUID = '00805f9b3511';
-const CHAR_NODE_STATUS_UUID = '00805f9b3512';
-const CHAR_CHECK_INSTALL_UUID = '00805f9b3513';
-const CHAR_INSTALL_IMAGE_UUID = '00805f9b3514';
-const CHAR_INSTALL_CONFIGS_UUID = '00805f9b3515';
-const CHAR_NODE_ACTIONS_UUID = '00805f9b3516';
-const CHAR_SYSTEM_ACTIONS_UUID = '00805f9b3517';
-const CHAR_CERTIFICATE_ACTIONS_UUID = '00805f9b3518';
-const CHAR_WALLET_MNEMONIC_UUID = '00805f9b3519';
-const CHAR_WALLET_ACTIONS_UUID = '00805f9b351a';
-const CHAR_NODE_KEYRING_BACKEND_UUID = '00805f9b351b';
-const CHAR_ONLINE_USERS_UUID = '00805f9b351c';
-const CHAR_CHANGE_VPN_TYPE_UUID = '00805f9b351d';
-const CHAR_CHECK_PORT_UUID = '00805f9b351e';
+const BLE_UUID = '00001820-0000-1000-8000-00805f9b34fb';
+const CHAR_DISCOVERY_UUID = '0000a2d4-0000-1000-8000-00805f9b34fb';
 
 /**
  * Encode a string into a DataView
@@ -78,7 +45,7 @@ class BluetoothService
 	private static instance: BluetoothService;
 	private deviceId: string | null = null;
 	private connected = false;
-	private BLE_UUID: string | null = null;
+	private BLE_CHARACTERISTIC_SEED: string | null = null;
 	
 	private constructor() {}
 	
@@ -90,6 +57,16 @@ class BluetoothService
 			BluetoothService.instance.initialize();
 		}
 		return BluetoothService.instance;
+	}
+	
+	/**
+	 * Generate a UUID from a seed and a characteristic ID
+	 * @param characteristicId string
+	 * @returns string
+	 */
+	private generateUUIDFromSeed(characteristicId: string) : string
+	{
+		return uuidv5(`${this.BLE_CHARACTERISTIC_SEED}+${characteristicId}`, uuidv5.URL);
 	}
 	
 	/**
@@ -174,24 +151,24 @@ class BluetoothService
 	
 	/**
 	 * Connect to the BLE server.
-	 * @param bluetoothUuid string
+	 * @param bleCharacteristicSeed string
 	 * @returns boolean
 	 */
-	public async connect(bluetoothUuid: string): Promise<boolean>
+	public async connect(bleCharacteristicSeed: string): Promise<boolean>
 	{
 		if(this.connected)
 			await this.disconnect();
 		
 		// Set the BLE UUID
-		this.BLE_UUID = bluetoothUuid;
+		this.BLE_CHARACTERISTIC_SEED = bleCharacteristicSeed;
 		
 		try
 		{
 			console.log("Requesting BLE device...", {
-				services: [`${this.BLE_UUID}-${NODE_BLE_UUID}`],
+				services: [BLE_UUID],
 			});
 			const device = await BleClient.requestDevice({
-				services: [`${this.BLE_UUID}-${NODE_BLE_UUID}`],
+				services: [BLE_UUID],
 			});
 			console.log("Device found:", device);
 			
@@ -207,7 +184,7 @@ class BluetoothService
 		{
 			console.error('BLE connect (2) error:', error);
 			this.deviceId = null;
-			this.BLE_UUID = null;
+			this.BLE_CHARACTERISTIC_SEED = null;
 			this.connected = false;
 		}
 		
@@ -228,7 +205,7 @@ class BluetoothService
 				// Disconnect from the BLE server
 				await BleClient.disconnect(this.deviceId);
 				this.deviceId = null;
-				this.BLE_UUID = null;
+				this.BLE_CHARACTERISTIC_SEED = null;
 				this.connected = false;
 			}
 		}
@@ -240,11 +217,29 @@ class BluetoothService
 	
 	/**
 	 * Get the bluetooth UUID.
+	 * @returns string
+	 */
+	public getBleUuid(): string
+	{
+		return BLE_UUID;
+	}
+	
+	/**
+	 * Get the BLE characteristic discovery UUID.
+	 * @returns string
+	 */
+	public getBleCharacteristicDiscoveryUuid(): string
+	{
+		return CHAR_DISCOVERY_UUID;
+	}
+	
+	/**
+	 * Get the BLE characteristic seed.
 	 * @returns string|null
 	 */
-	public getBleUuid(): string|null
+	public getBleCharacteristicSeedUuid(): string|null
 	{
-		return this.BLE_UUID;
+		return this.BLE_CHARACTERISTIC_SEED;
 	}
 	
 	/**
@@ -257,72 +252,26 @@ class BluetoothService
 	}
 	
 	/**
-	 * Send hello message to the BLE server.
-	 * @param message string
-	 * @returns Promise<boolean>
+	 * Read the discovery information from the BLE device.
+	 * @returns Promise<string | null>
 	 */
-	public async sendHelloMessage(message: string): Promise<boolean>
+	public async readDiscoveryInfos(): Promise<string | null>
 	{
 		try
 		{
-			if(this.deviceId)
+			if(!this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, encodeDataView(message), {timeout: 30000});
-				return true;
+				console.error('Device not connected');
+				return null;
 			}
+			const value = await BleClient.read(this.deviceId, BLE_UUID, CHAR_DISCOVERY_UUID);
+			return decodeDataView(value);
 		}
-		catch (error)
+		catch(error)
 		{
-			console.error('BLE error:', error);
+			console.error('Failed to read IP and port', error);
+			return null;
 		}
-
-		return false;
-	}
-	
-	/**
-	 * Read hello message from the BLE server.
-	 * @returns Promise<string|null>
-	 */
-	public async readHelloFromServer(): Promise<string|null>
-	{
-		try
-		{
-			if(this.deviceId)
-			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, {timeout: 30000});
-				return decodeDataView(value);
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Subscribe to the BLE server.
-	 * @param callback 
-	 * @returns Promise<boolean>
-	 */
-	public async subscribeToServer(callback: (value: DataView) => void) : Promise<boolean>
-	{
-		try
-		{
-			if(this.deviceId)
-			{
-				await BleClient.startNotifications(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_HELLO_UUID}`, callback);
-				console.log('Subscribed to the BLE server.');
-				return true;
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
-		
-		return false;
 	}
 	
 	/**
@@ -335,7 +284,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_STATUS_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-status'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -357,7 +306,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MONIKER_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('moniker'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -379,7 +328,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MONIKER_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('moniker'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -400,7 +349,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_TYPE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-type'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -422,7 +371,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_TYPE_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-type'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -443,7 +392,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_IP_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-ip'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -465,7 +414,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_IP_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-ip'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -486,7 +435,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PORT_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-port'), {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -508,7 +457,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PORT_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-port'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -529,7 +478,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_TYPE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('vpn-type'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -551,7 +500,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_TYPE_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('vpn-type'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -572,7 +521,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHANGE_VPN_TYPE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('vpn-change-type'), {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -593,7 +542,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_PORT_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('vpn-port'), {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -615,7 +564,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_VPN_PORT_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('vpn-port'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -636,7 +585,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MAX_PEERS_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('max-peers'), {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -658,7 +607,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_MAX_PEERS_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('max-peers'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -680,7 +629,7 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				const data: string = 'apply';
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_CONFIG_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-config'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -701,7 +650,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_LOCATION_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-location'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -714,16 +663,16 @@ class BluetoothService
 	}
 	
 	/**
-	 * Read certificate expiry from the BLE server.
+	 * Read certificate expirity from the BLE server.
 	 * @returns Promise<string|null>
 	 */
-	public async readCertExpiry(): Promise<string|null>
+	public async readCertExpirity(): Promise<string|null>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERT_EXPIRITY_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('cert-expirity'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -745,7 +694,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_ONLINE_USERS_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('online-users'), {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -767,7 +716,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_BANDWIDTH_SPEED_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('bandwidth-speed'), {timeout: 30000});
 				const data = JSON.parse(decodeDataView(value)) as BandwidthSpeed;
 				return data;
 			}
@@ -790,7 +739,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_UPTIME_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-uptime'), {timeout: 30000});
 				return parseInt(decodeDataView(value));
 			}
 		}
@@ -812,7 +761,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CASANODE_VERSION_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('casanode-version'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -834,7 +783,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_DOCKER_IMAGE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('docker-image'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -856,7 +805,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_OS_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-os'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -878,7 +827,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ARCH_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-arch'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -900,7 +849,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_KERNEL_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-kernel'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -921,7 +870,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PASSPHRASE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-passphrase'), {timeout: 30000});
 				return decodeDataView(value) === 'true';
 			}
 		}
@@ -944,7 +893,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_PASSPHRASE_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-passphrase'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -965,7 +914,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_PUBLIC_ADDRESS_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('public-address'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -987,7 +936,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_ADDRESS_NODE_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-address'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -1010,7 +959,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the balance fetching process by writing a command to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, encodeDataView('udvpn'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-balance'), encodeDataView('udvpn'), {timeout: 30000});
 				
 				let status = 0;
 				// Check the balance status every 5 seconds
@@ -1021,7 +970,7 @@ class BluetoothService
 				
 				while (status !== -1 && (Date.now() - startTime) < timeout)
 				{
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_BALANCE_UUID}`, {timeout: 30000});
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-balance'), {timeout: 30000});
 					const valueString = decodeDataView(value);
 					
 					// Regex to match a string that starts with a number followed by a space and a currency code
@@ -1077,7 +1026,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHECK_INSTALL_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('check-installation'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -1100,7 +1049,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the installation by writing to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`, encodeDataView('install'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-docker-image'), encodeDataView('install'), {timeout: 30000});
 				
 				let status = 0;
 				// Check the installation status every 5 seconds
@@ -1113,7 +1062,7 @@ class BluetoothService
 				while (status !== 2 && status !== -1 && (Date.now() - startTime) < timeout)
 				{
 					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_IMAGE_UUID}`);
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-docker-image'));
 					// Parse the status
 					status = parseInt(decodeDataView(value));
 					// If the installation is successful
@@ -1155,7 +1104,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the configuration installation process by writing to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_CONFIGS_UUID}`, encodeDataView('create'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-configs'), encodeDataView('create'), {timeout: 30000});
 				
 				let status = '0';
 				// Check the configuration status every 5 seconds
@@ -1173,7 +1122,7 @@ class BluetoothService
 					}
 					
 					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_INSTALL_CONFIGS_UUID}`, {timeout: 30000});
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-configs'), {timeout: 30000});
 					status = decodeDataView(value);
 					
 					// Check if the status indicates an error
@@ -1209,7 +1158,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('start'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-actions'), encodeDataView('start'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1231,7 +1180,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('stop'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-actions'), encodeDataView('stop'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1253,7 +1202,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('restart'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-actions'), encodeDataView('restart'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1275,7 +1224,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_ACTIONS_UUID}`, encodeDataView('remove'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-actions'), encodeDataView('remove'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1298,7 +1247,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the system update process by writing to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('update-system'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('update-system'), {timeout: 30000});
 				
 				let status = '0';
 				// Check the update status every 5 seconds
@@ -1316,7 +1265,7 @@ class BluetoothService
 					}
 					
 					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, {timeout: 30000});
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), {timeout: 30000});
 					status = decodeDataView(value);
 					
 					// Check if the status indicates an error
@@ -1357,7 +1306,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the system update process by writing to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('update-sentinel'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('update-sentinel'), {timeout: 30000});
 				
 				let status = '0';
 				// Check the update status every 5 seconds
@@ -1375,7 +1324,7 @@ class BluetoothService
 					}
 					
 					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, {timeout: 30000});
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), {timeout: 30000});
 					status = decodeDataView(value);
 					
 					// Check if the status indicates an error
@@ -1418,7 +1367,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('reset'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('reset'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1440,7 +1389,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('reboot'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('reboot'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1462,7 +1411,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_SYSTEM_ACTIONS_UUID}`, encodeDataView('halt'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('halt'), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1485,7 +1434,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the certificate renewal process by writing to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERTIFICATE_ACTIONS_UUID}`, encodeDataView('renew'), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('certificate-actions'), encodeDataView('renew'), {timeout: 30000});
 				
 				let status = '0';
 				// Check the certificate status every 5 seconds
@@ -1503,7 +1452,7 @@ class BluetoothService
 					}
 					
 					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CERTIFICATE_ACTIONS_UUID}`, {timeout: 30000});
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('certificate-actions'), {timeout: 30000});
 					status = decodeDataView(value);
 
 					// Check if the status indicates an error
@@ -1565,14 +1514,14 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Read the length of the data first
-				const lengthBuffer = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, {timeout: 30000});
+				const lengthBuffer = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), {timeout: 30000});
 				const length = lengthBuffer.getUint32(0, true);
 				let dataBuffer = Buffer.alloc(0);
 				
 				do
 				{
 					// Read the next chunk
-					const chunk = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, {timeout: 30000});
+					const chunk = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), {timeout: 30000});
 					// console.log(`Received chunk: ${chunk.buffer.toString()} (${chunk.buffer.length} bytes)`);
 					dataBuffer = Buffer.concat([dataBuffer, Buffer.from(chunk.buffer)]);
 				}
@@ -1624,14 +1573,14 @@ class BluetoothService
 				// Send the length of the data first
 				const lengthBuffer = Buffer.alloc(4);
 				lengthBuffer.writeUInt32LE(dataBuffer.length, 0);
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, new DataView(lengthBuffer.buffer), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), new DataView(lengthBuffer.buffer), {timeout: 30000});
 				
 				// Send the data in chunks
 				const chunks = this.splitIntoChunks(dataBuffer, 20);
 				for (const chunk of chunks)
 				{
 					// console.log(`Sending chunk: ${chunk.toString('utf-8')} (${chunk.length} bytes)`)
-					await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_MNEMONIC_UUID}`, new DataView(chunk.buffer), {timeout: 30000});
+					await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), new DataView(chunk.buffer), {timeout: 30000});
 				}
 				
 				// Return true if the mnemonic was sent successfully
@@ -1662,7 +1611,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_WALLET_ACTIONS_UUID}`, encodeDataView(action), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('wallet-actions'), encodeDataView(action), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1683,7 +1632,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_KEYRING_BACKEND_UUID}`, {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-keyring-backend'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
@@ -1706,7 +1655,7 @@ class BluetoothService
 		{
 			if(this.deviceId)
 			{
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_NODE_KEYRING_BACKEND_UUID}`, encodeDataView(data), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-keyring-backend'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
@@ -1728,7 +1677,7 @@ class BluetoothService
 			if (this.deviceId)
 			{
 				// Start the port check process by writing to the characteristic
-				await BleClient.write(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHECK_PORT_UUID}`, encodeDataView(portType), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('check-port'), encodeDataView(portType), {timeout: 30000});
 				
 				let status = '0';
 				const interval = 5000;
@@ -1746,7 +1695,7 @@ class BluetoothService
 					}
 					
 					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, `${this.BLE_UUID}-${NODE_BLE_UUID}`, `${this.BLE_UUID}-${CHAR_CHECK_PORT_UUID}`, {timeout: 30000});
+					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('check-port'), {timeout: 30000});
 					status = decodeDataView(value);
 					
 					// Check if the status indicates an error

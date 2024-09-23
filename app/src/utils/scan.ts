@@ -65,7 +65,7 @@ export async function scanAndConnect(): Promise<boolean>
 				console.log('Connecting to Bluetooth device', qrData.bluetooth);
 				
 				// Connect to the Bluetooth device
-				return await BluetoothService.connect(qrData.bluetooth);
+				return await BluetoothService.connect(qrData.bluetooth.seed);
 			}
 			else
 			{
@@ -83,16 +83,16 @@ export async function scanAndConnect(): Promise<boolean>
 		{
 			console.error('Barcode scanner is not available on this platform, using default Bluetooth ID', error);
 			// Default Bluetooth ID
-			const defaultBluetoothId = "0000180d-0000-1000-8000";
+			const defaultBluetoothSeed = "4580e70c-1dcc-4e46-bd59-33686502314a";
 			// Check if the device is connected
 			const isConnected = await BluetoothService.isConnected();
 			// If connected, disconnect
 			if (isConnected)
 				await BluetoothService.disconnect();
 			
-			console.log('Connecting to Bluetooth device', defaultBluetoothId);
+			console.log('Connecting to Bluetooth device', defaultBluetoothSeed);
 			// Connect to the Bluetooth device
-			return await BluetoothService.connect(defaultBluetoothId);
+			return await BluetoothService.connect(defaultBluetoothSeed);
 		}
 	}
 	

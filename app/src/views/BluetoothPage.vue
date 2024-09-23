@@ -20,7 +20,6 @@ import {
 import LoadingButton from '@components/LoadingButton.vue';
 
 const isConnected = ref(BluetoothService.isConnected());
-const messages = ref<{ text: string; time: number }[]>([]);
 const passphraseFormOpen = ref(false);
 const passphraseInputValue = ref('');
 const passphraseErrorMessage = ref('');
@@ -95,12 +94,12 @@ const connectToBLE = async () =>
 	
 	// Update the loading state
 	isLoading.value = true;
-
-	// Default Bluetooth ID
-	const defaultBluetoothId = "0000180d-0000-1000-8000";
+	
+	// Default Bluetooth Seed
+	const defaultBluetoothSeed = "4580e70c-1dcc-4e46-bd59-33686502314a";
 	
 	// Connect to the BLE device
-	if(await BluetoothService.connect(defaultBluetoothId))
+	if(await BluetoothService.connect(defaultBluetoothSeed))
 	{
 		// Load the node status
 		const nodeStatus = await BluetoothService.readNodeStatus();
@@ -113,7 +112,7 @@ const connectToBLE = async () =>
 		const vpnPort = await BluetoothService.readVpnPort();
 		const maximumPeers = await BluetoothService.readMaximumPeers();
 		const nodeLocation = await BluetoothService.readNodeLocation();
-		const certExpiry = await BluetoothService.readCertExpiry();
+		const certExpiry = await BluetoothService.readCertExpirity();
 		const onlineUsers = await BluetoothService.readOnlineUsers();
 		const bandwidthSpeed: BandwidthSpeed|null = await BluetoothService.readBandwidthSpeed();
 		const systemUptime = await BluetoothService.readSystemUptime();
@@ -184,46 +183,6 @@ const disconnectFromBLE = async () =>
 	await BluetoothService.disconnect();
 	isConnected.value = BluetoothService.isConnected();
 	passphraseFormOpen.value = false;
-};
-
-const sendHelloMessage = async () =>
-{
-	const message = 'Hello from client';
-	
-	if(await BluetoothService.sendHelloMessage(message))
-	{
-		messages.value.push({ text: `Sent: ${message}`, time: Date.now() });
-		console.log('Message sent to the BLE server.');
-	}
-	else
-	{
-		console.error('Failed to send message to the BLE server.');
-	}
-};
-
-const readFromServer = async () =>
-{
-	const message: string|null = await BluetoothService.readHelloFromServer();
-	if(message)
-	{
-		messages.value.push({ text: `Received: message`, time: Date.now() });
-		console.log(`Received: ${message}`);
-	}
-	else
-		console.error('Failed to read message from the BLE server.')
-};
-
-const subscribeToServer = async () =>
-{
-	// Subscribe to the server
-	const isSubscribed = await BluetoothService.subscribeToServer((value) =>
-	{
-		const message = `Received (subscription): ${new TextDecoder().decode(value)}`;
-		messages.value.push({ text: message, time: Date.now() });
-		console.log(message);
-	});
-	
-	console.log(isSubscribed ? 'Subscribed to the BLE server.' : 'Failed to subscribe to the BLE server.');
 };
 
 // Define computed properties and methods for the node configuration
