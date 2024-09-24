@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { defineEmits } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 import {
 	IonContent, IonButton,
 	modalController
 } from '@ionic/vue';
 
+// Define the props
+const props = defineProps<{ ipPort: string }>();
+
+// Define the emits
 const emit = defineEmits(['dismiss']);
 
 const dismissModal = () =>
@@ -17,8 +21,8 @@ const dismissModal = () =>
 	<ion-content :fullscreen="true" class="ion-padding">
 		<h1>{{ $t('welcome.help-title') }}</h1>
 		<p class="text">{{ $t('welcome.help-text') }}</p>
+		<p class="address">{{ `http://${props.ipPort}` }}</p>
 		<p class="text">{{ $t('welcome.help-instruction') }}</p>
-		<p class="picture"><img src="@assets/images/browser.svg" alt="" /></p>
 		<p class="close">
 			<ion-button @click="dismissModal">{{ $t('welcome.help-close') }}</ion-button>
 		</p>
@@ -41,19 +45,17 @@ ion-content
 			line-height:1.5rem;
 		}
 		
-		&.picture
+		&.address
 		{
 			margin:0 0 1rem;
-			padding: 0 2rem;
+			padding: .5rem;
+			font-size: 1.25rem;
+			line-height: 2rem;
 			text-align:center;
-			
-			&> img
-			{
-				display:inline-block;
-				width:100%;
-			}
+			border: 2px solid var(--ion-color-primary);
+			border-radius: 0.5rem;
 		}
-
+		
 		&.close
 		{
 			margin:0;

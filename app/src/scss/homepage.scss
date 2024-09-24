@@ -62,12 +62,23 @@
 					padding: 0;
 					text-align: center;
 				}
-
+				
 				&> .help
 				{
 					margin: 1rem 0 0;
 					padding: 0 1rem;
 					text-align: center;
+					
+					&> .button
+					{
+						&> ion-spinner
+						{
+							margin:0 0.5rem 0 0;
+							width: 1rem;
+							height: 1rem;
+						}
+					}
+					
 				}
 				
 				&.device

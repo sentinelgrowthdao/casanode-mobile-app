@@ -38,6 +38,8 @@ const passphraseInputValue: Ref<string> = ref('');
 const passphraseLoading: Ref<boolean> = ref(false);
 // Passphrase error message
 const passphraseErrorMessage: Ref<string> = ref('');
+// Find QR Code in progress
+const findQRCodeLoader: Ref<boolean> = ref(false);
 
 /**
  * On mounted, get the last device
@@ -117,16 +119,37 @@ const tryConnection = async () =>
 	await toggleKeepAwake(false);
 };
 
-// Open the help modal
+/**
+ * Open the help modal
+ * @returns {Promise<void>}
+*/
 const openHelpModal = async () =>
 {
-	// Create the modal
-	const modal = await modalController.create({
-		component: ConnectHelpModal
-	});
-	
-	// Present the modal
-	modal.present();
+	// Show the find QR code loader
+	findQRCodeLoader.value = true;
+	// Connect to the device
+	const connected = await BluetoothService.connect('');
+	// If connected to the device
+	if(connected)
+	{
+		// Read the IP and Port
+		const ipPort = await BluetoothService.readDiscoveryInfos();
+		// Disconnect from the device
+		await BluetoothService.disconnect();
+		
+		// Create the modal
+		const modal = await modalController.create({
+			component: ConnectHelpModal,
+			componentProps: {
+				ipPort
+			}
+		});
+		
+		// Present the modal
+		modal.present();
+	}
+	// Hide the find QR code loader
+	findQRCodeLoader.value = false;
 };
 
 /**
@@ -330,7 +353,8 @@ const submitPassphrase = async () =>
 							</ion-button>
 						</p>
 						<p class="help">
-							<ion-button size="small" fill="clear" @click="openHelpModal">
+							<ion-button size="small" fill="clear" :disabled="findQRCodeLoader" @click="openHelpModal">
+								<ion-spinner name="crescent" v-if="findQRCodeLoader" />
 								{{ $t('welcome.start-help-button') }}
 							</ion-button>
 						</p>
