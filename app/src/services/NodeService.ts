@@ -1,11 +1,14 @@
 // src/services/NodeService.ts
-import BluetoothService from './BluetoothService';
+import NetworkService from './NetworkService';
 import { useNodeStore } from '@/stores/NodeStore';
 import {
 	refreshPublicAddress,
 	refreshNodeAddress,
 	refreshNodeBalance
 } from '@/utils/node';
+import {
+	type NetworkStatus,
+} from '@interfaces/network';
 
 class NodeService
 {
@@ -31,7 +34,7 @@ class NodeService
 		const nodeStore = useNodeStore();
 		
 		// Check if connected to the BLE device
-		if(!BluetoothService.isConnected())
+		if(!NetworkService.isConnected())
 		{
 			console.log('Not connected to the BLE device.');
 			return;
@@ -39,48 +42,35 @@ class NodeService
 		
 		try
 		{
-			// Load node configuration
-			const nodeStatus = await BluetoothService.readNodeStatus();
-			const moniker = await BluetoothService.readMoniker();
-			const nodeType = await BluetoothService.readNodeType();
-			const nodeIp = await BluetoothService.readNodeIp();
-			const nodePort = await BluetoothService.readNodePort();
-			const vpnType = await BluetoothService.readVpnType();
-			const vpnPort = await BluetoothService.readVpnPort();
-			const maximumPeers = await BluetoothService.readMaximumPeers();
-			const nodeLocation = await BluetoothService.readNodeLocation();
-			const certExpiry = await BluetoothService.readCertExpirity();
-			const onlineUsers = await BluetoothService.readOnlineUsers();
-			const bandwidthSpeed = await BluetoothService.readBandwidthSpeed();
-			const systemUptime = await BluetoothService.readSystemUptime();
-			const casanodeVersion = await BluetoothService.readCasanodeVersion();
-			const dockerImage = await BluetoothService.readDockerImage();
-			const systemOs = await BluetoothService.readSystemOs();
-			const systemArch = await BluetoothService.readSystemArch();
-			const systemKernel = await BluetoothService.readSystemKernel();
+			
+			// Get node Configuration
+			const configuration = await NetworkService.getNodeConfiguration();
+			// Get node status
+			const nodeStatus: string = await NetworkService.getNodeStatus();
+			const status: NetworkStatus = await NetworkService.getStatus();
 			
 			// Update the node store
-			nodeStore.setNodeStatus(nodeStatus || '');
-			nodeStore.setMoniker(moniker || '');
-			nodeStore.setNodeType(nodeType || '');
-			nodeStore.setNodeIp(nodeIp || '');
-			nodeStore.setNodePort(nodePort || 0);
-			nodeStore.setVpnType(vpnType || '');
-			nodeStore.setVpnPort(vpnPort || 0);
-			nodeStore.setMaximumPeers(maximumPeers || 0);
-			nodeStore.setNodeLocation(nodeLocation || '');
-			nodeStore.setCertExpiry(certExpiry || '');
-			nodeStore.setOnlineUsers(onlineUsers || 0);
-			nodeStore.setBandwidthSpeed(bandwidthSpeed?.upload || 'N/A', bandwidthSpeed?.download || 'N/A');
-			nodeStore.setSystemUptime(systemUptime || -1);
-			nodeStore.setCasanodeVersion(casanodeVersion || '');
-			nodeStore.setDockerImage(dockerImage || '');
-			nodeStore.setSystemOs(systemOs || '');
-			nodeStore.setSystemArch(systemArch || '');
-			nodeStore.setSystemKernel(systemKernel || '');
+			nodeStore.setMoniker(configuration.moniker);
+			nodeStore.setNodeIp(configuration.nodeIp);
+			nodeStore.setNodePort(configuration.nodePort);
+			nodeStore.setVpnType(configuration.vpnType);
+			nodeStore.setVpnPort(configuration.vpnPort);
+			nodeStore.setDockerImage(configuration.dockerImage);
+			nodeStore.setNodeStatus(nodeStatus);
+			nodeStore.setNodeType(status.status.type);
+			nodeStore.setMaximumPeers(status.status.max_peers);
+			nodeStore.setNodeLocation(status.nodeLocation);
+			nodeStore.setCertExpiry(status.certificate.expirationDate);
+			nodeStore.setOnlineUsers(status.status.peers);
+			nodeStore.setBandwidthSpeed(status.status.bandwidth.upload, status.status.bandwidth.download);
+			nodeStore.setSystemUptime(status.uptime);
+			nodeStore.setCasanodeVersion(status.version);
+			nodeStore.setSystemOs(status.systemOs);
+			nodeStore.setSystemArch(status.systemArch);
+			nodeStore.setSystemKernel(status.systemKernel);
 			
 			// Check if passphrase is available
-			const passphraseAvailable = await BluetoothService.readNodePassphrase();
+			const passphraseAvailable = await NetworkService.nodePassphrase();
 			// If passphrase is available
 			if (passphraseAvailable)
 			{
@@ -89,7 +79,6 @@ class NodeService
 				await refreshPublicAddress();
 				await refreshNodeBalance();
 			}
-		
 		}
 		catch(error)
 		{

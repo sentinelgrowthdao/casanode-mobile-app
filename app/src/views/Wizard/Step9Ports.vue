@@ -6,7 +6,7 @@ import {
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useNodeStore } from '@stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 import CheckMarkCross from '@components/CheckMarkCross.vue';
 
@@ -37,7 +37,7 @@ const checkPorts = async () =>
 	}
 	
 	// Check node port
-	if(await BluetoothService.checkPort('node') === 'open')
+	if(await NetworkService.checkPort('node') === 'open')
 		nodeCheckMarkCross.value = 'check';
 	else
 		nodeCheckMarkCross.value = 'cross';
@@ -46,7 +46,7 @@ const checkPorts = async () =>
 	if(nodeStore.vpnType === 'v2ray')
 	{
 		// Check vpn port
-		if(await BluetoothService.checkPort('vpn') === 'open')
+		if(await NetworkService.checkPort('vpn') === 'open')
 			vpnCheckMarkCross.value = 'check';
 		else
 			vpnCheckMarkCross.value = 'cross';

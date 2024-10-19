@@ -9,7 +9,7 @@ import {
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
@@ -30,10 +30,10 @@ const setVpnTypeAndNavigate = async () =>
 	// Check if the node type is wireguard or v2ray
 	if(vpnType.value === 'wireguard' || vpnType.value === 'v2ray')
 	{
-		// Send to the server and apply the value
-		if(await BluetoothService.writeVpnType(vpnType.value)
-			&& await BluetoothService.readChangeVpnType() === 0
-			&& await BluetoothService.writeNodeConfig())
+		// Set the vpn type value
+		const result = await NetworkService.setNodeConfiguration({ vpnType: vpnType.value });
+		// Check if the change was successful
+		if(result.vpnType)
 		{
 			nodeStore.setVpnType(vpnType.value);
 			router.push({ name: 'Wizard5Network' });

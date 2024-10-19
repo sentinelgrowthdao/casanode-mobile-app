@@ -9,7 +9,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
@@ -30,7 +30,7 @@ onMounted(async () =>
 const resetConfiguration = async () =>
 {
 	// Reset the system
-	const result = await BluetoothService.resetSystem();
+	const result = await NetworkService.resetSystem();
 	// Check the result
 	if(result)
 	{

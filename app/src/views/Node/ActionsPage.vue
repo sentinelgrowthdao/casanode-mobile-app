@@ -7,7 +7,7 @@ import {
 	toastController,
 } from '@ionic/vue';
 import AppToolbar from '@/components/AppToolbar.vue';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
@@ -81,7 +81,7 @@ const nodeAction = async(action: string) =>
 	if(action === 'start')
 	{
 		// Start the node
-		if(await BluetoothService.startNode())
+		if(await NetworkService.startNode())
 			message = t('actions.start-node-success');
 		else
 			message = t('actions.start-node-failure');
@@ -89,7 +89,7 @@ const nodeAction = async(action: string) =>
 	else if (action === 'stop')
 	{
 		// Stop the node
-		if(await BluetoothService.stopNode())
+		if(await NetworkService.stopNode())
 			message = t('actions.stop-node-success');
 		else
 			message = t('actions.stop-node-failure');
@@ -97,7 +97,7 @@ const nodeAction = async(action: string) =>
 	else if(action === 'restart')
 	{
 		// Restart the node
-		if(await BluetoothService.restartNode())
+		if(await NetworkService.restartNode())
 			message = t('actions.restart-node-success');
 		else
 			message = t('actions.restart-node-failure');
@@ -127,7 +127,7 @@ const certificateAction = async(action: string) =>
 	if(action === 'renew')
 	{
 		// Renew the certificate
-		if(await BluetoothService.renewCertificate())
+		if(await NetworkService.renewCertificate())
 			message = t('actions.regenerate-ssl-success');
 		else
 			message = t('actions.regenerate-ssl-failure');
@@ -153,26 +153,26 @@ const systemAction = async(action: string) =>
 	
 	if(action === 'update-system')
 	{
-		if(await BluetoothService.updateSystem())
+		if(await NetworkService.updateSystem('system'))
 			message = t('actions.upgrade-system-success');
 		else
 			message = t('actions.upgrade-system-failure');
 	}
 	else if(action === 'update-sentinel')
 	{
-		if(await BluetoothService.updateSentinel())
+		if(await NetworkService.updateSystem('sentinel'))
 			message = t('actions.update-sentinel-success');
 		else
 			message = t('actions.update-sentinel-failure');
 	}
 	else if(action === 'reset')
 	{
-		if(await BluetoothService.resetSystem())
+		if(await NetworkService.resetSystem())
 		{
 			// Reset store
 			nodeStore.resetStore();
 			// Remove device from the store
-			deviceStore.removeDeviceByUuid(BluetoothService.getBleUuid() || '');
+			deviceStore.removeDeviceByUuid(await NetworkService.getBleUuid() || '');
 			// Show a toast message
 			await showToastMessage(t('actions.factory-reset-success'));
 			// Redirect to the home page
@@ -188,7 +188,7 @@ const systemAction = async(action: string) =>
 	}
 	else if(action === 'reboot')
 	{
-		if(await BluetoothService.rebootSystem())
+		if(await NetworkService.rebootSystem())
 		{
 			// Show a toast message
 			await showToastMessage(t('actions.hard-reboot-success'));
@@ -205,7 +205,7 @@ const systemAction = async(action: string) =>
 	}
 	else if(action === 'shutdown')
 	{
-		if(await BluetoothService.shutdownSystem())
+		if(await NetworkService.shutdownSystem())
 		{
 			// Show a toast message
 			await showToastMessage(t('actions.shutdown-success'));

@@ -9,7 +9,7 @@ import {
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
@@ -42,11 +42,14 @@ const setValuesAndNavigate = async () =>
 		vpnPortValue >= 1024 && vpnPortValue <= 65535 &&
 		vpnPortValue !== nodePortValue)
 	{
+		// Set the node configuration
+		const result = await NetworkService.setNodeConfiguration({
+			nodeIp: nodeIpValue,
+			nodePort: nodePortValue,
+			vpnPort: vpnPortValue
+		});
 		// Send to the server and apply the value
-		if(await BluetoothService.writeNodeIp(nodeIpValue)
-			&& await BluetoothService.writeNodePort(nodePortValue.toString())
-			&& await BluetoothService.writeVpnPort(vpnPortValue.toString())
-			&& await BluetoothService.writeNodeConfig())
+		if(result.nodeIp && result.nodePort && result.vpnPort)
 		{
 			nodeStore.setNodeAddress(nodeIpValue);
 			nodeStore.setNodePort(nodePortValue);

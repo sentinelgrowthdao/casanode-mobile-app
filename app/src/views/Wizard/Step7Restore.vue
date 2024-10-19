@@ -9,7 +9,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 import { refreshPublicAddress, refreshNodeAddress } from '@/utils/node';
 
@@ -52,7 +52,7 @@ const requestRestoreWallet = async () =>
 	if(mnemonicRegex.test(mnemonicValue))
 	{
 		// Send mnemonic and request to restore a wallet
-		if(await BluetoothService.writeMnemonic(mnemonicValue) && await BluetoothService.performWalletAction('restore'))
+		if(await NetworkService.restoreWallet(mnemonicValue))
 		{
 			// Read public address
 			const publicAddress: string|null = await refreshPublicAddress();

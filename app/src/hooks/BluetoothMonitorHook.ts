@@ -2,7 +2,7 @@ import { onMounted, onUnmounted } from 'vue';
 import { App } from '@capacitor/app';
 import { useRouter } from 'vue-router';
 import { requiresBluetooth } from '@/router';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import { refreshNodeStatus } from '@/utils/node';
 
 export function startBluetoothMonitorHook() 
@@ -22,7 +22,7 @@ export function startBluetoothMonitorHook()
 			return;
 		
 		// Check if the user is connected to the Bluetooth device
-		const connected = await BluetoothService.isConnected();
+		const connected = await NetworkService.isConnected();
 		
 		// Initialize the status variable
 		let status = null;
@@ -36,7 +36,7 @@ export function startBluetoothMonitorHook()
 		if (!connected || status === null)
 		{
 			// Disconnect the user from the Bluetooth device
-			await BluetoothService.disconnect();
+			await NetworkService.disconnect();
 			// Redirect to the Home page
 			router.replace({ name: 'Home' });
 		}

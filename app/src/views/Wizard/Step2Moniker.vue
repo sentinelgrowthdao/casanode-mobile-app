@@ -9,7 +9,7 @@ import
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import AppInput from '@components/AppInput.vue';
 import LoadingButton from '@components/LoadingButton.vue';
 
@@ -36,8 +36,10 @@ const setValueAndNavigate = async () =>
 	// Check if the moniker is not empty and at least 4 characters
 	if(monikerValue !== '' && monikerValue.length >= 4)
 	{
-		// Send to the server and apply the value
-		if(await BluetoothService.writeMoniker(monikerValue) && await BluetoothService.writeNodeConfig())
+		// Set the moniker value
+		const result = await NetworkService.setNodeConfiguration({ moniker: monikerValue });
+		// Check if the change was successful
+		if(result.moniker)
 		{
 			// Set the moniker value
 			nodeStore.setMoniker(monikerValue);

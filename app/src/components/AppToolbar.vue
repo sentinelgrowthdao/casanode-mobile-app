@@ -3,7 +3,7 @@ import { IonToolbar, IonTitle, IonButtons, IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useNodeStore } from '@stores/NodeStore';
 import { computed } from 'vue';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import { refreshNodeStatus } from '@/utils/node';
 
 // Import pictures
@@ -36,7 +36,7 @@ const statusImage = computed(() =>
 const nodeDisconnect = async() =>
 {
 	// Disconnect the node
-	await BluetoothService.disconnect();
+	await NetworkService.disconnect();
 	// Redirect to the home page
 	router.replace({ name: 'Home' });
 };

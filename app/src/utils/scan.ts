@@ -1,5 +1,5 @@
 import { BarcodeScanner, BarcodeFormat } from '@capacitor-mlkit/barcode-scanning';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 
 /**
  * Install Google Barcode Scanner module
@@ -37,7 +37,7 @@ export async function installScannerModule(): Promise<void>
 
 
 /**
- * Scan a QR code and connect to the Bluetooth device if found
+ * Scan a QR code and connect to the device if found
  * @returns {Promise<boolean>}
  */
 export async function scanAndConnect(): Promise<boolean>
@@ -55,17 +55,17 @@ export async function scanAndConnect(): Promise<boolean>
 			if(qrData.bluetooth)
 			{
 				// Check if the device is connected
-				const isConnected = await BluetoothService.isConnected();
+				const isConnected = await NetworkService.isConnected();
 				// If connected, disconnect
 				if (isConnected)
 				{
-					await BluetoothService.disconnect();
+					await NetworkService.disconnect();
 				}
 				
 				console.log('Connecting to Bluetooth device', qrData.bluetooth);
 				
 				// Connect to the Bluetooth device
-				return await BluetoothService.connect(qrData.bluetooth.seed);
+				return await NetworkService.connect('bluetooth', {seed: qrData.bluetooth.seed});
 			}
 			else
 			{
@@ -85,14 +85,14 @@ export async function scanAndConnect(): Promise<boolean>
 			// Default Bluetooth ID
 			const defaultBluetoothSeed = "4580e70c-1dcc-4e46-bd59-33686502314a";
 			// Check if the device is connected
-			const isConnected = await BluetoothService.isConnected();
+			const isConnected = await NetworkService.isConnected();
 			// If connected, disconnect
 			if (isConnected)
-				await BluetoothService.disconnect();
+				await NetworkService.disconnect();
 			
 			console.log('Connecting to Bluetooth device', defaultBluetoothSeed);
 			// Connect to the Bluetooth device
-			return await BluetoothService.connect(defaultBluetoothSeed);
+			return await NetworkService.connect('bluetooth', {seed: defaultBluetoothSeed});
 		}
 	}
 	

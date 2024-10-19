@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n';
 import AppToolbar from '@/components/AppToolbar.vue';
 import { useNodeStore } from '@stores/NodeStore';
 import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 
 // Router
 const router = useRouter();
@@ -28,10 +28,10 @@ const deviceStore = useDeviceStore();
 onMounted(() =>
 {
 	// Check if the Bluetooth is connected
-	if(BluetoothService.isConnected())
+	if(NetworkService.isConnected())
 	{
 		// Get the last device
-		const bleUuid = BluetoothService.getBleUuid();
+		const bleUuid = NetworkService.getBleUuid();
 		if(bleUuid)
 		{
 			// Add the device to the store
@@ -60,7 +60,7 @@ const nodeStatus = computed(() =>
 const nodeDisconnect = async() =>
 {
 	// Disconnect the node
-	await BluetoothService.disconnect();
+	await NetworkService.disconnect();
 	// Redirect to the home page
 	router.replace({ name: 'Home' });
 };

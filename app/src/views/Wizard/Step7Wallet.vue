@@ -9,7 +9,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 import { refreshPublicAddress, refreshNodeAddress } from '@/utils/node';
 
@@ -42,10 +42,10 @@ onMounted(async () =>
 const requestCreateWallet = async () =>
 {
 	// Create a new wallet
-	if(await BluetoothService.performWalletAction('create'))
+	const mnemonic: string|null = await NetworkService.createWallet();
+	// If mnemonic is not null
+	if(mnemonic !== null)
 	{
-		// Read mnemonic
-		const mnemonic: string|null = await BluetoothService.readMnemonic();
 		// Read public address
 		const publicAddress: string|null = await refreshPublicAddress();
 		// Read node address

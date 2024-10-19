@@ -10,7 +10,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
@@ -48,7 +48,7 @@ const setPassphraseAndNavigate = async () =>
 	if(passphraseValue !== '' && passphraseValue.length >= 8)
 	{
 		// Send to the server and apply the value
-		if(await BluetoothService.writeNodePassphrase(passphraseValue))
+		if(await NetworkService.setNodePassphrase(passphraseValue))
 		{
 			// Navigate to the next step
 			router.push({ name: 'Wizard7Wallet' });

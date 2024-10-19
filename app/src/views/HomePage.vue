@@ -14,7 +14,7 @@ import { installScannerModule, scanAndConnect } from '@/utils/scan';
 import { toggleKeepAwake } from '@/utils/awake';
 import { refreshPublicAddress } from '@/utils/node';
 import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import NodeService from '@/services/NodeService';
 
 // Router
@@ -80,7 +80,7 @@ const deviceConnection = async () =>
 		// Keep the device awake
 		await toggleKeepAwake(true);
 		// Connect to the device
-		await BluetoothService.connect(deviceRef.value.uuid);
+		await NetworkService.connect('bluetooth', {seed: deviceRef.value.uuid});
 		// Continue the connection process
 		await connectionToNode();
 	}
@@ -128,14 +128,14 @@ const openHelpModal = async () =>
 	// Show the find QR code loader
 	findQRCodeLoader.value = true;
 	// Connect to the device
-	const connected = await BluetoothService.connect('');
+	const connected = await NetworkService.connect('bluetooth', {seed: ''});
 	// If connected to the device
 	if(connected)
 	{
 		// Read the IP and Port
-		const ipPort = await BluetoothService.readDiscoveryInfos();
+		const ipPort = await NetworkService.readDiscoveryInfos();
 		// Disconnect from the device
-		await BluetoothService.disconnect();
+		await NetworkService.disconnect();
 		
 		// Create the modal
 		const modal = await modalController.create({
@@ -175,17 +175,17 @@ const connectionToNode = async () =>
 	passphraseErrorMessage.value = '';
 	
 	// If the device is connected
-	if(await BluetoothService.isConnected())
+	if(await NetworkService.isConnected())
 	{
 		// Get installation status
-		const checkInstallation = await BluetoothService.readCheckInstallation();
+		const checkInstallation = await NetworkService.checkInstallation();
 		
 		// Parse the installation status
-		const imageAvailable = checkInstallation[0] === '1';
-		const nodeConfig = checkInstallation[2] === '1';
-		const vpnConfig = checkInstallation[3] === '1';
-		const certificateKey = checkInstallation[4] === '1';
-		const walletAvailable = checkInstallation[5] === '1';
+		const imageAvailable = checkInstallation.image;
+		const nodeConfig = checkInstallation.nodeConfig;
+		const vpnConfig = checkInstallation.vpnConfig;
+		const certificateKey = checkInstallation.certificateKey;
+		const walletAvailable = checkInstallation.wallet;
 		
 		// If the image is unavailable
 		if(!imageAvailable)
@@ -193,7 +193,7 @@ const connectionToNode = async () =>
 			// Set the waiting message
 			connectingMessage.value = t('loading.wait-docker') as string;
 			// Request to install the image
-			const installImage = await BluetoothService.installDockerImage();
+			const installImage = await NetworkService.installDockerImage();
 			// If an error occurred
 			if(installImage !== 1)
 			{
@@ -209,10 +209,10 @@ const connectionToNode = async () =>
 			// Set the waiting message
 			connectingMessage.value = t('loading.wait-config') as string;
 			// Request to install the node configuration
-			const installConfigs = await BluetoothService.installConfigs();
-			
+			const installConfigs = await NetworkService.installNodeConfiguration();
+			console.log(`installConfigs: `, JSON.stringify(installConfigs));
 			// If an error occurred
-			if(installConfigs !== '111')
+			if(!installConfigs.nodeConfig || !installConfigs.vpnConfig || !installConfigs.certificate)
 			{
 				// Set the connecting message
 				errorMessage.value = t('loading.error-message-config') as string;
@@ -221,7 +221,7 @@ const connectionToNode = async () =>
 		}
 		
 		// Check if passphrase is needed
-		const keyringBackend = await BluetoothService.readKeyringBackend();
+		const keyringBackend = await NetworkService.getKeyringBackend();
 		const publicAddress = await refreshPublicAddress();
 		
 		// If passphrase is needed and wallet already exists
@@ -254,11 +254,11 @@ const finishConnection = async () =>
 	await NodeService.loadNodeConfiguration();
 	
 	// Get installation status
-	const checkInstallation = await BluetoothService.readCheckInstallation();
+	const checkInstallation = await NetworkService.checkInstallation();
 	
 	// Parse the installation status
-	const containerExists = checkInstallation[0] === '1';
-	const walletAvailable = checkInstallation[5] === '1';
+	const imageAvailable = checkInstallation.image;
+	const walletAvailable = checkInstallation.wallet;
 	
 	// Clear error messages
 	connectingMessage.value = '';
@@ -269,7 +269,7 @@ const finishConnection = async () =>
 	await toggleKeepAwake(false);
 	
 	// If the container does not exist or the wallet is not available
-	if(!containerExists || !walletAvailable)
+	if(!imageAvailable || !walletAvailable)
 	{
 		// Launch the wizard
 		router.replace({ name: 'Wizard1Welcome' });
@@ -292,7 +292,7 @@ const submitPassphrase = async () =>
 	passphraseLoading.value = true;
 	// Get the passphrase
 	const passphrase = passphraseInputValue.value.trim();
-	const passphraseValid = await BluetoothService.writeNodePassphrase(passphrase);
+	const passphraseValid = await NetworkService.setNodePassphrase(passphrase);
 	
 	// Send the passphrase to the BLE device
 	if(passphraseValid)

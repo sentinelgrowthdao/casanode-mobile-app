@@ -1,4 +1,4 @@
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import { useNodeStore } from '@stores/NodeStore';
 import { type NodeBalance } from '@stores/NodeStore';
 
@@ -12,7 +12,7 @@ export async function refreshNodeStatus(): Promise<string | null>
 	const nodeStore = useNodeStore();
 	
 	// Read the node status
-	const status = await BluetoothService.readNodeStatus();
+	const status = await NetworkService.getNodeStatus();
 	
 	// Update the node status
 	if (status)
@@ -34,7 +34,7 @@ export async function refreshNodeBalance(): Promise<NodeBalance | null>
 	const nodeStore = useNodeStore();
 	
 	// Read the node balance
-	const balance = await BluetoothService.fetchNodeBalance();
+	const balance = await NetworkService.getNodeBalance();
 	
 	// Update the node balance
 	if (balance)
@@ -56,7 +56,7 @@ export async function refreshNodeAddress(): Promise<string | null>
 	const nodeStore = useNodeStore();
 	
 	// Read the node address
-	const address = await BluetoothService.readNodeAddress();
+	const address = await NetworkService.getNodeAddress();
 	
 	// Update the node address
 	if (address)
@@ -78,7 +78,7 @@ export async function refreshPublicAddress(): Promise<string | null>
 	const nodeStore = useNodeStore();
 	
 	// Read the public address
-	const address = await BluetoothService.readPublicAddress();
+	const address = await NetworkService.getWalletAddress();
 	
 	// Update the public address
 	if (address)

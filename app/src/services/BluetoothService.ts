@@ -1,11 +1,10 @@
-// src/services/BluetoothService.ts
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { Geolocation } from '@capacitor/geolocation';
 import { Capacitor } from '@capacitor/core';
 import { Buffer } from 'buffer';
 import * as cryptoJs from 'crypto-js';
 import { v5 as uuidv5 } from 'uuid';
-import { type BandwidthSpeed, type NodeBalance } from '@stores/NodeStore';
+import { type BandwidthSpeed } from '@stores/NodeStore';
 
 const BLE_UUID = '00001820-0000-1000-8000-00805f9b34fb';
 const CHAR_DISCOVERY_UUID = '0000a2d4-0000-1000-8000-00805f9b34fb';
@@ -950,9 +949,9 @@ class BluetoothService
 	
 	/**
 	 * Start fetching the node balance from the BLE server and wait until it's ready.
-	 * @returns Promise<NodeBalance|null>
+	 * @returns Promise<string|null>
 	 */
-	public async fetchNodeBalance(): Promise<NodeBalance|null>
+	public async fetchNodeBalance(): Promise<string|null>
 	{
 		try
 		{
@@ -980,11 +979,7 @@ class BluetoothService
 					const match = valueString.match(balanceRegex);
 					if (match)
 					{
-						const balance = match.slice(1, 3); // Extract the amount and denom from the match
-						return {
-							amount: parseFloat(balance[0]),
-							denom: balance[2],
-						};
+						return valueString;
 					}
 					else
 					{
@@ -1670,7 +1665,7 @@ class BluetoothService
 	 * @param portType 'node' or 'vpn'
 	 * @returns Promise<string> - 'open' or 'closed'
 	 */
-	public async checkPort(portType: string): Promise<string | null>
+	public async checkPort(portType: 'node' | 'vpn'): Promise<string | null>
 	{
 		try
 		{

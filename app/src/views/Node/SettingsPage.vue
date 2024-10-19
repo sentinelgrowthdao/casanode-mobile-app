@@ -8,7 +8,7 @@ import {
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import AppToolbar from '@/components/AppToolbar.vue';
 import LoadingButton from '@components/LoadingButton.vue';
 import { refreshNodeStatus } from '@/utils/node';
@@ -62,50 +62,52 @@ const saveSettings = async () =>
 	
 	try
 	{
-		// Save the moniker
-		if(await BluetoothService.writeMoniker(nodeSettings.value.moniker) === false)
-			throw new Error('moniker');
-		// Update the moniker
-		nodeStore.setMoniker(nodeSettings.value.moniker);
 		
 		// Save the node settings
-		if(await BluetoothService.writeNodeType(nodeSettings.value.nodeType) === false)
-			throw new Error('nodeType');
+		const result = await NetworkService.setNodeConfiguration({
+			moniker: nodeSettings.value.moniker,
+			nodeType: nodeSettings.value.nodeType,
+			nodeIp: nodeSettings.value.nodeIp,
+			nodePort: nodeSettings.value.nodePort,
+			vpnPort: nodeSettings.value.vpnPort,
+			maximumPeers: nodeSettings.value.maximumPeers,
+			vpnType: nodeSettings.value.vpnType,
+		});
+		
+		// Update the moniker
+		if(result.moniker === false)
+			throw new Error('moniker');
+		nodeStore.setMoniker(nodeSettings.value.moniker);
+		
 		// Update the node settings
+		if(result.nodeType === false)
+			throw new Error('nodeType');
 		nodeStore.setNodeType(nodeSettings.value.nodeType);
 		
-		// Save the node IP
-		if(await BluetoothService.writeNodeIp(nodeSettings.value.nodeIp) === false)
-			throw new Error('nodeIp');
 		// Update the node IP
+		if(result.nodeIp === false)
+			throw new Error('nodeIp');
 		nodeStore.setNodeIp(nodeSettings.value.nodeIp);
 		
-		// Save the node port
-		if(await BluetoothService.writeNodePort(nodeSettings.value.nodePort.toString()) === false)
-			throw new Error('nodePort');
 		// Update the node port
+		if(result.nodePort === false)
+			throw new Error('nodePort');
 		nodeStore.setNodePort(nodeSettings.value.nodePort);
 		
-		// Save the VPN port
-		if(await BluetoothService.writeVpnPort(nodeSettings.value.vpnPort.toString()) === false)
-			throw new Error('vpnPort');
 		// Update the VPN port
+		if(result.vpnPort === false)
+			throw new Error('vpnPort');
 		nodeStore.setVpnPort(nodeSettings.value.vpnPort);
 		
-		// Save the maximum peers
-		if(await BluetoothService.writeMaximumPeers(nodeSettings.value.maximumPeers.toString()) === false)
-			throw new Error('maximumPeers');
 		// Update the maximum peers
+		if(result.maximumPeers === false)
+			throw new Error('maximumPeers');
 		nodeStore.setMaximumPeers(nodeSettings.value.maximumPeers);
 		
-		// Save the VPN type
-		if(await BluetoothService.writeVpnType(nodeSettings.value.vpnType) === false)
-			throw new Error('vpnType');
 		// Update the VPN type
+		if(result.vpnType === false)
+			throw new Error('vpnType');
 		nodeStore.setVpnType(nodeSettings.value.vpnType);
-		
-		// Apply configuration
-		await BluetoothService.writeNodeConfig();
 		
 		// Save success
 		saveSuccess = true;
@@ -132,8 +134,7 @@ const saveSettings = async () =>
 		try
 		{
 			// Restart the node
-			await BluetoothService.restartNode();
-			restartSuccess = true;
+			restartSuccess = await NetworkService.restartNode();
 		}
 		catch(error)
 		{

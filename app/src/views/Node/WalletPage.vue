@@ -9,7 +9,7 @@ import { refresh, link, copy } from 'ionicons/icons';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import AppToolbar from '@/components/AppToolbar.vue';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import { copyToClipboard } from '@/utils/clipboard';
 import { useNodeStore } from '@stores/NodeStore';
 import { refreshNodeBalance } from '@/utils/node';
@@ -47,7 +47,7 @@ function formatNumber(amount: number, locale: string): string
 const removeWallet = async () =>
 {
 	// Remove the wallet
-	const success = await BluetoothService.performWalletAction('remove');
+	const success = await NetworkService.removeWallet();
 	// Check if the wallet was removed
 	if (success)
 	{

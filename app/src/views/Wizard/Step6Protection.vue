@@ -9,7 +9,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
@@ -42,8 +42,10 @@ onMounted(async () =>
  */
 const setKeyringBackendValue = async (value: string) =>
 {
-	// Send to the server and apply the value
-	if(await BluetoothService.writeKeyringBackend(value) && await BluetoothService.writeNodeConfig())
+	// Set the keyring backend value
+	const result = await NetworkService.setNodeConfiguration({ backend: value });
+	// Check if the backend value is set
+	if(result.backend)
 	{
 		// Navigate to the next step
 		router.push({ name: value === 'file' ? 'Wizard6Passphrase' : 'Wizard7Wallet' });

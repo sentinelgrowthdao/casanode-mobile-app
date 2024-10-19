@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { copyToClipboard } from '@/utils/clipboard';
 import { useNodeStore } from '@/stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 import { refreshNodeStatus, refreshNodeBalance } from '@/utils/node';
 
@@ -35,7 +35,7 @@ const checkWalletBalance = async () =>
 	if(balance && balance.amount >= 10)
 	{
 		// Start the dvpn node successfully
-		if(await BluetoothService.startNode())
+		if(await NetworkService.startNode())
 		{
 			// Get Node status
 			const status = await refreshNodeStatus();

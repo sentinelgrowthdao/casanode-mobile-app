@@ -10,7 +10,7 @@ import {
 } from '@ionic/vue';
 import { shieldHalf } from 'ionicons/icons';
 import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import {
 	refreshNodeStatus,
 	refreshNodeBalance,
@@ -19,7 +19,7 @@ import {
 } from '@/utils/node';
 import LoadingButton from '@components/LoadingButton.vue';
 
-const isConnected = ref(BluetoothService.isConnected());
+const isConnected = ref(NetworkService.isConnected());
 const passphraseFormOpen = ref(false);
 const passphraseInputValue = ref('');
 const passphraseErrorMessage = ref('');
@@ -123,7 +123,7 @@ const connectToBLE = async () =>
 		const systemKernel = await BluetoothService.readSystemKernel();
 		
 		// Get if passphrase is required/set
-		const passphraseAvailable = await BluetoothService.readNodePassphrase();
+		const passphraseAvailable = await NetworkService.nodePassphrase();
 		
 		// If all the passphrase is already available
 		if(passphraseAvailable)

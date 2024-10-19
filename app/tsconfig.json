@@ -24,7 +24,9 @@
 			"@components/*": ["./src/components/*"],
 			"@views/*": ["./src/views/*"],
 			"@scss/*": ["./src/scss/*"],
+			"@services/*": ["./src/services/*"],
 			"@stores/*": ["./src/stores/*"],
+			"@interfaces/*": ["./src/interfaces/*"],
 		}
 	},
 	"include": [

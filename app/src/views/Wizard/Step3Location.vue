@@ -9,7 +9,7 @@ import {
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNodeStore } from '@stores/NodeStore';
-import BluetoothService from '@/services/BluetoothService';
+import NetworkService from '@/services/NetworkService';
 import LoadingButton from '@components/LoadingButton.vue';
 
 // Router
@@ -30,8 +30,10 @@ const setNodeTypeAndNavigate = async () =>
 	// Check if the node type is residential or datacenter
 	if(nodeType.value === 'residential' || nodeType.value === 'datacenter')
 	{
-		// Send to the server and apply the value
-		if(await BluetoothService.writeNodeType(nodeType.value) && await BluetoothService.writeNodeConfig())
+		// Set the node type value
+		const result = await NetworkService.setNodeConfiguration({ nodeType: nodeType.value });
+		// Check if the change was successful
+		if(result.nodeType)
 		{
 			nodeStore.setNodeType(nodeType.value);
 			router.push({ name: 'Wizard4Protocol' });

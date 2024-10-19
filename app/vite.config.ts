@@ -17,7 +17,9 @@ export default defineConfig({
 			'@components': path.resolve(__dirname, './src/components'),
 			'@views': path.resolve(__dirname, './src/views'),
 			'@scss': path.resolve(__dirname, './src/scss'),
+			'@services': path.resolve(__dirname, './src/services'),
 			'@stores': path.resolve(__dirname, './src/stores'),
+			'@interfaces': path.resolve(__dirname, './src/interfaces'),
 		},
 	},
 	// test: {
