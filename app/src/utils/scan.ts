@@ -1,6 +1,23 @@
 import { BarcodeScanner, BarcodeFormat } from '@capacitor-mlkit/barcode-scanning';
 import NetworkService from '@/services/NetworkService';
 
+export interface QRData
+{
+	device: string;
+	os: string;
+	kernel: string;
+	architecture: string;
+	ip: string | null;
+	webPort: string | number;
+	apiPort: string | number;
+	authToken: string;
+	bluetooth?: {
+		uuid: string;
+		discovery: string;
+		seed: string;
+	};
+}
+
 /**
  * Install Google Barcode Scanner module
  * @returns {Promise<void>}
@@ -50,7 +67,7 @@ export async function scanAndConnect(): Promise<boolean>
 		if(result && result.barcodes.length > 0)
 		{
 			// Parse the QR code data
-			const qrData = JSON.parse(result.barcodes[0].rawValue);
+			const qrData: QRData = JSON.parse(result.barcodes[0].rawValue) as QRData;
 			// Check if the QR code has Bluetooth ID
 			if(qrData.bluetooth)
 			{
