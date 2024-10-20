@@ -40,12 +40,12 @@ class NetworkService
 		// Connect to the network (API or Bluetooth)
 		if(this.useApi)
 		{
-			// Get the API token, URL, and port
+			// Get the API token, IP, and port
 			const token = data.token ?? '';
-			const url = data.url ?? '';
+			const ip = data.ip ?? '';
 			const port = data.port ?? 0;
 			// Initialize the API service
-			return ApiService.connect(token, url, port);
+			return ApiService.connect(token, ip, port);
 		}
 		else
 		{

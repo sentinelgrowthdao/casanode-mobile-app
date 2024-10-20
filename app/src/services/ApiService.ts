@@ -28,16 +28,16 @@ class ApiService
 	}
 	
 	/**
-	 * Initialize the service with token and URL
+	 * Initialize the service with token, ip, and port
 	 * @param token string
-	 * @param baseUrl string
+	 * @param ip string
 	 * @param port number
 	 * @returns boolean
 	 */
-	public connect(token: string, url: string, port: number): boolean
+	public connect(token: string, ip: string, port: number): boolean
 	{
 		this.authToken = token;
-		this.baseUrl = `https://${url}:${port}/api/v1`;
+		this.baseUrl = `https://${ip}:${port}/api/v1`;
 		this.connected = true;
 		return true;
 	}
