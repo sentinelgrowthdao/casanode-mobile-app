@@ -41,11 +41,11 @@ class NetworkService
 		if(this.useApi)
 		{
 			// Get the API token, IP, and port
-			const token = data.token ?? '';
 			const ip = data.ip ?? '';
 			const port = data.port ?? 0;
+			const token = data.token ?? '';
 			// Initialize the API service
-			return ApiService.connect(token, ip, port);
+			return ApiService.connect(ip, port, token);
 		}
 		else
 		{
