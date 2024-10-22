@@ -305,7 +305,7 @@ class ApiService
 	 */
 	public async setNodeConfiguration(config: NetworkConfiguration): Promise<NodeConfigResults>
 	{
-		const data = await this.postRequest("/node/configuration", config);
+		const data = await this.putRequest("/node/configuration", config);
 		const results: NodeConfigResults = {};
 		
 		Object.keys(config).forEach((key) =>
