@@ -54,6 +54,22 @@ class ApiService
 	}
 	
 	/**
+	 * Get the device UUID
+	 * @returns string | undefined
+	 */
+	public getDeviceUuid(): string | undefined
+	{
+		if(!this.connected || !this.baseUrl)
+			return undefined;
+		
+		// Hash the base url to generate a unique UUID
+		const uuid = btoa(this.baseUrl);
+		
+		// Return the UUID as a string
+		return typeof uuid === 'string' ? uuid : String(uuid);
+	}
+	
+	/**
 	 * Check if the device is connected to the BLE server.
 	 * @returns boolean
 	 */
