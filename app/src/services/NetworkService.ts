@@ -166,15 +166,15 @@ class NetworkService
 					},
 					peers: onlineUsers ?? null,
 					max_peers: maximumPeers ?? null,
-				} as NodeStatus,
+				},
 				certificate:
 				{
 					creationDate: null,
 					expirationDate: certExpiry ?? null,
 					issuer: null,
 					subject: null,
-				} as CertificateInfo,
-			} as NetworkStatus;
+				},
+			};
 		}
 	}
 	
