@@ -148,7 +148,7 @@ class NetworkService
 				systemOs: systemOs ?? null,
 				status:
 				{
-					type: nodeType ?? null,
+					type: isNaN(Number(nodeType)) ? null : Number(nodeType),
 					version: null,
 					bandwidth: {
 						download: bandwidthSpeed?.download || 'N/A',
