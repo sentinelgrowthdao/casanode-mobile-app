@@ -66,27 +66,30 @@ export async function scanAndConnect(): Promise<boolean>
 		// Check if the scan was successful and has content
 		if(result && result.barcodes.length > 0)
 		{
+			// Check if the device is connected
+			const isConnected = await NetworkService.isConnected();
+			// Check if the device is already connected
+			if(isConnected)
+				await NetworkService.disconnect();
+			
 			// Parse the QR code data
 			const qrData: QRData = JSON.parse(result.barcodes[0].rawValue) as QRData;
 			// Check if the QR code has Bluetooth ID
 			if(qrData.bluetooth)
 			{
-				// Check if the device is connected
-				const isConnected = await NetworkService.isConnected();
-				// If connected, disconnect
-				if (isConnected)
-				{
-					await NetworkService.disconnect();
-				}
-				
 				console.log('Connecting to Bluetooth device', qrData.bluetooth);
-				
 				// Connect to the Bluetooth device
 				return await NetworkService.connect('bluetooth', {seed: qrData.bluetooth.seed});
 			}
 			else
 			{
-				console.error('No Bluetooth ID found in QR Code');
+				console.log(`Connecting to device ${qrData.device} at ${qrData.ip}:${qrData.apiPort}`);
+				// Connect to the device
+				return await NetworkService.connect('api', {
+					ip: qrData.ip,
+					port: qrData.apiPort,
+					token: qrData.authToken,
+				});
 			}
 		}
 		else
