@@ -82,59 +82,59 @@ export const useNodeStore = defineStore('node',
 		},
 		
 		// Set the node status
-		setNodeStatus(status: string)
+		setNodeStatus(status: string | null): void
 		{
-			this.status = status;
+			this.status = status ?? 'unknown';
 		},
 		// Set the number of connected users
-		setOnlineUsers(users: number)
+		setOnlineUsers(users: number | null): void
 		{
-			this.onlineUsers = users;
+			this.onlineUsers = users ?? 0;
 		},
 		// Set the node balance
-		setMoniker(moniker: string)
+		setMoniker(moniker: string | null): void
 		{
-			this.moniker = moniker;
+			this.moniker = moniker ?? '';
 		},
 		// Set the node balance
-		setNodeType(type: string): void
+		setNodeType(type: string | null): void
 		{
-			this.nodeType = type;
+			this.nodeType = type ?? '';
 		},
 		// Set the node balance
-		setNodeIp(ip: string): void
+		setNodeIp(ip: string | null): void
 		{
-			this.nodeIp = ip;
+			this.nodeIp = ip ?? '';
 		},
 		// Set the node balance
-		setNodePort(port: number): void
+		setNodePort(port: number | null): void
 		{
-			this.nodePort = port;
+			this.nodePort = port ?? -1;
 		},
 		// Set the node balance
-		setVpnType(type: string): void
+		setVpnType(type: string | null): void
 		{
-			this.vpnType = type;
+			this.vpnType = type ?? '';
 		},
 		// Set the node balance
-		setVpnPort(port: number): void
+		setVpnPort(port: number | null): void
 		{
-			this.vpnPort = port;
+			this.vpnPort = port ?? -1;
 		},
 		// Set the node balance
-		setMaximumPeers(peers: number): void
+		setMaximumPeers(peers: number | null): void
 		{
-			this.maximumPeers = peers;
+			this.maximumPeers = peers ?? 0;
 		},
 		// Set the node location
-		setNodeLocation(nodeLocation: string): void
+		setNodeLocation(nodeLocation: string | null): void
 		{
-			this.nodeLocation = nodeLocation;
+			this.nodeLocation = nodeLocation ?? '';
 		},
 		// Set certificate expiry
-		setCertExpiry(certExpiry: string): void
+		setCertExpiry(certExpiry: string | null): void
 		{
-			this.certExpiry = certExpiry;
+			this.certExpiry = certExpiry ?? '';
 		},
 		// Set Bandwidth Speed
 		setBandwidthSpeed(uploadSpeed: string | null, downloadSpeed: string | null): void
@@ -143,47 +143,47 @@ export const useNodeStore = defineStore('node',
 			this.downloadSpeed = downloadSpeed ?? '';
 		},
 		// Set the system uptime
-		setSystemUptime(uptime: number): void
+		setSystemUptime(uptime: number | null): void
 		{
-			this.uptime = uptime;
+			this.uptime = uptime ?? 0;
 		},
 		// Set the casanode version
-		setCasanodeVersion(casanodeVersion: string): void
+		setCasanodeVersion(casanodeVersion: string | null): void
 		{
-			this.casanodeVersion = casanodeVersion;
+			this.casanodeVersion = casanodeVersion ?? '';
 		},
 		// Set the docker image
-		setDockerImage(dockerImage: string): void
+		setDockerImage(dockerImage: string | null): void
 		{
-			this.dockerImage = dockerImage;
+			this.dockerImage = dockerImage ?? '';
 		},
 		// Set the system os
-		setSystemOs(systemOs: string): void
+		setSystemOs(systemOs: string | null): void
 		{
-			this.systemOs = systemOs;
+			this.systemOs = systemOs ?? '';
 		},
 		// Set the system kernel
-		setSystemKernel(systemKernel: string): void
+		setSystemKernel(systemKernel: string | null): void
 		{
-			this.systemKernel = systemKernel;
+			this.systemKernel = systemKernel ?? '';
 		},
 		// Set the system arch
-		setSystemArch(systemArch: string): void
+		setSystemArch(systemArch: string | null): void
 		{
-			this.systemArch = systemArch;
+			this.systemArch = systemArch ?? '';
 		},
 		// Set the public address
-		setPublicAddress(address: string): void
+		setPublicAddress(address: string | null): void
 		{
-			this.publicAddress = address;
+			this.publicAddress = address ?? '';
 		},
 		// Set the node address
-		setNodeAddress(address: string): void
+		setNodeAddress(address: string | null): void
 		{
-			this.nodeAddress = address;
+			this.nodeAddress = address ?? '';
 		},
 		// Set the node balance
-		setNodeBalance(balance: NodeBalance|null): void
+		setNodeBalance(balance: NodeBalance | null): void
 		{
 			if(balance === null)
 				this.nodeBalance = { amount: 0, denom: '' };
