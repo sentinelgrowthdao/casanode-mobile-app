@@ -91,12 +91,16 @@ class NetworkService
 	}
 	
 	/**
-	 * Get the bluetooth UUID.
-	 * @returns Promise<string | null>
+	 * Get the device UUID.
+	 * @returns string | undefined
 	 */
-	public async getBleUuid(): Promise<string | null>
+	public getDeviceUuid(): string | undefined
 	{
-		return this.useApi === false ? BluetoothService.getBleUuid() : null;
+		if(!this.isConnected())
+			return undefined;
+		
+		// Return the device UUID
+		return this.useApi === false ? BluetoothService.getDeviceUuid() : ApiService.getDeviceUuid();
 	}
 	
 	/**

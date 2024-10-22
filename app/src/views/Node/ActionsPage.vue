@@ -172,7 +172,7 @@ const systemAction = async(action: string) =>
 			// Reset store
 			nodeStore.resetStore();
 			// Remove device from the store
-			deviceStore.removeDeviceByUuid(await NetworkService.getBleUuid() || '');
+			deviceStore.removeDeviceByUuid(NetworkService.getDeviceUuid() || '');
 			// Show a toast message
 			await showToastMessage(t('actions.factory-reset-success'));
 			// Redirect to the home page

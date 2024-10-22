@@ -31,12 +31,12 @@ onMounted(() =>
 	if(NetworkService.isConnected())
 	{
 		// Get the last device
-		const bleUuid = NetworkService.getBleUuid();
-		if(bleUuid)
+		const deviceUuid = NetworkService.getDeviceUuid();
+		if(deviceUuid)
 		{
 			// Add the device to the store
 			deviceStore.addDevice({
-				uuid: bleUuid,
+				uuid: deviceUuid,
 				name: nodeStore.moniker,
 				address: nodeStore.nodeIp,
 			} as DeviceEntry);
