@@ -1,35 +1,35 @@
 
 export interface NodeStatus
 {
-	type: number;
-	version: string;
+	type: number | null;
+	version: string | null;
 	bandwidth:
 	{
-		download: number;
-		upload: number;
+		download: number | string;
+		upload: number | string;
 	},
 	handshake:
 	{
-		enable: boolean;
-		peers: number;
+		enable: boolean | null;
+		peers: number | null;
 	},
 	location:
 	{
-		city: string;
-		country: string;
-		latitude: number;
-		longitude: number;
+		city: string | null;
+		country: string | null;
+		latitude: number | null;
+		longitude: number | null;
 	},
-	peers: number;
-	max_peers: number;
+	peers: number | null;
+	max_peers: number | null;
 }
 
 export interface CertificateInfo
 {
-	creationDate: string;
-	expirationDate: string;
-	issuer: string;
-	subject: string;
+	creationDate: string | null;
+	expirationDate: string | null;
+	issuer: string | null;
+	subject: string | null;
 }
 
 export interface NetworkStatus
