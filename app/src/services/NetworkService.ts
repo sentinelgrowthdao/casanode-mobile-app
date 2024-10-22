@@ -3,8 +3,6 @@ import ApiService from '@services/ApiService';
 import {
 	type NetworkStatus,
 	type NetworkConfiguration,
-	type CertificateInfo,
-	type NodeStatus,
 	type NetworkInstallationCheck,
 	type NetworkInstallConfiguration,
 	type NodeConfigResults,
