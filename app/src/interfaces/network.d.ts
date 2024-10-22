@@ -5,8 +5,8 @@ export interface NodeStatus
 	version: string | null;
 	bandwidth:
 	{
-		download: number | string;
-		upload: number | string;
+		download: string | null;
+		upload: string | null;
 	},
 	handshake:
 	{

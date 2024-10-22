@@ -62,7 +62,7 @@ class NodeService
 			nodeStore.setNodeLocation(status.nodeLocation);
 			nodeStore.setCertExpiry(status.certificate.expirationDate);
 			nodeStore.setOnlineUsers(status.status.peers);
-			nodeStore.setBandwidthSpeed(status.status.bandwidth.upload, status.status.bandwidth.download);
+			nodeStore.setBandwidthSpeed(status?.status?.bandwidth?.upload ?? null, status?.status?.bandwidth?.download ?? null);
 			nodeStore.setSystemUptime(status.uptime);
 			nodeStore.setCasanodeVersion(status.version);
 			nodeStore.setSystemOs(status.systemOs);

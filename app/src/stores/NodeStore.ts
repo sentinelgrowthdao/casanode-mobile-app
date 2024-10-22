@@ -137,10 +137,10 @@ export const useNodeStore = defineStore('node',
 			this.certExpiry = certExpiry;
 		},
 		// Set Bandwidth Speed
-		setBandwidthSpeed(uploadSpeed: string, downloadSpeed: string): void
+		setBandwidthSpeed(uploadSpeed: string | null, downloadSpeed: string | null): void
 		{
-			this.uploadSpeed = uploadSpeed;
-			this.downloadSpeed = downloadSpeed;
+			this.uploadSpeed = uploadSpeed ?? '';
+			this.downloadSpeed = downloadSpeed ?? '';
 		},
 		// Set the system uptime
 		setSystemUptime(uptime: number): void
