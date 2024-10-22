@@ -56,9 +56,9 @@ class NodeService
 			nodeStore.setVpnType(configuration.vpnType);
 			nodeStore.setVpnPort(configuration.vpnPort);
 			nodeStore.setDockerImage(configuration.dockerImage);
+			nodeStore.setNodeType(configuration.nodeType);
+			nodeStore.setMaximumPeers(configuration.maximumPeers);
 			nodeStore.setNodeStatus(nodeStatus);
-			nodeStore.setNodeType(status.status.type);
-			nodeStore.setMaximumPeers(status.status.max_peers);
 			nodeStore.setNodeLocation(status.nodeLocation);
 			nodeStore.setCertExpiry(status.certificate.expirationDate);
 			nodeStore.setOnlineUsers(status.status.peers);
