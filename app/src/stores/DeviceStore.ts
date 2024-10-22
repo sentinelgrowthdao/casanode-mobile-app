@@ -5,6 +5,7 @@ export interface DeviceEntry
 	uuid: string;
 	name: string;
 	address: string;
+	connector: string;
 }
 
 export const useDeviceStore = defineStore('device',

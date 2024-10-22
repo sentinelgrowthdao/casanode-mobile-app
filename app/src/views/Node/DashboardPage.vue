@@ -37,6 +37,7 @@ onMounted(() =>
 			// Add the device to the store
 			deviceStore.addDevice({
 				uuid: deviceUuid,
+				connector: NetworkService.getConnector(),
 				name: nodeStore.moniker,
 				address: nodeStore.nodeIp,
 			} as DeviceEntry);
