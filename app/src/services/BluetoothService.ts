@@ -216,11 +216,11 @@ class BluetoothService
 	
 	/**
 	 * Get the bluetooth UUID.
-	 * @returns string
+	 * @returns string | undefined
 	 */
-	public getBleUuid(): string
+	public getDeviceUuid(): string | undefined
 	{
-		return BLE_UUID;
+		return this.BLE_CHARACTERISTIC_SEED ?? undefined;
 	}
 	
 	/**
