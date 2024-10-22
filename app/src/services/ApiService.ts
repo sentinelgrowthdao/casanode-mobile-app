@@ -1,4 +1,4 @@
-
+import { Http } from '@capacitor-community/http';
 import {
 	type NetworkStatus,
 	type NetworkConfiguration,
@@ -83,18 +83,23 @@ class ApiService
 		try
 		{
 			if (!this.baseUrl || !this.authToken)
-				throw new Error("API is not initialized. Please set token and baseUrl.");
+				throw new Error('API is not initialized. Please set token and baseUrl.');
 			
-			const response = await fetch(`${this.baseUrl}${endpoint}`, {
-				method: "GET",
+			// Request options
+			const options = {
+				url: `${this.baseUrl}${endpoint}`,
+				method: 'GET',
 				headers: this.getHeaders(),
-			});
-			return await this.handleResponse(response);
+				validateCertificates: false,
+			};
+
+			const response = await Http.request(options);
+			return response.data;
 		}
 		catch (error)
 		{
 			console.error(`GET request failed: ${error}`);
-			return null;
+			throw error;
 		}
 	}
 	
@@ -110,13 +115,17 @@ class ApiService
 			if (!this.baseUrl || !this.authToken)
 				throw new Error("API is not initialized. Please set token and baseUrl.");
 			
-			const response = await fetch(`${this.baseUrl}${endpoint}`, {
-				method: "POST",
+			// Request options
+			const options = {
+				url: `${this.baseUrl}${endpoint}`,
+				method: 'POST',
 				headers: this.getHeaders(),
-				body: JSON.stringify(data),
-			});
+				data: data,
+				validateCertificates: false,
+			};
 			
-			return await this.handleResponse(response);
+			const response = await Http.request(options);
+			return response.data;
 		}
 		catch (error)
 		{
@@ -137,13 +146,17 @@ class ApiService
 			if (!this.baseUrl || !this.authToken)
 				throw new Error("API is not initialized. Please set token and baseUrl.");
 			
-			const response = await fetch(`${this.baseUrl}${endpoint}`, {
-				method: "PUT",
+			// Request options
+			const options = {
+				url: `${this.baseUrl}${endpoint}`,
+				method: 'PUT',
 				headers: this.getHeaders(),
-				body: JSON.stringify(data),
-			});
+				data: data,
+				validateCertificates: false,
+			};
 			
-			return await this.handleResponse(response);
+			const response = await Http.request(options);
+			return response.data;
 		}
 		catch (error)
 		{
@@ -162,16 +175,20 @@ class ApiService
 		try
 		{
 			if (!this.baseUrl || !this.authToken)
-			{
 				throw new Error("API is not initialized. Please set token and baseUrl.");
-			}
-			const response = await fetch(`${this.baseUrl}${endpoint}`, {
-				method: "DELETE",
+			
+			// Request options
+			const options = {
+				url: `${this.baseUrl}${endpoint}`,
+				method: 'DELETE',
 				headers: this.getHeaders(),
-			});
-			return await this.handleResponse(response);
+				validateCertificates: false,
+			};
+			
+			const response = await Http.request(options);
+			return response.data;
 		}
-		catch(error)
+		catch (error)
 		{
 			console.error(`DELETE request failed: ${error}`);
 			return null;
