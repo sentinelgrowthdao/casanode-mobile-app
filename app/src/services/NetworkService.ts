@@ -82,6 +82,18 @@ class NetworkService
 	}
 	
 	/**
+	 * Get the connector type
+	 * @returns string | undefined
+	 */
+	public getConnector(): string | undefined
+	{
+		if(!this.isConnected())
+			return undefined;
+		// Return the connector type
+		return this.useApi ? 'tcp' : 'ble';
+	}
+	
+	/**
 	 * Read the discovery information from the BLE device.
 	 * @returns Promise<string | null>
 	 */
