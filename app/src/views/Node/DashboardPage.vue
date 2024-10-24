@@ -34,12 +34,18 @@ onMounted(() =>
 		const deviceUuid = NetworkService.getDeviceUuid();
 		if(deviceUuid)
 		{
+			// Get the API infos
+			const apiInfos = NetworkService.getApiInfos();
 			// Add the device to the store
 			deviceStore.addDevice({
 				uuid: deviceUuid,
 				connector: NetworkService.getConnector(),
 				name: nodeStore.moniker,
 				address: nodeStore.nodeIp,
+				bleUuid: NetworkService.getDeviceUuid(),
+				apiIp: apiInfos?.ip || null,
+				apiPort: apiInfos?.port || null,
+				apiToken: apiInfos?.token || null,
 			} as DeviceEntry);
 		}
 	}
