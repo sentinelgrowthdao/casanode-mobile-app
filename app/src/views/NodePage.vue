@@ -4,10 +4,10 @@ import {
 	IonTabBar, IonTabButton, IonIcon, IonLabel
 } from '@ionic/vue';
 import { shieldHalf, settings, wallet, power, helpCircle } from 'ionicons/icons';
-import { startBluetoothMonitorHook } from '@/hooks/BluetoothMonitorHook';
+import { startNetworkMonitorHook } from '@/hooks/BluetoothMonitorHook';
 
 // Start the Bluetooth monitor hook
-startBluetoothMonitorHook();
+startNetworkMonitorHook();
 </script>
 
 <template>
