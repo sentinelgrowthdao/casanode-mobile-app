@@ -1,7 +1,7 @@
 import { onMounted, onUnmounted } from 'vue';
 import { App } from '@capacitor/app';
 import { useRouter } from 'vue-router';
-import { requiresBluetooth } from '@/router';
+import { requiresConnection } from '@/router';
 import NetworkService from '@/services/NetworkService';
 import { refreshNodeStatus } from '@/utils/node';
 
@@ -18,7 +18,7 @@ export function startBluetoothMonitorHook()
 	const checkBluetoothStatus = async () => 
 	{
 		// Check if the current route requires Bluetooth
-		if(!requiresBluetooth.includes(router.currentRoute.value.name as string))
+		if(!requiresConnection.includes(router.currentRoute.value.name as string))
 			return;
 		
 		// Check if the user is connected to the Bluetooth device

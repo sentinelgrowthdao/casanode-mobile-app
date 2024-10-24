@@ -3,8 +3,8 @@ import { RouteRecordRaw } from 'vue-router';
 import NodeManager from '@views/NodePage.vue';
 import NetworkService from '@/services/NetworkService';
 
-// List of pages that require bluetooth connection
-export const requiresBluetooth = [
+// List of pages that require connection
+export const requiresConnection = [
 	'Node', 'NodeDashboard', 'NodeSettings', 'NodeWallet', 'NodeActions', 'NodeAbout',
 	'Wizard1Welcome', 'Wizard1Reset', 'Wizard2Moniker', 'Wizard3Location', 'Wizard4Protocol',
 	'Wizard5Network', 'Wizard6Protection', 'Wizard6Passphrase', 'Wizard7Wallet', 'Wizard7Restore',
@@ -143,7 +143,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) =>
 {
 	// If the page requires bluetooth connection
-	if(requiresBluetooth.includes(to.name as string))
+	if(requiresConnection.includes(to.name as string))
 	{
 		// Check if the bluetooth is connected
 		const isConnected = await NetworkService.isConnected();
