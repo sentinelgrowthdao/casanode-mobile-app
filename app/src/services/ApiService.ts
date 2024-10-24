@@ -10,10 +10,19 @@ import {
 	type NodeConfigResults,
 } from '@interfaces/network';
 
+export interface ApiInfos
+{
+	ip: string | null,
+	port: number | null,
+	token: string | null,
+}
+
 class ApiService
 {
 	private static instance: ApiService;
 	private authToken: string | null = null;
+	private apiIp: string | null = null;
+	private apiPort: number | null = null;
 	private baseUrl: string | null = null;
 	private connected = false;
 	
@@ -36,8 +45,10 @@ class ApiService
 	 */
 	public connect(ip: string, port: number, token: string): boolean
 	{
+		this.apiIp = ip;
+		this.apiPort = port;
 		this.authToken = token;
-		this.baseUrl = `https://${ip}:${port}/api/v1`;
+		this.baseUrl = `https://${this.apiIp}:${this.apiPort}/api/v1`;
 		this.connected = true;
 		return true;
 	}
@@ -48,6 +59,8 @@ class ApiService
 	 */
 	public async disconnect(): Promise<void>
 	{
+		this.apiIp = null;
+		this.apiPort = null;
 		this.authToken = null;
 		this.baseUrl = null;
 		this.connected = false;
@@ -67,6 +80,19 @@ class ApiService
 		
 		// Return the UUID as a string
 		return typeof uuid === 'string' ? uuid : String(uuid);
+	}
+	
+	/**
+	 * Get the API information
+	 * @returns ApiInfos
+	 */
+	public getApiInfos(): ApiInfos
+	{
+		return {
+			ip: this.apiIp,
+			port: this.apiPort,
+			token: this.authToken,
+		};
 	}
 	
 	/**
