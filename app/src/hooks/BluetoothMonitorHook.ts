@@ -5,23 +5,23 @@ import { requiresConnection } from '@/router';
 import NetworkService from '@/services/NetworkService';
 import { refreshNodeStatus } from '@/utils/node';
 
-export function startBluetoothMonitorHook() 
+export function startNetworkMonitorHook() 
 {
 	const router = useRouter();
 	let intervalId: number | null = null;
 	let appStateChangeListener: any = null;
 	
 	/**
-	 * Check the current Bluetooth status and redirect to the Home page if the user is not connected
+	 * Check the current Network status and redirect to the Home page if the user is not connected
 	 * @returns {Promise<void>}
 	 */
-	const checkBluetoothStatus = async () => 
+	const checkNetworkStatus = async () => 
 	{
-		// Check if the current route requires Bluetooth
+		// Check if the current route requires connection to the Network device
 		if(!requiresConnection.includes(router.currentRoute.value.name as string))
 			return;
 		
-		// Check if the user is connected to the Bluetooth device
+		// Check if the user is connected to the device
 		const connected = await NetworkService.isConnected();
 		
 		// Initialize the status variable
@@ -30,12 +30,10 @@ export function startBluetoothMonitorHook()
 		if(connected)
 			status = await refreshNodeStatus();
 		
-		console.log('Checking Bluetooth status', connected, status);
-		
 		// If the user is not connected or the status is null, redirect to the Home page
 		if (!connected || status === null)
 		{
-			// Disconnect the user from the Bluetooth device
+			// Disconnect the user from the Network device
 			await NetworkService.disconnect();
 			// Redirect to the Home page
 			router.replace({ name: 'Home' });
@@ -51,7 +49,7 @@ export function startBluetoothMonitorHook()
 	{
 		if (state.isActive) 
 		{
-			await checkBluetoothStatus();
+			await checkNetworkStatus();
 		}
 	};
 	
@@ -60,8 +58,8 @@ export function startBluetoothMonitorHook()
 	 */
 	onMounted(async () => 
 	{
-		intervalId = window.setInterval(checkBluetoothStatus, 15000);
-		await checkBluetoothStatus();
+		intervalId = window.setInterval(checkNetworkStatus, 15000);
+		await checkNetworkStatus();
 		
 		// Add the listener to the app state change event
 		appStateChangeListener = await App.addListener('appStateChange', handleAppStateChange);
