@@ -130,6 +130,7 @@ class ApiService
 			// Request options
 			const options = {
 				url: `${this.baseUrl}${endpoint}`,
+				params: {},
 				method: 'GET',
 				headers: this.getHeaders(),
 				validateCertificates: false,
