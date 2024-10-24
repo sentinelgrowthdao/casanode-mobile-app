@@ -72,15 +72,26 @@ const openNewsLink = async () =>
  */
 const deviceConnection = async () =>
 {
-	console.log('Connecting to device');
-	console.log(deviceRef.value);
 	// Check if the device is available
 	if(deviceRef.value?.uuid)
 	{
 		// Keep the device awake
 		await toggleKeepAwake(true);
-		// Connect to the device
-		await NetworkService.connect('bluetooth', {seed: deviceRef.value.uuid});
+		// Check if the device is ble
+		if(deviceRef.value.connector === 'ble')
+		{
+			// Connect to the device
+			await NetworkService.connect('bluetooth', {seed: deviceRef.value.bleUuid});
+		}
+		else
+		{
+			// Connect to the device
+			await NetworkService.connect('api', {
+				ip: deviceRef.value.apiIp,
+				port: deviceRef.value.apiPort,
+				token: deviceRef.value.apiToken,
+			});
+		}
 		// Continue the connection process
 		await connectionToNode();
 	}
