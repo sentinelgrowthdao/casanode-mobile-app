@@ -6,6 +6,10 @@ export interface DeviceEntry
 	name: string;
 	address: string;
 	connector: string;
+	bleUuid: string | null;
+	apiIp: string | null;
+	apiPort: number | null;
+	apiToken: string | null;
 }
 
 export const useDeviceStore = defineStore('device',
