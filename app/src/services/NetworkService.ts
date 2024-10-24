@@ -1,5 +1,6 @@
 import BluetoothService from '@services/BluetoothService';
 import ApiService from '@services/ApiService';
+import { type ApiInfos } from '@services/ApiService';
 import {
 	type NetworkStatus,
 	type NetworkConfiguration,
@@ -113,6 +114,18 @@ class NetworkService
 		
 		// Return the device UUID
 		return this.useApi === false ? BluetoothService.getDeviceUuid() : ApiService.getDeviceUuid();
+	}
+	
+	/**
+	 * Get the api infos
+	 * @returns string | undefined
+	 */
+	public getApiInfos(): ApiInfos | null
+	{
+		if(this.useApi)
+			return ApiService.getApiInfos();
+		else
+			return null;
 	}
 	
 	/**
