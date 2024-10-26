@@ -1,4 +1,8 @@
-import { Http } from '@capacitor-community/http';
+import {
+	Http,
+	type HttpOptions,
+	type HttpHeaders,
+} from '@capacitor-community/http';
 import {
 	type NetworkStatus,
 	type NetworkConfiguration,
@@ -107,7 +111,7 @@ class ApiService
 	/**
 	 * Helper method to get authorization headers
 	 */
-	private getHeaders(): HeadersInit
+	private getHeaders(): HttpHeaders
 	{
 		return {
 			"Authorization": `Bearer ${this.authToken}`,
@@ -128,14 +132,13 @@ class ApiService
 				throw new Error('API is not initialized. Please set token and baseUrl.');
 			
 			// Request options
-			const options = {
+			const options: HttpOptions = {
 				url: `${this.baseUrl}${endpoint}`,
 				params: {},
 				method: 'GET',
 				headers: this.getHeaders(),
-				validateCertificates: false,
 			};
-
+			
 			const response = await Http.request(options);
 			return response.data;
 		}
@@ -159,12 +162,12 @@ class ApiService
 				throw new Error("API is not initialized. Please set token and baseUrl.");
 			
 			// Request options
-			const options = {
+			const options: HttpOptions = {
 				url: `${this.baseUrl}${endpoint}`,
+				params: {},
 				method: 'POST',
 				headers: this.getHeaders(),
 				data: data,
-				validateCertificates: false,
 			};
 			
 			const response = await Http.request(options);
@@ -190,12 +193,12 @@ class ApiService
 				throw new Error("API is not initialized. Please set token and baseUrl.");
 			
 			// Request options
-			const options = {
+			const options: HttpOptions = {
 				url: `${this.baseUrl}${endpoint}`,
+				params: {},
 				method: 'PUT',
 				headers: this.getHeaders(),
 				data: data,
-				validateCertificates: false,
 			};
 			
 			const response = await Http.request(options);
@@ -221,11 +224,11 @@ class ApiService
 				throw new Error("API is not initialized. Please set token and baseUrl.");
 			
 			// Request options
-			const options = {
+			const options: HttpOptions = {
 				url: `${this.baseUrl}${endpoint}`,
+				params: {},
 				method: 'DELETE',
 				headers: this.getHeaders(),
-				validateCertificates: false,
 			};
 			
 			const response = await Http.request(options);
