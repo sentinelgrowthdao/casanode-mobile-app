@@ -239,21 +239,6 @@ class ApiService
 	}
 	
 	/**
-	 * Helper method to handle responses
-	 * @param response Response
-	 * @returns Promise<any>
-	 */
-	private async handleResponse(response: Response): Promise<any>
-	{
-		if (!response.ok)
-		{
-			const error = await response.text();
-			throw new Error(`API request failed: ${error}`);
-		}
-		return await response.json();
-	}
-	
-	/**
 	 * Get the node status
 	 * @returns Promise<string>
 	 */
