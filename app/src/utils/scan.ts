@@ -54,43 +54,30 @@ export async function installScannerModule(): Promise<void>
 
 
 /**
- * Scan a QR code and connect to the device if found
- * @returns {Promise<boolean>}
+ * Scan a QR code and return the data
+ * @returns {Promise<QRData|undefined>}
  */
-export async function scanAndConnect(): Promise<boolean>
+export async function scanQrcode(): Promise<QRData|undefined>
 {
 	try
 	{
 		// Start scanning
 		const result = await BarcodeScanner.scan({formats: [BarcodeFormat.QrCode]});
+		
 		// Check if the scan was successful and has content
 		if(result && result.barcodes.length > 0)
 		{
 			// Check if the device is connected
 			const isConnected = await NetworkService.isConnected();
-			// Check if the device is already connected
+			
+			// Disconnect if already connected
 			if(isConnected)
 				await NetworkService.disconnect();
 			
 			// Parse the QR code data
 			const qrData: QRData = JSON.parse(result.barcodes[0].rawValue) as QRData;
-			// Check if the QR code has Bluetooth ID
-			if(qrData.bluetooth)
-			{
-				console.log('Connecting to Bluetooth device', qrData.bluetooth);
-				// Connect to the Bluetooth device
-				return await NetworkService.connect('bluetooth', {seed: qrData.bluetooth.seed});
-			}
-			else
-			{
-				console.log(`Connecting to device ${qrData.device} at ${qrData.ip}:${qrData.apiPort}`);
-				// Connect to the device
-				return await NetworkService.connect('api', {
-					ip: qrData.ip,
-					port: qrData.apiPort,
-					token: qrData.authToken,
-				});
-			}
+			// Return the QR code data
+			return qrData;
 		}
 		else
 		{
@@ -99,22 +86,33 @@ export async function scanAndConnect(): Promise<boolean>
 	}
 	catch (error: any)
 	{
+		// Check if the error is due to the barcode scanner being unavailable
 		if(typeof(error?.code) !== 'undefined' && error?.code === 'UNAVAILABLE')
 		{
-			console.error('Barcode scanner is not available on this platform, using default Bluetooth ID', error);
-			// Default Bluetooth ID
-			const defaultBluetoothSeed = "4580e70c-1dcc-4e46-bd59-33686502314a";
-			// Check if the device is connected
-			const isConnected = await NetworkService.isConnected();
-			// If connected, disconnect
-			if (isConnected)
-				await NetworkService.disconnect();
-			
-			console.log('Connecting to Bluetooth device', defaultBluetoothSeed);
-			// Connect to the Bluetooth device
-			return await NetworkService.connect('bluetooth', {seed: defaultBluetoothSeed});
+			// Attempt to load the JSON file in development mode if the scanner is unavailable
+			if(process.env.NODE_ENV === 'development')
+			{
+				try
+				{
+					// @ts-expect-error Dynamically import the JSON file
+					const qrData = await import('@qrcode.json');
+					return qrData.default as QRData;
+				}
+				catch (fileError)
+				{
+					console.error('The qrdata.json file is not available or could not be loaded');
+				}
+			}
+			else
+			{
+				console.error('Barcode scanner is unavailable');
+			}
+		}
+		else
+		{
+			console.error('An unexpected error occurred:', error);
 		}
 	}
 	
-	return false;
+	return undefined;
 }
