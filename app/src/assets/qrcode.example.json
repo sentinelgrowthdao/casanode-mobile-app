@@ -1,0 +1,16 @@
+{
+	"device":"casanode",
+	"os":"Debian 12",
+	"kernel":"6.6.51+rpt-rpi-2712",
+	"architecture":"aarch64",
+	"ip":"x.x.x.x",
+	"webPort":"8080",
+	"apiPort":"8081",
+	"authToken":"",
+	"bluetooth":
+	{
+		"uuid":"00001820-0000-1000-8000-00805f9b34fb",
+		"discovery":"0000a2d4-0000-1000-8000-00805f9b34fb",
+		"seed":""
+	}
+}
