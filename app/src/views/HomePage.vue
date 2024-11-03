@@ -5,12 +5,16 @@ import {
 	IonItem, IonInput, IonSpinner,
 	modalController
 } from '@ionic/vue';
-import { closeOutline } from 'ionicons/icons';
+import {
+	closeOutline,
+	bluetoothOutline,
+	wifiOutline,
+} from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Browser } from '@capacitor/browser';
 import ConnectHelpModal from '@components/ConnectHelpModal.vue';
-import { installScannerModule, scanAndConnect } from '@/utils/scan';
+import { installScannerModule, type QRData, scanQrcode } from '@/utils/scan';
 import { toggleKeepAwake } from '@/utils/awake';
 import { refreshPublicAddress } from '@/utils/node';
 import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
@@ -25,6 +29,8 @@ const { t } = useI18n();
 const deviceStore = useDeviceStore();
 // Device Ref
 const deviceRef: Ref<DeviceEntry | null> = ref(null);
+// QR Code data
+const deviceQrcodeData: Ref<QRData | null> = ref(null);
 
 // Connecting message
 const connectingMessage: Ref<string> = ref('');
@@ -40,6 +46,8 @@ const passphraseLoading: Ref<boolean> = ref(false);
 const passphraseErrorMessage: Ref<string> = ref('');
 // Find QR Code in progress
 const findQRCodeLoader: Ref<boolean> = ref(false);
+// Choose connection method open
+const chooseConnectionMethodOpen: Ref<boolean> = ref(false);
 
 /**
  * On mounted, get the last device
@@ -116,18 +124,119 @@ const deviceRemove = () =>
  */
 const tryConnection = async () =>
 {
+	// Clear the messages
+	connectingMessage.value = '';
+	errorMessage.value = '';
+	passphraseErrorMessage.value = '';
+	
 	// Keep the device awake
 	await toggleKeepAwake(true);
 	// Install the scanner if required
 	await installScannerModule();
-	// Scan and connect to the device
-	if(await scanAndConnect())
+	// Scan the QR code
+	const qrcodeData : QRData | undefined = await scanQrcode();
+	
+	// If the QR code data is available
+	if(qrcodeData)
 	{
+		deviceQrcodeData.value = qrcodeData;
+		// If attribut bluetooth exists and is not null
+		if(qrcodeData.bluetooth)
+		{
+			// Open the choose method box
+			chooseConnectionMethodOpen.value = true;
+		}
+		else
+		{
+			// Connect to the device
+			await connectLocalNetwork();
+		}
+	}
+	else
+	{
+		// Disable the keep awake
+		await toggleKeepAwake(false);
+	}
+	
+};
+
+/**
+ * Connect to the device using TCP
+ * @returns {Promise<void>}
+ */
+const connectLocalNetwork = async (): Promise<void> =>
+{
+	// Get the IP, Port and Token
+	const ip = deviceQrcodeData.value?.ip || null;
+	const port = deviceQrcodeData.value?.apiPort || null;
+	const token = deviceQrcodeData.value?.authToken || null;
+	// Connect to the device using the IP, Port and Token
+	const connected = await NetworkService.connect('api', {
+		ip: ip,
+		port: port,
+		token: token,
+	});
+	
+	// If connected to the device
+	if(connected)
+	{
+		// Close the choose connection method
+		chooseConnectionMethodOpen.value = false;
 		// Continue the connection process
 		await connectionToNode();
+		// Disable the keep awake
+		await toggleKeepAwake(false);
 	}
+	else
+	{
+		// Set the connecting message
+		errorMessage.value = t('loading.error-message') as string;
+	}
+}
+
+/**
+ * Connect to the device using Bluetooth
+ * @returns {Promise<void>}
+ */
+const connectBluetooth = async (): Promise<void> =>
+{
+	// Get the seed
+	const seed = deviceQrcodeData.value?.bluetooth?.seed || null;
+	// Connect to the device using the seed
+	const connected = await NetworkService.connect('bluetooth', {seed: seed});
+	
+	// If connected to the device
+	if(connected)
+	{
+		// Close the choose connection method
+		chooseConnectionMethodOpen.value = false;
+		// Continue the connection process
+		await connectionToNode();
+		// Disable the keep awake
+		await toggleKeepAwake(false);
+	}
+	else
+	{
+		// Set the connecting message
+		errorMessage.value = t('loading.error-message') as string;
+	}
+}
+
+/**
+ * Cancel the connection
+ * @returns {Promise<void>}
+ */
+const cancelConnection = async (): Promise<void> => 
+{
 	// Disable the keep awake
 	await toggleKeepAwake(false);
+	// Clear the error message
+	errorMessage.value = '';
+	passphraseErrorMessage.value = '';
+	// Close the passphrase form
+	passphraseFormOpen.value = false;
+	// Close the choose connection method
+	chooseConnectionMethodOpen.value = false;
 };
 
 /**
@@ -188,66 +297,74 @@ const connectionToNode = async () =>
 	// If the device is connected
 	if(await NetworkService.isConnected())
 	{
-		// Get installation status
-		const checkInstallation = await NetworkService.checkInstallation();
-		
-		// Parse the installation status
-		const imageAvailable = checkInstallation.image;
-		const nodeConfig = checkInstallation.nodeConfig;
-		const vpnConfig = checkInstallation.vpnConfig;
-		const certificateKey = checkInstallation.certificateKey;
-		const walletAvailable = checkInstallation.wallet;
-		
-		// If the image is unavailable
-		if(!imageAvailable)
+		try
 		{
-			// Set the waiting message
-			connectingMessage.value = t('loading.wait-docker') as string;
-			// Request to install the image
-			const installImage = await NetworkService.installDockerImage();
-			// If an error occurred
-			if(installImage !== 1)
+			// Get installation status
+			const checkInstallation = await NetworkService.checkInstallation();
+			
+			// Parse the installation status
+			const imageAvailable = checkInstallation.image;
+			const nodeConfig = checkInstallation.nodeConfig;
+			const vpnConfig = checkInstallation.vpnConfig;
+			const certificateKey = checkInstallation.certificateKey;
+			const walletAvailable = checkInstallation.wallet;
+			
+			// If the image is unavailable
+			if(!imageAvailable)
 			{
-				// Set the connecting message
-				errorMessage.value = t('loading.error-message-docker') as string;
-				return;
+				// Set the waiting message
+				connectingMessage.value = t('loading.wait-docker') as string;
+				// Request to install the image
+				const installImage = await NetworkService.installDockerImage();
+				// If an error occurred
+				if(installImage !== 1)
+				{
+					// Set the connecting message
+					errorMessage.value = t('loading.error-message-docker') as string;
+					return;
+				}
 			}
-		}
-		
-		// If the node or VPN configuration does not exist
-		if(!nodeConfig || !vpnConfig || !certificateKey)
-		{
-			// Set the waiting message
-			connectingMessage.value = t('loading.wait-config') as string;
-			// Request to install the node configuration
-			const installConfigs = await NetworkService.installNodeConfiguration();
-			console.log(`installConfigs: `, JSON.stringify(installConfigs));
-			// If an error occurred
-			if(!installConfigs.nodeConfig || !installConfigs.vpnConfig || !installConfigs.certificate)
+			
+			// If the node or VPN configuration does not exist
+			if(!nodeConfig || !vpnConfig || !certificateKey)
 			{
-				// Set the connecting message
-				errorMessage.value = t('loading.error-message-config') as string;
-				return;
+				// Set the waiting message
+				connectingMessage.value = t('loading.wait-config') as string;
+				// Request to install the node configuration
+				const installConfigs = await NetworkService.installNodeConfiguration();
+				// If an error occurred
+				if(!installConfigs.nodeConfig || !installConfigs.vpnConfig || !installConfigs.certificate)
+				{
+					// Set the connecting message
+					errorMessage.value = t('loading.error-message-config') as string;
+					return;
+				}
 			}
+			
+			// Check if passphrase is needed
+			const keyringBackend = await NetworkService.getKeyringBackend();
+			const publicAddress = await refreshPublicAddress();
+			
+			// If passphrase is needed and wallet already exists
+			if(keyringBackend === 'file' && publicAddress === null && walletAvailable === true)
+			{
+				errorMessage.value = '';
+				// Open the passphrase form
+				passphraseFormOpen.value = true;
+			}
+			else
+			{
+				// Finish the connection process
+				await finishConnection();
+			}
+			
 		}
-		
-		// Check if passphrase is needed
-		const keyringBackend = await NetworkService.getKeyringBackend();
-		const publicAddress = await refreshPublicAddress();
-		
-		// If passphrase is needed and wallet already exists
-		if(keyringBackend === 'file' && publicAddress === null && walletAvailable === true)
+		catch(e)
 		{
-			errorMessage.value = '';
-			// Open the passphrase form
-			passphraseFormOpen.value = true;
+			// Set the connecting message
+			errorMessage.value = t('loading.error-message') as string;
+			return;
 		}
-		else
-		{
-			// Finish the connection process
-			await finishConnection();
-		}
-		
 	}
 	else
 	{
@@ -335,7 +452,7 @@ const submitPassphrase = async () =>
 						<img src="@assets/images/casanode-logo.png" alt="Logo" />
 					</p>
 				</div>
-				<div v-if="!isLoading()" class="welcome">
+				<div v-if="!isLoading() && chooseConnectionMethodOpen === false" class="welcome">
 					<h2>{{ $t(deviceRef ? 'welcome.start-title-alt' : 'welcome.start-title') }}</h2>
 					<div v-if="deviceRef" class="start device">
 						<p class="close">
@@ -371,12 +488,41 @@ const submitPassphrase = async () =>
 						</p>
 					</div>
 				</div>
+				<div v-else-if="!isLoading() && chooseConnectionMethodOpen === true" class="welcome methods">
+					<h2 v-html="t('welcome.method-title')" />
+					<ion-grid>
+						<ion-row>
+							<ion-col size="6">
+								<ion-button expand="block" color="none" @click="connectBluetooth">
+									<div class="content">
+										<div class="button">
+											<ion-icon :icon="bluetoothOutline" />
+											<p class="name">{{ $t('welcome.method-ble-name') }}</p>
+										</div>
+										<p class="desc">{{ $t('welcome.method-ble-desc') }}</p>
+									</div>
+								</ion-button>
+							</ion-col>
+							<ion-col size="6">
+								<ion-button expand="block" color="none" @click="connectLocalNetwork">
+									<div class="content">
+											<div class="button">
+											<ion-icon :icon="wifiOutline" />
+											<p class="name">{{ $t('welcome.method-lan-name') }}</p>
+										</div>
+										<p class="desc">{{ $t('welcome.method-lan-desc') }}</p>
+									</div>
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</ion-grid>
+				</div>
 				<div v-else class="loading">
-					<div v-if="errorMessage.length === 0 && passphraseFormOpen === false" class="connecting">
+					<div v-if="errorMessage.length === 0 && passphraseFormOpen === false && chooseConnectionMethodOpen === false" class="connecting">
 						<p class="spinner"><ion-spinner name="crescent" /></p>
 						<p class="message">{{ connectingMessage }}</p>
 					</div>
-					<div v-else-if="errorMessage.length === 0 && passphraseFormOpen === true" class="passphrase">
+					<div v-else-if="errorMessage.length === 0 && passphraseFormOpen === true && chooseConnectionMethodOpen === false" class="passphrase">
 						<p v-if="passphraseErrorMessage.length > 0" class="error">{{ passphraseErrorMessage }}</p>
 						<p v-else class="message">{{ $t('loading.passphrase-message') }}</p>
 						<ion-item>
@@ -400,6 +546,13 @@ const submitPassphrase = async () =>
 					<p class="button">
 						<ion-button size="small" fill="clear" @click="openNewsLink">
 							{{ $t('welcome.news-button') }}
+						</ion-button>
+					</p>
+				</div>
+				<div v-else-if="chooseConnectionMethodOpen === true" class="footer">
+					<p class="button">
+						<ion-button size="small" fill="clear" @click="cancelConnection">
+							{{ $t('welcome.method-cancel') }}
 						</ion-button>
 					</p>
 				</div>
