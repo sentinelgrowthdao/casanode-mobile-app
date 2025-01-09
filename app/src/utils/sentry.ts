@@ -6,6 +6,7 @@ export function initSentry(app: VueApp, router: Router)
 {
 	// Retrieve the DSN from Vite environment variables
 	const dsn = import.meta.env.VITE_SENTRY_DSN
+	const environment = import.meta.env.MODE;
 	
 	// Small safeguard if the variable is not defined
 	if (!dsn)
@@ -24,6 +25,6 @@ export function initSentry(app: VueApp, router: Router)
 			}),
 		],
 		tracesSampleRate: 1.0,
-		environment: process.env.NODE_ENV || 'development',
+		environment: environment || 'development',
 	});
 }
