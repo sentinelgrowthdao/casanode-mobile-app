@@ -4,7 +4,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import App from './App.vue'
 import router from './router';
 import i18n from './locales';
-
+import { initSentry } from './utils/sentry';
 import { IonicVue } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
@@ -46,6 +46,9 @@ const app = createApp(App)
 	.use(pinia)
 	.use(i18n)
 	.use(router);
+
+// Initialize Sentry
+initSentry(app, router);
 
 router.isReady().then(() =>
 {
