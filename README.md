@@ -83,3 +83,7 @@ ionic capacitor open android
 - Click on the Run button (green play icon) to compile and launch the application on your selected device.
 
 Ensure that you have the necessary Android SDK and tools installed in Android Studio to successfully build and run the project.
+
+## License
+
+This project is licensed under the GPL v3 License - see the LICENSE file for details.
