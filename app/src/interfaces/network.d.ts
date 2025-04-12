@@ -84,6 +84,12 @@ export interface NetworkInstallConfiguration
 	certificate: boolean;
 }
 
+export interface NetworkPassphrase
+{
+	required: boolean;
+	available: boolean;
+}
+
 export interface NodeConfigResults
 {
 	[key: string]: boolean;
