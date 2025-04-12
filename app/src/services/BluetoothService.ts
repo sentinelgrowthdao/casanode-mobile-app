@@ -167,7 +167,8 @@ class BluetoothService
 				services: [BLE_UUID],
 			});
 			const device = await BleClient.requestDevice({
-				services: [BLE_UUID],
+				name: "Casanode",
+				optionalServices: [BLE_UUID],
 			});
 			console.log("Device found:", device);
 			
