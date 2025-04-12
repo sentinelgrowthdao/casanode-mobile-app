@@ -72,7 +72,7 @@ class NodeService
 			// Check if passphrase is available
 			const passphraseAvailable = await NetworkService.nodePassphrase();
 			// If passphrase is available
-			if (passphraseAvailable)
+			if (passphraseAvailable.available)
 			{
 				// Load node address, public address and balance
 				await refreshNodeAddress();

@@ -7,6 +7,7 @@ import {
 	type NetworkInstallationCheck,
 	type NetworkInstallConfiguration,
 	type NodeConfigResults,
+	type NetworkPassphrase,
 } from '@interfaces/network';
 import { type NodeBalance } from '@stores/NodeStore';
 
@@ -437,9 +438,17 @@ class NetworkService
 	 * Check if the node passphrase is available
 	 * @returns Promise<boolean>
 	 */
-	public async nodePassphrase(): Promise<boolean>
+	public async nodePassphrase(): Promise<NetworkPassphrase>
 	{
-		return this.useApi ? await ApiService.nodePassphrase() : BluetoothService.readNodePassphrase();
+		if(this.useApi)
+			return await ApiService.nodePassphrase();
+		
+		// Retrieve the passphrase status from the Bluetooth device
+		const data: string = await BluetoothService.readNodePassphrase();
+		return {
+			required: data[0] === '1',
+			available: data[1] === '1',
+		} as NetworkPassphrase;
 	}
 	
 	/**

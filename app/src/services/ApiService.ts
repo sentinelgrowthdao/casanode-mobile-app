@@ -12,6 +12,7 @@ import {
 	type NetworkInstallDocker,
 	type NetworkInstallConfiguration,
 	type NodeConfigResults,
+	type NetworkPassphrase,
 } from '@interfaces/network';
 
 export interface ApiInfos
@@ -451,11 +452,11 @@ class ApiService
 	 * Check if the node passphrase is available
 	 * @returns Promise<boolean>
 	 */
-	public async nodePassphrase(): Promise<boolean>
+	public async nodePassphrase(): Promise<NetworkPassphrase>
 	{
 		// Get the passphrase availability and return the result
-		const data = await this.getRequest("/node/passphrase");
-		return data.available ?? false;
+		const data: NetworkPassphrase = await this.getRequest("/node/passphrase");
+		return data;
 	}
 	
 	/**

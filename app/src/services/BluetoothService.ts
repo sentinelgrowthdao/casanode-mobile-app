@@ -821,22 +821,22 @@ class BluetoothService
 	/**
 	 * Read node passphrase from the BLE server.
 	 */
-	public async readNodePassphrase(): Promise<boolean>
+	public async readNodePassphrase(): Promise<string>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
 				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-passphrase'), {timeout: 30000});
-				return decodeDataView(value) === 'true';
+				return decodeDataView(value);
 			}
 		}
 		catch (error)
 		{
 			console.error('BLE error:', error);
 		}
-		
-		return false;
+		// enabled: false, available: false
+		return "00";
 	}
 	
 	/**
