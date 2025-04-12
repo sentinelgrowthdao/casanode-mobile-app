@@ -327,7 +327,7 @@ class NetworkService
 		}
 		else
 		{
-			const address = await BluetoothService.readPublicAddress();
+			const address = await BluetoothService.readWalletAddress();
 			return address ?? null;
 		}
 	}
