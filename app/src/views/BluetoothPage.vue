@@ -12,6 +12,10 @@ import { shieldHalf } from 'ionicons/icons';
 import { useNodeStore, type BandwidthSpeed } from '@stores/NodeStore';
 import NetworkService from '@/services/NetworkService';
 import {
+	type NetworkPassphrase,
+} from '@interfaces/network';
+import BluetoothService from '@/services/BluetoothService';
+import {
 	refreshNodeStatus,
 	refreshNodeBalance,
 	refreshNodeAddress,
@@ -82,6 +86,8 @@ const sendPassphrase = async () =>
 
 /**
  * Function to connect to the BLE device
+ * This method first utilizes NetworkService to properly initialize the connection,
+ * and then employs BluetoothService to perform a direct test of the connection.
  * @returns void
  */
 const connectToBLE = async () =>
@@ -99,48 +105,65 @@ const connectToBLE = async () =>
 	const defaultBluetoothSeed = "4580e70c-1dcc-4e46-bd59-33686502314a";
 	
 	// Connect to the BLE device
-	if(await BluetoothService.connect(defaultBluetoothSeed))
+	if(await NetworkService.connect('bluetooth', {seed: defaultBluetoothSeed}))
 	{
 		// Load the node status
 		const nodeStatus = await BluetoothService.readNodeStatus();
+		console.log(`Node status: ${nodeStatus}`);
 		// Load the node configuration
 		const moniker = await BluetoothService.readMoniker();
+		console.log(`Moniker: ${moniker}`);
 		const nodeType = await BluetoothService.readNodeType();
+		console.log(`Node Type: ${nodeType}`);
 		const nodeIp = await BluetoothService.readNodeIp();
+		console.log(`Node IP: ${nodeIp}`);
 		const nodePort = await BluetoothService.readNodePort();
+		console.log(`Node Port: ${nodePort}`);
 		const vpnType = await BluetoothService.readVpnType();
+		console.log(`VPN Type: ${vpnType}`);
 		const vpnPort = await BluetoothService.readVpnPort();
+		console.log(`VPN Port: ${vpnPort}`);
 		const maximumPeers = await BluetoothService.readMaximumPeers();
+		console.log(`Maximum Peers: ${maximumPeers}`);
 		const nodeLocation = await BluetoothService.readNodeLocation();
+		console.log(`Node Location: ${nodeLocation}`);
 		const certExpiry = await BluetoothService.readCertExpirity();
+		console.log(`Cert Expiry: ${certExpiry}`);
 		const onlineUsers = await BluetoothService.readOnlineUsers();
+		console.log(`Online Users: ${onlineUsers}`);
 		const bandwidthSpeed: BandwidthSpeed|null = await BluetoothService.readBandwidthSpeed();
+		console.log(`Bandwidth Speed: ${bandwidthSpeed?.upload} / ${bandwidthSpeed?.download}`);
 		const systemUptime = await BluetoothService.readSystemUptime();
+		console.log(`System Uptime: ${systemUptime}`);
 		const casanodeVersion = await BluetoothService.readCasanodeVersion();
+		console.log(`Casanode Version: ${casanodeVersion}`);
 		const dockerImage = await BluetoothService.readDockerImage();
+		console.log(`Docker Image: ${dockerImage}`);
 		const systemOs = await BluetoothService.readSystemOs();
+		console.log(`System OS: ${systemOs}`);
 		const systemArch = await BluetoothService.readSystemArch();
+		console.log(`System Arch: ${systemArch}`);
 		const systemKernel = await BluetoothService.readSystemKernel();
+		console.log(`System Kernel: ${systemKernel}`);
 		
 		// Get if passphrase is required/set
-		const passphraseAvailable = await NetworkService.nodePassphrase();
+		const passphraseData: string = await BluetoothService.readNodePassphrase();
+		const passphraseAvailable: NetworkPassphrase = {
+			required: passphraseData[0] === '1',
+			available: passphraseData[1] === '1',
+		} as NetworkPassphrase;
 		
-		// If all the passphrase is already available
-		if(passphraseAvailable)
+		// Check if passphrase is required
+		if (passphraseAvailable.required && !passphraseAvailable.available)
 		{
-			console.log('Passphrase is already available.');
-			// Close the passphrase form
-			passphraseFormOpen.value = false;
-			// Load the node informations
-			loadNodeInformations();
-			// Update the connected status
-			isConnected.value = true;
+			console.log('Passphrase is required.');
+			passphraseFormOpen.value = true;
 		}
 		else
 		{
-			console.log('Passphrase is required before loading the node informations.');
-			// Open the passphrase form
-			passphraseFormOpen.value = true;
+			console.log(passphraseAvailable.required ? 'Passphrase is already set.' : 'Passphrase is already available.');
+			loadNodeInformations();
+			isConnected.value = true;
 		}
 		
 		// Update the loading state
@@ -183,6 +206,7 @@ const disconnectFromBLE = async () =>
 	await BluetoothService.disconnect();
 	isConnected.value = BluetoothService.isConnected();
 	passphraseFormOpen.value = false;
+	nodeStore.resetStore();
 };
 
 // Define computed properties and methods for the node configuration
@@ -231,8 +255,6 @@ const sendMoniker = async () =>
 	{
 		monikerResponse.value = `Moniker set to: ${moniker.value}`;
 		monikerResponseClass.value = 'success';
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -252,8 +274,6 @@ const sendNodeType = async () =>
 		nodeTypeResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setNodeType(nodeType.value);
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -273,8 +293,6 @@ const sendNodeIp = async () =>
 		nodeIpResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setNodeIp(nodeIp.value);
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -294,8 +312,6 @@ const sendNodePort = async () =>
 		nodePortResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setNodePort(parseInt(nodePort.value.toString()));
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -315,8 +331,6 @@ const sendVpnType = async () =>
 		vpnTypeResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setVpnType(vpnType.value);
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -336,8 +350,6 @@ const sendVpnPort = async () =>
 		vpnPortResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setVpnPort(parseInt(vpnPort.value.toString()));
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -357,8 +369,6 @@ const sendMaximumPeers = async () =>
 		maximumPeersResponseClass.value = 'success';
 		// Update in the store
 		nodeStore.setMaximumPeers(maximumPeers.value);
-		// Increase the apply counter to notify user that the changes are not applied
-		nodeStore.increaseApplyCounter();
 	}
 	else
 	{
@@ -367,38 +377,38 @@ const sendMaximumPeers = async () =>
 	}
 };
 
-/** APPLY NODE CONFIG */
-const applyNodeConfig = async () =>
+const dockerInstallImage = async () =>
 {
-	if (isConnected.value && nodeStore.applyCounter > 0)
+	if(await BluetoothService.installDockerImage() === 2)
 	{
-		if(await BluetoothService.writeNodeConfig())
-		{
-			console.log('Node configuration applied successfully.');
-			// Reset the apply counter
-			nodeStore.resetApplyCounter();
-			// Remove input responses
-			monikerResponse.value = null;
-			nodeTypeResponse.value = null;
-			nodeIpResponse.value = null;
-			nodePortResponse.value = null;
-			vpnTypeResponse.value = null;
-			vpnPortResponse.value = null;
-			maximumPeersResponse.value = null;
-		}
-		else
-		{
-			console.error('Failed to apply node configuration.');
-		}
+		console.log('Docker image installed successfully.');
+	}
+	else
+	{
+		console.error('Failed to install Docker image.');
 	}
 };
 
-const sendMnemonic = async () =>
+const installConfigs = async () =>
+{
+	if(await BluetoothService.installConfigs() === '111')
+	{
+		console.log('Docker configs installed successfully.');
+	}
+	else
+	{
+		console.error('Failed to install Docker configs.');
+	}
+};
+
+const walletRestore = async () =>
 {
 	const mnemonic = 'winner note become voice inside number middle insect spy horror churn envelope island sweet hen happy knee interest flame soccer hospital uniform hood ice';
-	if(await BluetoothService.writeMnemonic(mnemonic))
+	if(await BluetoothService.writeWalletMnemonic(mnemonic))
 	{
 		console.log('Mnemonic sent to the BLE server.');
+		// Load the node informations
+		loadNodeInformations();
 	}
 	else
 	{
@@ -406,16 +416,45 @@ const sendMnemonic = async () =>
 	}
 };
 
-const readMnemonic = async () =>
+const walletCreate = async () =>
 {
-	const mnemonic = await BluetoothService.readMnemonic();
+	const mnemonic: string|null = await BluetoothService.readWalletMnemonic();
 	if(mnemonic)
 	{
-		console.log(`Mnemonic received from the BLE server: ${mnemonic}`);
+		console.log('Wallet created successfully.');
+		console.log(`Mnemonic: ${mnemonic}`);
+		// Load the node informations
+		loadNodeInformations();
 	}
 	else
 	{
-		console.error('Failed to read mnemonic from the BLE server.');
+		console.error('Failed to create wallet.');
+	}
+};
+
+const walletRemove = async () =>
+{
+	if (await BluetoothService.performWalletAction('remove'))
+	{
+		console.log('Wallet removed successfully.');
+		nodeStore.resetStore();
+	}
+	else 
+	{
+		console.error('Failed to remove wallet.');
+	}
+};
+
+const walletKeyringBackend = async () =>
+{
+	const keyringBackend = await BluetoothService.readKeyringBackend();
+	if(keyringBackend)
+	{
+		console.log(`Keyring backend: ${keyringBackend}`);
+	}
+	else
+	{
+		console.error('Failed to read keyring backend.');
 	}
 };
 
@@ -461,6 +500,45 @@ const removeNode = async () =>
 	else
 	{
 		console.error('Failed to remove the node.');
+	}
+};
+
+const nodeBalance = async () =>
+{
+	const balance = await BluetoothService.fetchNodeBalance();
+	if(balance)
+	{
+		console.log(`Wallet balance: ${balance}`);
+	}
+	else
+	{
+		console.error('Failed to read wallet balance.');
+	}
+};
+
+const nodeLocation = async () =>
+{
+	const location = await BluetoothService.readNodeLocation();
+	if(location)
+	{
+		console.log(`Node location: ${location}`);
+	}
+	else
+	{
+		console.error('Failed to read node location.');
+	}
+};
+
+const statusNode = async () => 
+{
+	const status = await BluetoothService.readNodeStatus();
+	if(status)
+	{
+		console.log(`Node status: ${status}`);
+	}
+	else
+	{
+		console.error('Failed to read node status.');
 	}
 };
 
@@ -521,7 +599,20 @@ const renewCertificate = async () =>
 	}
 };
 
-const checkPort = (portType: string) => async () =>
+const checkCertificateExpirity = async () =>
+{
+	const certExpirity = await BluetoothService.readCertExpirity();
+	if(certExpirity)
+	{
+		console.log(`Certificate expirity: ${certExpirity}`);
+	}
+	else
+	{
+		console.error('Failed to read certificate expirity.');
+	}
+};
+
+const checkPort = (portType: "node" | "vpn") => async () =>
 {
 	if(await BluetoothService.checkPort(portType) === 'open')
 	{
@@ -530,6 +621,110 @@ const checkPort = (portType: string) => async () =>
 	else
 	{
 		console.error(`Port ${portType} is closed.`);
+	}
+};
+
+const onlineUsers = async () =>
+{
+	const users = await BluetoothService.readOnlineUsers();
+	if(users !== null)
+	{
+		console.log(`Online users: ${users}`);
+	}
+	else
+	{
+		console.error('Failed to read online users.');
+	}
+};
+
+const bandwidthSpeed = async () =>
+{
+	const speed = await BluetoothService.readBandwidthSpeed();
+	if(speed)
+	{
+		console.log(`Bandwidth speed: ${speed.upload} / ${speed.download}`);
+	}
+	else
+	{
+		console.error('Failed to read bandwidth speed.');
+	}
+};
+
+const systemUptime = async () =>
+{
+	const uptime = await BluetoothService.readSystemUptime();
+	if(uptime)
+	{
+		console.log(`System uptime: ${uptime}`);
+	}
+	else
+	{
+		console.error('Failed to read system uptime.');
+	}
+};
+
+const systemOs = async () =>
+{
+	const os = await BluetoothService.readSystemOs();
+	if(os)
+	{
+		console.log(`System OS: ${os}`);
+	}
+	else
+	{
+		console.error('Failed to read system OS.');
+	}
+};
+
+const systemArch = async () =>
+{
+	const arch = await BluetoothService.readSystemArch();
+	if(arch)
+	{
+		console.log(`System Arch: ${arch}`);
+	}
+	else
+	{
+		console.error('Failed to read system arch.');
+	}
+};
+
+const systemKernel = async () =>
+{
+	const kernel = await BluetoothService.readSystemKernel();
+	if(kernel)
+	{
+		console.log(`System Kernel: ${kernel}`);
+	}
+	else
+	{
+		console.error('Failed to read system kernel.');
+	}
+};
+
+const casanodeVersion = async () =>
+{
+	const version = await BluetoothService.readCasanodeVersion();
+	if(version)
+	{
+		console.log(`Casanode version: ${version}`);
+	}
+	else
+	{
+		console.error('Failed to read casanode version.');
+	}
+};
+
+const checkInstallation = async () =>
+{
+	const installation = await BluetoothService.readCheckInstallation();
+	if(installation)
+	{
+		console.log(`Installation status: ${installation}`);
+	}
+	else
+	{
+		console.error('Failed to check installation status.');
 	}
 };
 
@@ -546,9 +741,6 @@ const checkPort = (portType: string) => async () =>
 						<ion-icon :icon="shieldHalf" />
 					</ion-button>
 				</ion-buttons>
-				<ion-buttons slot="end">
-					<ion-button @click="applyNodeConfig" :disabled="!isConnected || nodeStore.applyCounter === 0">Apply ({{ nodeStore.applyCounter }})</ion-button>
-				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
@@ -557,63 +749,189 @@ const checkPort = (portType: string) => async () =>
 				Connect
 			</ion-button>
 			<ion-button @click="disconnectFromBLE" :disabled="!isConnected && !passphraseFormOpen">Disconnect</ion-button>
-			<!-- <ion-button @click="sendHelloMessage" :disabled="!isConnected">Send Message</ion-button>
-			<ion-button @click="readFromServer" :disabled="!isConnected">Read from Server</ion-button>
-			<ion-button @click="subscribeToServer" :disabled="!isConnected">Subscribe to Server</ion-button> -->
-			<!-- <ion-list>
-				<ion-item v-for="msg in messages" :key="msg.time">
-					{{ msg.text }}
-				</ion-item>
-			</ion-list> -->
 			<ion-grid>
+				<ion-row v-if="isConnected">
+					<h1>Informations</h1>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item v-if="nodeStore.publicAddress">
+							<ion-label>Public Address: {{ nodeStore.publicAddress }}</ion-label>
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-item v-if="nodeStore.nodeAddress">
+							<ion-label>Node Address: {{ nodeStore.nodeAddress }}</ion-label>
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-item v-if="nodeStore.publicAddress">
+							<ion-label>Balance: {{ nodeStore.nodeBalance.amount }} {{ nodeStore.nodeBalance.denom }}</ion-label>
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-item v-if="nodeStore.publicAddress">
+							<ion-label>Status: {{ nodeStore.status }}</ion-label>
+						</ion-item>
+					</ion-col>
+				</ion-row>
+				<ion-row v-if="isConnected">
+					<h1>Actions</h1>
+				</ion-row>
 				<ion-row v-if="isConnected">
 					<ion-col size="12">
 						<ion-label>
-							<h2>Wallet Mnemonic</h2>
+							<h2>Docker</h2>
 						</ion-label>
-						<ion-item>
-							<ion-button @click="sendMnemonic">Send Mnemonic</ion-button>
-							<ion-button @click="readMnemonic">Read Mnemonic</ion-button>
-						</ion-item>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<loading-button label="Install Image" :callback="dockerInstallImage" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Install Config" :callback="installConfigs" />
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+					</ion-col>
+					<ion-col size="12">
+						<ion-label>
+							<h2>Wallet</h2>
+						</ion-label>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<loading-button label="Restore" :callback="walletRestore" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Create" :callback="walletCreate" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Remove" :callback="walletRemove" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Keyring Backend" :callback="walletKeyringBackend" />
+								</ion-col>
+							</ion-row>
+						</ion-grid>
 					</ion-col>
 					<ion-col size="12">
 						<ion-label>
 							<h2>Node Actions</h2>
 						</ion-label>
-						<ion-item>
-							<loading-button label="Start" :callback="startNode" />
-							<loading-button label="Stop" :callback="stopNode" />
-							<loading-button label="Restart" :callback="restartNode" />
-							<loading-button label="Remove" :callback="removeNode" />
-						</ion-item>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<loading-button label="Start" :callback="startNode" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Stop" :callback="stopNode" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Restart" :callback="restartNode" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Remove" :callback="removeNode" />
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col size="3">
+									<ion-button expand="block" @click="statusNode">Status</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Balance" :callback="nodeBalance" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Location" :callback="nodeLocation" />
+								</ion-col>
+							</ion-row>
+						</ion-grid>
 					</ion-col>
 					<ion-col size="12">
 						<ion-label>
 							<h2>System Actions</h2>
 						</ion-label>
-						<ion-item>
-							<loading-button label="Update" :callback="updateSystem" />
-							<loading-button label="Reset" :callback="resetSystem" />
-							<loading-button label="Reboot" :callback="rebootSystem" />
-							<loading-button label="Shutdown" :callback="shutdownSystem" />
-						</ion-item>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<loading-button label="Update" :callback="updateSystem" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Reset" :callback="resetSystem" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Reboot" :callback="rebootSystem" />
+								</ion-col>
+								<ion-col size="3">
+									<loading-button label="Shutdown" :callback="shutdownSystem" />
+								</ion-col>
+							</ion-row>
+						</ion-grid>
 					</ion-col>
 					<ion-col size="12">
 						<ion-label>
 							<h2>Certificate Actions</h2>
 						</ion-label>
-						<ion-item>
-							<loading-button label="Renew Certificate" :callback="renewCertificate" />
-						</ion-item>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<ion-button expand="block" @click="renewCertificate">Renew Certificate</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="checkCertificateExpirity">Check Certificate Expirity</ion-button>
+								</ion-col>
+							</ion-row>
+						</ion-grid>
 					</ion-col>
 					<ion-col size="12">
 						<ion-label>
 							<h2>Check Ports</h2>
 						</ion-label>
-						<ion-item>
-							<loading-button label="Node" :callback="checkPort('node')" />
-							<loading-button label="VPN" :callback="checkPort('vpn')" />
-						</ion-item>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<ion-button expand="block" @click="checkPort('node')">Node</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="checkPort('vpn')">VPN</ion-button>
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+					</ion-col>
+					<ion-col size="12">
+						<ion-label>
+							<h2>Informations</h2>
+						</ion-label>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="3">
+									<ion-button expand="block" @click="onlineUsers">Online Users</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="bandwidthSpeed">Bandwidth Speed</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="systemUptime">System Uptime</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="systemOs">System OS</ion-button>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col size="3">
+									<ion-button expand="block" @click="systemArch">System Arch</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="systemKernel">System Kernel</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="casanodeVersion">Casanode Version</ion-button>
+								</ion-col>
+								<ion-col size="3">
+									<ion-button expand="block" @click="checkInstallation">Check Installation</ion-button>
+								</ion-col>
+							</ion-row>
+						</ion-grid>
 					</ion-col>
 				</ion-row>
 				
@@ -625,7 +943,7 @@ const checkPort = (portType: string) => async () =>
 						</ion-item>
 						<div class="input-line">
 							<p class="button">
-								<ion-button @click="sendPassphrase" :disabled="passphraseInputValue.length === 0">
+								<ion-button @click="sendPassphrase" :disabled="passphraseInputValue.length < 8">
 									<ion-spinner name="crescent" v-if="isPassphraseLoading && !isConnected" />
 									Send Passphrase
 								</ion-button>
@@ -638,7 +956,7 @@ const checkPort = (portType: string) => async () =>
 					<h1>Configuration</h1>
 				</ion-row>
 				<ion-row v-if="isConnected">
-					<ion-col size="12">
+					<ion-col size="6">
 						<ion-item>
 						<ion-label position="stacked">Node Moniker</ion-label>
 						<ion-input v-model="moniker" placeholder="Enter Moniker" :disabled="!isConnected" />
@@ -648,9 +966,7 @@ const checkPort = (portType: string) => async () =>
 							<p :class="['label', 'ion-padding', monikerResponseClass]">{{ monikerResponse }}</p>
 						</div>
 					</ion-col>
-				</ion-row>
-				<ion-row v-if="isConnected">
-					<ion-col size="12">
+					<ion-col size="6">
 						<ion-item>
 							<ion-label position="stacked">Node Type</ion-label>
 						<ion-select v-model="nodeType" :disabled="!isConnected">
@@ -665,7 +981,7 @@ const checkPort = (portType: string) => async () =>
 					</ion-col>
 				</ion-row>
 				<ion-row v-if="isConnected">
-					<ion-col size="12">
+					<ion-col size="6">
 						<ion-item>
 							<ion-label position="stacked">IP Address</ion-label>
 							<ion-input v-model="nodeIp" placeholder="Enter IP Address" :disabled="!isConnected" />
@@ -675,9 +991,7 @@ const checkPort = (portType: string) => async () =>
 							<p :class="['label', 'ion-padding', nodeIpResponseClass]">{{ nodeIpResponse }}</p>
 						</div>
 					</ion-col>
-				</ion-row>
-				<ion-row v-if="isConnected">
-					<ion-col size="12">
+					<ion-col size="6">
 						<ion-item>
 							<ion-label position="stacked">Node Port</ion-label>
 							<ion-input v-model="nodePort" type="number" placeholder="Enter Node Port" :disabled="!isConnected" />
@@ -689,7 +1003,7 @@ const checkPort = (portType: string) => async () =>
 					</ion-col>
 				</ion-row>
 				<ion-row v-if="isConnected">
-					<ion-col size="12">
+					<ion-col size="6">
 						<ion-item>
 							<ion-label position="stacked">VPN Type</ion-label>
 							<ion-select v-model="vpnType" :disabled="!isConnected">
@@ -702,9 +1016,7 @@ const checkPort = (portType: string) => async () =>
 							<p :class="['label', 'ion-padding', vpnTypeResponseClass]">{{ vpnTypeResponse }}</p>
 						</div>
 					</ion-col>
-				</ion-row>
-				<ion-row v-if="isConnected">
-					<ion-col size="12">
+					<ion-col size="6">
 						<ion-item>
 							<ion-label position="stacked">VPN Port</ion-label>
 							<ion-input v-model="vpnPort" type="number" placeholder="Enter VPN Port" :disabled="!isConnected" />
