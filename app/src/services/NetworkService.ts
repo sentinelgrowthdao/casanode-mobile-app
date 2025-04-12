@@ -609,7 +609,7 @@ class NetworkService
 		else
 		{
 			// Write mnemonic to the Bluetooth device and restore the wallet
-			return await BluetoothService.writeMnemonic(mnemonic) && await BluetoothService.performWalletAction('restore')
+			return await BluetoothService.writeWalletMnemonic(mnemonic);
 		}
 	}
 	

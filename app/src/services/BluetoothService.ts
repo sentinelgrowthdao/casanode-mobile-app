@@ -1511,7 +1511,7 @@ class BluetoothService
 	 * @param data string
 	 * @returns Promise<boolean>
 	 */
-	public async writeMnemonic(data: string): Promise<boolean>
+	public async writeWalletMnemonic(data: string): Promise<boolean>
 	{
 		try
 		{
@@ -1526,14 +1526,14 @@ class BluetoothService
 				// Send the length of the data first
 				const lengthBuffer = Buffer.alloc(4);
 				lengthBuffer.writeUInt32LE(dataBuffer.length, 0);
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), new DataView(lengthBuffer.buffer), {timeout: 30000});
+				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('wallet-mnemonic'), new DataView(lengthBuffer.buffer), {timeout: 30000});
 				
 				// Send the data in chunks
 				const chunks = this.splitIntoChunks(dataBuffer, 20);
 				for (const chunk of chunks)
 				{
 					// console.log(`Sending chunk: ${chunk.toString('utf-8')} (${chunk.length} bytes)`)
-					await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), new DataView(chunk.buffer), {timeout: 30000});
+					await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('wallet-mnemonic'), new DataView(chunk.buffer), {timeout: 30000});
 				}
 				
 				// Return true if the mnemonic was sent successfully
