@@ -3,8 +3,8 @@ import { ref, computed } from 'vue';
 import {
 	IonButton, IonContent, IonHeader,
 	IonItem, IonPage, IonIcon,
-	IonTitle, IonToolbar,
-	IonInput, IonSelect,
+	IonTitle, IonToolbar, IonButtons,
+	IonInput, IonSelect, IonSelectOption,
 	IonSpinner, IonLabel,
 	IonGrid, IonCol, IonRow,
 } from '@ionic/vue';
