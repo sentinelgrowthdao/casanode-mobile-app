@@ -512,27 +512,6 @@ class BluetoothService
 	}
 	
 	/**
-	 * Change VPN configuration file and delete unnecessary one.
-	 * @returns Promise<number|null>
-	 */
-	public async readChangeVpnType(): Promise<number|null>
-	{
-		try
-		{
-			if(this.deviceId)
-			{
-				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('vpn-change-type'), {timeout: 30000});
-				return parseInt(decodeDataView(value));
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
-		return null;
-	}
-	
-	/**
 	 * Read VPN port from the BLE server.
 	 * @returns Promise<number|null>
 	 */
@@ -608,28 +587,6 @@ class BluetoothService
 			if(this.deviceId)
 			{
 				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('max-peers'), encodeDataView(data), {timeout: 30000});
-				return true;
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
-		return false;
-	}
-	
-	/**
-	 * Send apply node config to the BLE server.
-	 * @returns Promise<boolean>
-	 */
-	public async writeNodeConfig(): Promise<boolean>
-	{
-		try
-		{
-			if(this.deviceId)
-			{
-				const data: string = 'apply';
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-config'), encodeDataView(data), {timeout: 30000});
 				return true;
 			}
 		}
