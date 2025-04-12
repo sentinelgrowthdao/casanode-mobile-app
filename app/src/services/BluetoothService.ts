@@ -862,16 +862,16 @@ class BluetoothService
 	}
 	
 	/**
-	 * Read public address from the BLE server.
+	 * Read wallet address from the BLE server.
 	 * @returns Promise<string|null>
 	 */
-	public async readPublicAddress(): Promise<string|null>
+	public async readWalletAddress(): Promise<string|null>
 	{
 		try
 		{
 			if(this.deviceId)
 			{
-				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('public-address'), {timeout: 30000});
+				const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('wallet-address'), {timeout: 30000});
 				return decodeDataView(value);
 			}
 		}
