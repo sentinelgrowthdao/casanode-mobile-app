@@ -1457,54 +1457,81 @@ class BluetoothService
 	
 	
 	/**
-	 * Read mnemonic from the BLE server.
-	 * @returns Promise<string | null>
+	 * Create a wallet and return the mnemonic.
+	 * The process is as follows:
+	 *  1. Read the first 4 bytes to get the total length (in bytes) of the mnemonic data.
+	 *  2. Read successive chunks until the accumulated length equals the expected total length.
+	 *  3. Convert the received data to a string, split it into the mnemonic and the hash, and verify integrity.
+	 *  4. Return the mnemonic if the hash matches; otherwise, return null.
+	 *
+	 * @returns Promise<string | null> The wallet mnemonic or null in case of an error.
 	 */
-	public async readMnemonic(): Promise<string | null>
+	public async readWalletMnemonic(): Promise<string | null> 
 	{
-		try
+		try 
 		{
-			if (this.deviceId)
+			if (!this.deviceId) 
 			{
-				// Read the length of the data first
-				const lengthBuffer = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), {timeout: 30000});
-				const length = lengthBuffer.getUint32(0, true);
-				let dataBuffer = Buffer.alloc(0);
-				
-				do
-				{
-					// Read the next chunk
-					const chunk = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-mnemonic'), {timeout: 30000});
-					// console.log(`Received chunk: ${chunk.buffer.toString()} (${chunk.buffer.length} bytes)`);
-					dataBuffer = Buffer.concat([dataBuffer, Buffer.from(chunk.buffer)]);
-				}
-				while(dataBuffer.toString('utf-8').length < length)
-				
-				// Process the received data
-				const receivedStr = dataBuffer.toString('utf-8');
-				const parts = receivedStr.split(' ');
-				const hash = parts.pop();
-				const mnemonic = parts.join(' ');
-				
-				const calculatedHash = cryptoJs.SHA256(mnemonic).toString();
-				if (calculatedHash === hash)
-				{
-					return mnemonic;
-				}
-				else
-				{
-					console.error('Hash mismatch for received mnemonic');
-					return null;
-				}
+				console.error('No device id available');
+				return null;
+			}
+			
+			// Step 1: Read the initial 4 bytes which represent the total data length (little-endian)
+			const lengthBuffer = await BleClient.read(
+				this.deviceId,
+				BLE_UUID,
+				this.generateUUIDFromSeed('wallet-mnemonic'),
+				{ timeout: 30000 }
+			);
+			const expectedLength = lengthBuffer.getUint32(0, true);
+			
+			// Step 2: Accumulate data chunks until the total received length matches the expected length
+			let dataBuffer = Buffer.alloc(0);
+			while (dataBuffer.length < expectedLength) 
+			{
+				const chunkView = await BleClient.read(
+				this.deviceId,
+				BLE_UUID,
+				this.generateUUIDFromSeed('wallet-mnemonic'), { timeout: 30000 });
+				const chunkBuffer = Buffer.from(chunkView.buffer);
+				dataBuffer = Buffer.concat([dataBuffer, chunkBuffer]);
+			}
+			
+			// Convert the complete data to a UTF-8 string
+			const receivedStr = dataBuffer.toString('utf-8');
+			
+			// Step 3: If the received string is "error", log and return null
+			if (receivedStr === 'error') 
+			{
+				console.error('Received error from BLE characteristic');
+				return null;
+			}
+			
+			// The expected format is "<mnemonic> <hash>"
+			// Split the string into parts and separate the hash from the mnemonic
+			const parts = receivedStr.split(' ');
+			const receivedHash = parts.pop() as string;
+			const mnemonic = parts.join(' ');
+			
+			// Step 4: Verify the mnemonic's integrity by comparing the SHA256 hash
+			const calculatedHash = cryptoJs.SHA256(mnemonic).toString();
+			if (calculatedHash === receivedHash) 
+			{
+				return mnemonic;
+			}
+			else
+			{
+				console.error('Hash mismatch for received mnemonic');
+				return null;
 			}
 		}
-		catch (error)
+		catch (error) 
 		{
 			console.error('BLE error:', error);
+			return null;
 		}
-		
-		return null;
 	}
+	
 	
 	/**
 	 * Send mnemonic to the BLE server.
