@@ -1557,7 +1557,7 @@ class BluetoothService
 	public async performWalletAction(action: string): Promise<boolean>
 	{
 		// Check if the action is valid
-		if(action !== 'create' && action !== 'restore' && action !== 'remove')
+		if(action !== 'remove')
 			return false;
 		
 		try
