@@ -291,16 +291,6 @@ class NetworkService
 			if(configData.maximumPeers)
 				results['maximumPeers'] = await BluetoothService.writeMaximumPeers(configData.maximumPeers);
 			
-			// Apply the configuration
-			await BluetoothService.writeNodeConfig();
-			
-			// If vpnType changed
-			if(typeof(results['vpnType']) !== 'undefined' && results['vpnType'])
-			{
-				// Apply the VPN configuration
-				await BluetoothService.readChangeVpnType();
-			}
-			
 			// Return the results
 			return results;
 		}
