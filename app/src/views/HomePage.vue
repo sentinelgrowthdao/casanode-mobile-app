@@ -16,7 +16,6 @@ import { Browser } from '@capacitor/browser';
 import ConnectHelpModal from '@components/ConnectHelpModal.vue';
 import { installScannerModule, type QRData, scanQrcode } from '@/utils/scan';
 import { toggleKeepAwake } from '@/utils/awake';
-import { refreshPublicAddress } from '@/utils/node';
 import { useDeviceStore, type DeviceEntry } from '@stores/DeviceStore';
 import NetworkService from '@/services/NetworkService';
 import NodeService from '@/services/NodeService';
@@ -341,12 +340,10 @@ const connectionToNode = async () =>
 				}
 			}
 			
-			// Check if passphrase is needed
-			const keyringBackend = await NetworkService.getKeyringBackend();
-			const publicAddress = await refreshPublicAddress();
-			
+			// Get the node passphrase status
+			const nodePassphrase = await NetworkService.nodePassphrase();
 			// If passphrase is needed and wallet already exists
-			if(keyringBackend === 'file' && publicAddress === null && walletAvailable === true)
+			if (nodePassphrase.required && !nodePassphrase.available && walletAvailable === true)
 			{
 				errorMessage.value = '';
 				// Open the passphrase form
