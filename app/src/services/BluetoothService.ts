@@ -212,6 +212,8 @@ class BluetoothService
 					'node-balance',
 					'system-actions',
 					'certificate-actions',
+					'check-port',
+				])
 				{
 					const uuid = this.generateUUIDFromSeed(charId);
 					await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid).catch(() => {});
@@ -1551,57 +1553,39 @@ class BluetoothService
 	 */
 	public async checkPort(portType: 'node' | 'vpn'): Promise<string | null>
 	{
-		try
-		{
-			if (this.deviceId)
-			{
-				// Start the port check process by writing to the characteristic
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('check-port'), encodeDataView(portType), {timeout: 30000});
-				
-				let status = '0';
-				// Check the certificate status every 500ms
-				const interval = 500;
-				// 2 minutes timeout
-				const timeout = 120000;
-				const startTime = Date.now();
-				
-				// While NOT_STARTED or IN_PROGRESS
-				while (status === '0' || status === '1')
-				{
-					if ((Date.now() - startTime) > timeout)
-					{
-						console.error('Port check timed out.');
-						return null;
-					}
-					
-					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('check-port'), {timeout: 30000});
-					status = decodeDataView(value);
-					
-					// Check if the status indicates an error
-					if (status === '-1')
-					{
-						console.error('Port check failed.');
-						return 'closed';
-					}
-					
-					// Wait before checking again
-					await this.delay(interval);
-				}
-				
-				// Return the result based on the final status
-				if (status === '2')
-					return 'open';
-				else if (status === '3')
-					return 'closed';
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
+		if (!this.deviceId)
+			return null;
+			
+		const charId = 'check-port';
+		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		return null;
+		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView(portType), { timeout: 30000 });
+		
+		try 
+		{
+			// wait for a notification that is '2' (open), '3' (closed) or '-1' (error)
+			const result = await this.waitForNotification(
+				charId,
+				s => s === '2' || s === '3' || s === '-1',
+				120000
+			);
+			if (result === '2')
+				return 'open';
+			if (result === '3')
+				return 'closed';
+			
+			return null;
+		}
+		catch
+		{
+			console.error('Port check timed out');
+			return null;
+		}
+		finally
+		{
+			await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid);
+		}
 	}
 	
 	
