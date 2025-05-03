@@ -6,6 +6,7 @@
 	"status-uninstalled": "Uninstalled",
 	"status-stopped": "Stopped",
 	"status-running": "Running",
+	"status-error": "Error",
 
 	"node-title": "Node Information",
 	"node-address": "IP Address:",
