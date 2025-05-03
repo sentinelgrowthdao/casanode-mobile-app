@@ -919,8 +919,8 @@ class BluetoothService
 				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-balance'), encodeDataView('udvpn'), {timeout: 30000});
 				
 				let status = 0;
-				// Check the balance status every 5 seconds
-				const interval = 5000;
+				// Check the certificate status every 500ms
+				const interval = 500;
 				// Timeout after 3 minutes
 				const timeout = 180000;
 				const startTime = Date.now();
@@ -1203,8 +1203,8 @@ class BluetoothService
 				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('update-system'), {timeout: 30000});
 				
 				let status = '0';
-				// Check the update status every 5 seconds
-				const interval = 5000;
+				// Check the certificate status every 500ms
+				const interval = 500;
 				// Timeout after 5 minutes
 				const timeout = 300000; 
 				const startTime = Date.now();
@@ -1262,8 +1262,8 @@ class BluetoothService
 				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('update-sentinel'), {timeout: 30000});
 				
 				let status = '0';
-				// Check the update status every 5 seconds
-				const interval = 5000;
+				// Check the certificate status every 500ms
+				const interval = 500;
 				// Timeout after 2 minutes
 				const timeout = 120000;
 				const startTime = Date.now();
@@ -1390,8 +1390,8 @@ class BluetoothService
 				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('certificate-actions'), encodeDataView('renew'), {timeout: 30000});
 				
 				let status = '0';
-				// Check the certificate status every 5 seconds
-				const interval = 5000;
+				// Check the certificate status every 500ms
+				const interval = 500;
 				// Timeout after 3 minutes
 				const timeout = 180000;
 				const startTime = Date.now();
@@ -1660,7 +1660,8 @@ class BluetoothService
 				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('check-port'), encodeDataView(portType), {timeout: 30000});
 				
 				let status = '0';
-				const interval = 5000;
+				// Check the certificate status every 500ms
+				const interval = 500;
 				// 2 minutes timeout
 				const timeout = 120000;
 				const startTime = Date.now();
