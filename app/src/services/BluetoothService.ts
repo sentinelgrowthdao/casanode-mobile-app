@@ -206,6 +206,8 @@ class BluetoothService
 			// Check if the device is connected
 			if(this.deviceId)
 			{
+				for (const charId of [
+					'install-configs',
 					'install-docker-image',
 					'node-balance',
 					'system-actions',
