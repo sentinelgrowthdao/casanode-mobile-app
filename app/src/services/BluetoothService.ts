@@ -967,64 +967,29 @@ class BluetoothService
 	 * Start fetching the node balance from the BLE server and wait until it's ready.
 	 * @returns Promise<string|null>
 	 */
-	public async fetchNodeBalance(): Promise<string|null>
+	public async fetchNodeBalance(): Promise<string|null> 
 	{
+		if (!this.deviceId)
+			return null;
+		
+		const charId = 'node-balance';
+		const uuid = this.generateUUIDFromSeed(charId);
+		
+		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('udvpn'));
 		try
 		{
-			if (this.deviceId)
-			{
-				// Start the balance fetching process by writing a command to the characteristic
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-balance'), encodeDataView('udvpn'), {timeout: 30000});
-				
-				let status = 0;
-				// Check the certificate status every 500ms
-				const interval = 500;
-				// Timeout after 3 minutes
-				const timeout = 180000;
-				const startTime = Date.now();
-				
-				while (status !== -1 && (Date.now() - startTime) < timeout)
-				{
-					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('node-balance'), {timeout: 30000});
-					const valueString = decodeDataView(value);
-					
-					// Regex to match a string that starts with a number followed by a space and a currency code
-					const balanceRegex = /^(\d+(\.\d+)?)\s([A-Za-z]+)$/;
-					
-					// Check if the result is a valid balance format
-					const match = valueString.match(balanceRegex);
-					if (match)
-					{
-						return valueString;
-					}
-					else
-					{
-						// If the result is a status code (0, 1, -1)
-						status = parseInt(valueString);
-						
-						// Error fetching balance
-						if (status === -1)
-						{
-							console.error('Balance fetch failed.');
-							return null;
-						}
-					}
-					
-					// Wait before checking again
-					await this.delay(interval);
-				}
-				
-				// If the timeout is reached
-				console.error('Balance fetch timed out.');
-				return null;
-			}
+			const result = await this.waitForNotification(
+				charId,
+				s => /^-1$/.test(s) || /^\d+(\.\d+)?\s[A-Za-z]+$/.test(s)
+			);
+			return result === '-1' ? null : result;
 		}
-		catch (error)
+		catch
 		{
-			console.error('BLE error:', error);
+			console.error('Balance fetch timed out');
+			return null;
 		}
-		
-		return null;
 	}
 	
 	/**
