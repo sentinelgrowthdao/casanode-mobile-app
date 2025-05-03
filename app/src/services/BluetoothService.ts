@@ -1,4 +1,5 @@
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import type { Callback } from '@capacitor-community/bluetooth-le';
 import { Geolocation } from '@capacitor/geolocation';
 import { Capacitor } from '@capacitor/core';
 import { Buffer } from 'buffer';
@@ -176,6 +177,9 @@ class BluetoothService
 			await BleClient.connect(device.deviceId);
 			console.log("Connected to device");
 			
+			await BleClient.getServices(device.deviceId);
+			console.log("GATT services discovered");
+			
 			this.deviceId = device.deviceId;
 			this.connected = true;
 			console.log('Connected to the BLE device!');
@@ -202,6 +206,11 @@ class BluetoothService
 			// Check if the device is connected
 			if(this.deviceId)
 			{
+				for (const charId of ['install-configs', 'install-docker-image'])
+				{
+					const uuid = this.generateUUIDFromSeed(charId);
+					await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid).catch(() => {});
+				}
 				// Disconnect from the BLE server
 				await BleClient.disconnect(this.deviceId);
 				this.deviceId = null;
@@ -213,6 +222,55 @@ class BluetoothService
 		{
 			console.error('BLE error:', error);
 		}
+	}
+	
+	/**
+	 * Delay function to wait for a specified time.
+	 * @param charId 
+	 * @param isDone 
+	 * @param timeout 
+	 * @returns 
+	 */
+	private async waitForNotification(
+		charId: string,
+		isDone: (s: string) => boolean,
+		timeout = 180000
+	): Promise<string> 
+	{
+		if (!this.deviceId)
+			throw new Error('No device');
+		
+		const uuid = this.generateUUIDFromSeed(charId);
+		
+		return new Promise<string>(async (resolve, reject) => 
+		{
+			const timer = setTimeout(async () => 
+			{
+				await BleClient.stopNotifications(this.deviceId!, BLE_UUID, uuid).catch(() => {});
+				reject(new Error('timeout'));
+			}, timeout);
+			
+			const callback: Callback = (value: any) => 
+			{
+				const status = decodeDataView(value);
+				if (isDone(status)) 
+				{
+					clearTimeout(timer);
+					BleClient.stopNotifications(this.deviceId!, BLE_UUID, uuid).catch(() => {});
+					resolve(status);
+				}
+			};
+			
+			try 
+			{
+				await BleClient.startNotifications(this.deviceId!, BLE_UUID, uuid, callback);
+			}
+			catch (err) 
+			{
+				clearTimeout(timer);
+				reject(err);
+			}
+		});
 	}
 	
 	/**
@@ -995,110 +1053,48 @@ class BluetoothService
 	 * Start the installation of the Docker image and check the status.
 	 * @returns Promise<number>
 	 */
-	public async installDockerImage(): Promise<number>
+	public async installDockerImage(): Promise<number> 
 	{
-		try
-		{
-			if (this.deviceId)
-			{
-				// Start the installation by writing to the characteristic
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-docker-image'), encodeDataView('install'), {timeout: 30000});
-				
-				let status = 0;
-				// Check the installation status every 5 seconds
-				const interval = 5000;
-				// Timeout after 5 minutes
-				const timeout = 300000;
-				const startTime = Date.now();
-				
-				// Wait for the installation to complete
-				while (status !== 2 && status !== -1 && (Date.now() - startTime) < timeout)
-				{
-					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-docker-image'));
-					// Parse the status
-					status = parseInt(decodeDataView(value));
-					// If the installation is successful
-					if (status === 2)
-						return 1;
-					// If the installation failed
-					else if (status === -1)
-						return -1;
-					
-					// Wait for the next check
-					await this.delay(interval);
-				}
-				
-				// If the installation timed out
-				if (status !== 2 && status !== -1)
-				{
-					return -1;
-				}
-				
-				return status;
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
+		if (!this.deviceId)
+			return -1;
 		
-		return -1;
+		const charId = 'install-docker-image';
+		const uuid   = this.generateUUIDFromSeed(charId);
+		
+		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('install'), { timeout: 30000 });
+		
+		const result = await this.waitForNotification(
+			charId,
+			s => s === '2' || s === '-1',
+			300000
+		);
+		
+		return result === '2' ? 1 : -1;
 	}
 	
 	/**
 	 * Send create config files to the BLE server and wait for completion.
 	 * @returns Promise<string>
 	 */
-	public async installConfigs(): Promise<string>
+	public async installConfigs(): Promise<string> 
 	{
-		try
-		{
-			if (this.deviceId)
-			{
-				// Start the configuration installation process by writing to the characteristic
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-configs'), encodeDataView('create'), {timeout: 30000});
-				
-				let status = '0';
-				// Check the configuration status every 5 seconds
-				const interval = 5000;
-				// Timeout after 3 minutes
-				const timeout = 180000;
-				const startTime = Date.now();
-				
-				while (status === '0' || status === '1')
-				{
-					if ((Date.now() - startTime) > timeout)
-					{
-						console.error('Configuration installation timed out.');
-						return '000';
-					}
-					
-					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('install-configs'), {timeout: 30000});
-					status = decodeDataView(value);
-					
-					// Check if the status indicates an error
-					if (status === '-1')
-					{
-						console.error('Configuration installation failed.');
-						return '000';
-					}
-					
-					// Wait before checking again
-					await this.delay(interval);
-				}
-				
-				// Return the final status after the process is complete
-				return status;
-			}
-		}
-		catch (error)
-		{
-			console.error('BLE error:', error);
-		}
+		if (!this.deviceId)
+			return '000';
+
+		const charId = 'install-configs';
+		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		return '000';
+		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('create'), { timeout: 30000 });
+		
+		const result = await this.waitForNotification(
+			charId,
+			s => s !== '0' && s !== '1',
+			180000
+		);
+		
+		return result === '-1' ? '000' : result;
 	}
 	
 	/**
