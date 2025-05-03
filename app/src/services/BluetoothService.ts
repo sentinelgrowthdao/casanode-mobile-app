@@ -1191,57 +1191,34 @@ class BluetoothService
 	 */
 	public async updateSystem(): Promise<boolean>
 	{
+		const charId = 'system-actions';
+		const uuid   = this.generateUUIDFromSeed(charId);
+		
+		if (!this.deviceId)
+			return false;
+		
+		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('update-system'), {timeout: 30000});
+		
+		// wait for either '2' or '-1'
 		try
 		{
-			if (this.deviceId)
-			{
-				// Start the system update process by writing to the characteristic
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('update-system'), {timeout: 30000});
-				
-				let status = '0';
-				// Check the certificate status every 500ms
-				const interval = 500;
-				// Timeout after 5 minutes
-				const timeout = 300000; 
-				const startTime = Date.now();
-				
-				while (status === '0' || status === '1')
-				{
-					if ((Date.now() - startTime) > timeout)
-					{
-						console.error('System update timed out.');
-						return false;
-					}
-					
-					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), {timeout: 30000});
-					status = decodeDataView(value);
-					
-					// Check if the status indicates an error
-					if (status === '-1')
-					{
-						console.error('System update failed.');
-						return false;
-					}
-					
-					// Wait before checking again
-					await this.delay(interval);
-				}
-				
-				// If the status is '2', it means the system update was successful
-				if (status === '2')
-					return true;
-				
-				// If the status is not '2', return false
-				return false;
-			}
+			const result = await this.waitForNotification(
+				charId,
+				s => s === '2' || s === '-1',
+				300000
+			);
+			return result === '2';
 		}
-		catch (error)
+		catch
 		{
-			console.error('BLE error:', error);
+			console.error('System update timed out');
+			return false;
 		}
-		
-		return false;
+		finally
+		{
+			await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid);
+		}
 	}
 	
 	/**
@@ -1250,60 +1227,33 @@ class BluetoothService
 	 */
 	public async updateSentinel(): Promise<boolean>
 	{
+		const charId = 'system-actions';
+		const uuid   = this.generateUUIDFromSeed(charId);
+		
+		if (!this.deviceId)
+			return false;
+		
+		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('update-sentinel'), {timeout: 30000});
+		
 		try
 		{
-			if (this.deviceId)
-			{
-				// Start the system update process by writing to the characteristic
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), encodeDataView('update-sentinel'), {timeout: 30000});
-				
-				let status = '0';
-				// Check the certificate status every 500ms
-				const interval = 500;
-				// Timeout after 2 minutes
-				const timeout = 120000;
-				const startTime = Date.now();
-				
-				while (status === '0' || status === '1')
-				{
-					if ((Date.now() - startTime) > timeout)
-					{
-						console.error('Sentinel update timed out.');
-						return false;
-					}
-					
-					// Read the status from the BLE server
-					const value = await BleClient.read(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('system-actions'), {timeout: 30000});
-					status = decodeDataView(value);
-					
-					// Check if the status indicates an error
-					if (status === '-1')
-					{
-						console.error('Sentinel update failed.');
-						return false;
-					}
-					
-					// Wait before checking again
-					await this.delay(interval);
-				}
-				
-				// If the status is '2', it means the sentinel update was successful
-				if (status === '2')
-				{
-					console.log('Sentinel update completed successfully.');
-					return true;
-				}
-				
-				// If the status is not '2', return false
-				return false;
-			}
+			const result = await this.waitForNotification(
+				charId,
+				s => s === '2' || s === '-1',
+				120000
+			);
+			return result === '2';
 		}
-		catch (error)
+		catch
 		{
-			console.error('BLE error:', error);
+			console.error('Sentinel update timed out');
+			return false;
 		}
-		
-		return false;
+		finally
+		{
+			await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid);
+		}
 	}
 	
 	/**
