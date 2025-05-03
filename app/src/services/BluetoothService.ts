@@ -206,7 +206,10 @@ class BluetoothService
 			// Check if the device is connected
 			if(this.deviceId)
 			{
-				for (const charId of ['install-configs', 'install-docker-image'])
+					'install-docker-image',
+					'node-balance',
+					'system-actions',
+					'certificate-actions',
 				{
 					const uuid = this.generateUUIDFromSeed(charId);
 					await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid).catch(() => {});
