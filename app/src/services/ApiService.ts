@@ -555,7 +555,7 @@ class ApiService
 	public async createWallet(): Promise<string|null>
 	{
 		const data = await this.postRequest("/wallet/create");
-		return data.mnemonic ?? null;
+		return Array.isArray(data.mnemonic) ? data.mnemonic.join(' ') : data.mnemonic ?? null;
 	}
 	
 	/**
