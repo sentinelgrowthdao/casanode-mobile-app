@@ -453,6 +453,19 @@ const submitPassphrase = async () =>
 	passphraseLoading.value = true;
 	// Get the passphrase
 	const passphrase = passphraseInputValue.value.trim();
+	
+	// Reconnect to the device
+	const reconnect = await NetworkService.reconnect();
+	if(!reconnect)
+	{
+		// Hide the loading
+		passphraseLoading.value = false;
+		// Set the error message
+		passphraseErrorMessage.value = t('loading.passphrase-error') as string;
+		return;
+	}
+	
+	// Send the passphrase to the device
 	const passphraseValid = await NetworkService.setNodePassphrase(passphrase);
 	
 	// Send the passphrase to the BLE device
