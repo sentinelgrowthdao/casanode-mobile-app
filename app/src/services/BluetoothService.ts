@@ -247,7 +247,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('disconnect(): BLE error:', error);
 		}
 	}
 	
@@ -375,7 +375,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodeStatus(): BLE error:', error);
 		}
 		
 		return null;
@@ -397,7 +397,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readMoniker(): BLE error:', error);
 		}
 		
 		return null;
@@ -419,7 +419,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeMoniker(): BLE error:', error);
 		}
 		return false;
 	}
@@ -440,7 +440,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodeType(): BLE error:', error);
 		}
 		
 		return null;
@@ -462,7 +462,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeNodeType(): BLE error:', error);
 		}
 		return false;
 	}
@@ -483,7 +483,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodeIp(): BLE error:', error);
 		}
 		
 		return null;
@@ -505,7 +505,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeNodeIp(): BLE error:', error);
 		}
 		return false;
 	}
@@ -526,7 +526,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodePort(): BLE error:', error);
 		}
 		
 		return null;
@@ -548,7 +548,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeNodePort(): BLE error:', error);
 		}
 		return false;
 	}
@@ -569,7 +569,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readVpnType(): BLE error:', error);
 		}
 		
 		return null;
@@ -591,7 +591,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeVpnType(): BLE error:', error);
 		}
 		return false;
 	}
@@ -612,7 +612,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readVpnPort(): BLE error:', error);
 		}
 		
 		return null;
@@ -634,7 +634,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeVpnPort(): BLE error:', error);
 		}
 		return false;
 	}
@@ -655,7 +655,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readMaximumPeers(): BLE error:', error);
 		}
 		
 		return null;
@@ -677,7 +677,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeMaximumPeers(): BLE error:', error);
 		}
 		return false;
 	}
@@ -698,7 +698,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodeLocation(): BLE error:', error);
 		}
 		
 		return null;
@@ -720,7 +720,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readCertExpirity(): BLE error:', error);
 		}
 		
 		return null;
@@ -742,7 +742,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readOnlineUsers(): BLE error:', error);
 		}
 		
 		return null;
@@ -765,7 +765,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readBandwidthSpeed(): BLE error:', error);
 		}
 		
 		return null;
@@ -787,7 +787,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readSystemUptime(): BLE error:', error);
 		}
 		
 		return null;
@@ -809,7 +809,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readCasanodeVersion(): BLE error:', error);
 		}
 		
 		return null;
@@ -831,7 +831,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readDockerImage(): BLE error:', error);
 		}
 		
 		return null;
@@ -853,7 +853,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readSystemOs(): BLE error:', error);
 		}
 		
 		return null;
@@ -875,7 +875,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readSystemArch(): BLE error:', error);
 		}
 		
 		return null;
@@ -897,7 +897,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readSystemKernel(): BLE error:', error);
 		}
 		
 		return null;
@@ -918,7 +918,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodePassphrase(): BLE error:', error);
 		}
 		// enabled: false, available: false
 		return "00";
@@ -941,7 +941,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeNodePassphrase(): BLE error:', error);
 		}
 		return false;
 	}
@@ -962,7 +962,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readWalletAddress(): BLE error:', error);
 		}
 		
 		return null;
@@ -984,7 +984,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readNodeAddress(): BLE error:', error);
 		}
 		
 		return null;
@@ -1045,7 +1045,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readCheckInstallation(): BLE error:', error);
 		}
 		
 		return '0000';
@@ -1145,7 +1145,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('startNode(): BLE error:', error);
 		}
 		
 		return false;
@@ -1167,7 +1167,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('stopNode(): BLE error:', error);
 		}
 		
 		return false;
@@ -1189,7 +1189,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('restartNode(): BLE error:', error);
 		}
 		
 		return false;
@@ -1211,7 +1211,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('removeNode(): BLE error:', error);
 		}
 		
 		return false;
@@ -1313,7 +1313,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('resetSystem(): BLE error:', error);
 		}
 		
 		return false;
@@ -1335,7 +1335,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('rebootSystem(): BLE error:', error);
 		}
 		
 		return false;
@@ -1357,7 +1357,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('shutdownSystem(): BLE error:', error);
 		}
 		
 		return false;
@@ -1462,7 +1462,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeWalletMnemonic(): BLE error:', error);
 		}
 		
 		// Return false if there was an error
@@ -1552,7 +1552,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('readKeyringBackend(): BLE error:', error);
 		}
 		
 		return null;
@@ -1575,7 +1575,7 @@ class BluetoothService
 		}
 		catch (error)
 		{
-			console.error('BLE error:', error);
+			console.error('writeKeyringBackend(): BLE error:', error);
 		}
 		return false;
 	}
