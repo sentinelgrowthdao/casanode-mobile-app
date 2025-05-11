@@ -416,22 +416,6 @@ const walletRestore = async () =>
 	}
 };
 
-// const walletCreate = async () =>
-// {
-// 	const mnemonic: string|null = await BluetoothService.readWalletMnemonic();
-// 	if(mnemonic)
-// 	{
-// 		console.log('Wallet created successfully.');
-// 		console.log(`Mnemonic: ${mnemonic}`);
-// 		// Load the node informations
-// 		loadNodeInformations();
-// 	}
-// 	else
-// 	{
-// 		console.error('Failed to create wallet.');
-// 	}
-// };
-
 const walletRemove = async () =>
 {
 	if (await BluetoothService.performWalletAction('remove'))
