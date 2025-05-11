@@ -342,8 +342,9 @@ const connectionToNode = async () =>
 			
 			// Get the node passphrase status
 			const nodePassphrase = await NetworkService.nodePassphrase();
-			// If passphrase is needed and wallet already exists
-			if (nodePassphrase.required && !nodePassphrase.available && walletAvailable === true)
+			
+			// If passphrase is needed
+			if (nodePassphrase.required && !nodePassphrase.available)
 			{
 				errorMessage.value = '';
 				// Open the passphrase form
