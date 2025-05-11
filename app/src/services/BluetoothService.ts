@@ -992,20 +992,30 @@ class BluetoothService
 		const charId = 'node-balance';
 		const uuid = this.generateUUIDFromSeed(charId);
 		
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('udvpn'));
 		try
 		{
-			const result = await this.waitForNotification(
+			// Start notifications for the node balance characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = this.waitForNotification(
 				charId,
-				s => /^-1$/.test(s) || /^\d+(\.\d+)?\s[A-Za-z]+$/.test(s)
+				s => /^-1$/.test(s) || /^\d+(\.\d+)?\s[A-Za-z]+$/.test(s),
+				120000
 			);
+			// Send the command to fetch the balance
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('udvpn'));
+			// Wait for either '-1' or a valid balance
+			const result = await resultPromise;
 			return result === '-1' ? null : result;
 		}
 		catch
 		{
 			console.error('Balance fetch timed out');
 			return null;
+		}
+		finally
+		{
+			await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid);
 		}
 	}
 	
@@ -1043,16 +1053,31 @@ class BluetoothService
 		const charId = 'install-docker-image';
 		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('install'), { timeout: 30000 });
-		
-		const result = await this.waitForNotification(
-			charId,
-			s => s === '2' || s === '-1',
-			300000
-		);
-		
-		return result === '2' ? 1 : -1;
+		try
+		{
+			// Start notifications for the installation characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = this.waitForNotification(
+				charId,
+				s => s === '2' || s === '-1',
+				300000
+			);
+			// Send the command to install the Docker image
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('install'), { timeout: 30000 });
+			// Wait for either '-1' or a valid balance
+			const result = await resultPromise;
+			return result === '2' ? 1 : -1;
+		}
+		catch (error)
+		{
+			console.error('Docker image installation timed out');
+			return -1;
+		}
+		finally
+		{
+			await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid);
+		}
 	}
 	
 	/**
@@ -1067,16 +1092,31 @@ class BluetoothService
 		const charId = 'install-configs';
 		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('create'), { timeout: 30000 });
-		
-		const result = await this.waitForNotification(
-			charId,
-			s => s !== '0' && s !== '1',
-			180000
-		);
-		
-		return result === '-1' ? '000' : result;
+		try
+		{
+			// Start notifications for the installation characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = this.waitForNotification(
+				charId,
+				s => s !== '0' && s !== '1',
+				180000
+			);
+			// Send the command to create config files
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('create'), { timeout: 30000 });
+			// Wait for either '2' or '-1'
+			const result = await resultPromise;
+			return result === '-1' ? '000' : result;
+		}
+		catch (error)
+		{
+			console.error('Config files installation timed out');
+			return '000';
+		}
+		finally
+		{
+			await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid);
+		}
 	}
 	
 	/**
@@ -1179,17 +1219,21 @@ class BluetoothService
 		if (!this.deviceId)
 			return false;
 		
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('update-system'), {timeout: 30000});
 		
-		// wait for either '2' or '-1'
 		try
 		{
-			const result = await this.waitForNotification(
+			// Start notifications for update system characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = this.waitForNotification(
 				charId,
 				s => s === '2' || s === '-1',
 				300000
 			);
+			// Send the command to update the system
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('update-system'), {timeout: 30000});
+			// Wait for either '2' or '-1'
+			const result = await resultPromise;
 			return result === '2';
 		}
 		catch
@@ -1215,16 +1259,21 @@ class BluetoothService
 		if (!this.deviceId)
 			return false;
 		
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('update-sentinel'), {timeout: 30000});
 		
 		try
 		{
-			const result = await this.waitForNotification(
+			// Start notifications for update sentinel characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = this.waitForNotification(
 				charId,
 				s => s === '2' || s === '-1',
 				120000
 			);
+			// Send the command to update the sentinel
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('update-sentinel'), {timeout: 30000});
+			// Wait for either '2' or '-1'
+			const result = await resultPromise;
 			return result === '2';
 		}
 		catch
@@ -1316,19 +1365,20 @@ class BluetoothService
 		const charId = 'certificate-actions';
 		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		// Subscribe to notifications
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		// Trigger renewal
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('renew'), { timeout: 30000 });
-		
 		try
 		{
-			// Wait until the value is either '2' (success) or '-1' (error), timeout after 3min
-			const result = await this.waitForNotification(
+			// Start notifications for renew certificate characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = this.waitForNotification(
 				charId,
 				s => s === '2' || s === '-1',
 				180000
 			);
+			// Send the command to renew the certificate
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('renew'), { timeout: 30000 });
+			// Wait for either '2' or '-1'
+			const result = await resultPromise;
 			return result === '2';
 		}
 		catch
@@ -1424,16 +1474,12 @@ class BluetoothService
 		
 		if(action === 'create')
 		{
-			// Subscribe to notifications
-			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {})
-			
-			// Write the action to the BLE device
-			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('create'), { timeout: 30000 })
-
 			try
 			{
-				// Wait for a notification that indicates success or error
-				const notif = await this.waitForNotification(
+				// Start notifications for the wallet actions characteristic
+				await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {})
+				// Wait for the notification to be ready
+				const resultPromise = await this.waitForNotification(
 					charId,
 					(jsonStr: string) =>
 					{
@@ -1442,8 +1488,11 @@ class BluetoothService
 					},
 					180000
 				)
-
-				const data = JSON.parse(notif) as WalletNotification
+				// Send the command to create the wallet
+				await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('create'), { timeout: 30000 })
+				// Wait for the result
+				const result = await resultPromise;
+				const data = JSON.parse(result) as WalletNotification
 				if(data.status === 'success' && data.mnemonic)
 					return data.mnemonic
 				
@@ -1533,17 +1582,23 @@ class BluetoothService
 		const charId = 'check-port';
 		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
-		await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView(portType), { timeout: 30000 });
 		
 		try 
 		{
-			// wait for a notification that is '2' (open), '3' (closed) or '-1' (error)
-			const result = await this.waitForNotification(
+			// Start notifications for the check port characteristic
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
+			// Wait for the notification to be ready
+			const resultPromise = await this.waitForNotification(
 				charId,
 				s => s === '2' || s === '3' || s === '-1',
 				120000
 			);
+			// Send the command to check the port
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView(portType), { timeout: 30000 });
+			
+			// Wait for the result
+			const result = await resultPromise;
+			
 			if (result === '2')
 				return 'open';
 			if (result === '3')
