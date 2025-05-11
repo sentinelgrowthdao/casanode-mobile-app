@@ -416,21 +416,21 @@ const walletRestore = async () =>
 	}
 };
 
-const walletCreate = async () =>
-{
-	const mnemonic: string|null = await BluetoothService.readWalletMnemonic();
-	if(mnemonic)
-	{
-		console.log('Wallet created successfully.');
-		console.log(`Mnemonic: ${mnemonic}`);
-		// Load the node informations
-		loadNodeInformations();
-	}
-	else
-	{
-		console.error('Failed to create wallet.');
-	}
-};
+// const walletCreate = async () =>
+// {
+// 	const mnemonic: string|null = await BluetoothService.readWalletMnemonic();
+// 	if(mnemonic)
+// 	{
+// 		console.log('Wallet created successfully.');
+// 		console.log(`Mnemonic: ${mnemonic}`);
+// 		// Load the node informations
+// 		loadNodeInformations();
+// 	}
+// 	else
+// 	{
+// 		console.error('Failed to create wallet.');
+// 	}
+// };
 
 const walletRemove = async () =>
 {
@@ -802,9 +802,6 @@ const checkInstallation = async () =>
 							<ion-row>
 								<ion-col size="3">
 									<loading-button label="Restore" :callback="walletRestore" />
-								</ion-col>
-								<ion-col size="3">
-									<loading-button label="Create" :callback="walletCreate" />
 								</ion-col>
 								<ion-col size="3">
 									<loading-button label="Remove" :callback="walletRemove" />
