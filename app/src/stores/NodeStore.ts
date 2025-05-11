@@ -13,51 +13,57 @@ export interface NodeBalance
 	denom: string;
 }
 
-const initialState = {
-	
-	// Node Status
-	status: 'unknown',
-	onlineUsers: 0,
-	
-	// Node Information
-	nodeIp: '',
-	nodeLocation: '',
-	nodePort: -1,
-	vpnPort: -1,
-	certExpiry: '',
-	uploadSpeed: '',
-	downloadSpeed: '',
-	
-	// Node Settings
-	moniker: '',
-	nodeType: '',
-	
-	// VPN Settings
-	vpnType: '',
-	maximumPeers: 0,
-	
-	// Wallet
-	nodeBalance: {
-		amount: 0,
-		denom: ''
-	} as NodeBalance,
-	publicAddress: '',
-	nodeAddress: '',
-	mnemonic: [] as string[],
-	transactions: [],
-	
-	// System Information
-	casanodeVersion: '',
-	systemOs: '',
-	systemKernel: '',
-	systemArch: '',
-	dockerImage: '',
-	uptime: 0
-};
+/**
+ * The initial state of the node store
+ * @returns The initial state of the node store
+ */
+function createDefaultState() 
+{
+	return {
+		// Node Status
+		status: 'unknown',
+		onlineUsers: 0,
+		
+		// Node Information
+		nodeIp: '',
+		nodeLocation: '',
+		nodePort: -1,
+		vpnPort: -1,
+		certExpiry: '',
+		uploadSpeed: '',
+		downloadSpeed: '',
+		
+		// Node Settings
+		moniker: '',
+		nodeType: '',
+		
+		// VPN Settings
+		vpnType: '',
+		maximumPeers: 0,
+		
+		// Wallet
+		nodeBalance: {
+			amount: 0,
+			denom: ''
+		} as NodeBalance,
+		publicAddress: '',
+		nodeAddress: '',
+		mnemonic: [] as string[],
+		transactions: [],
+		
+		// System Information
+		casanodeVersion: '',
+		systemOs: '',
+		systemKernel: '',
+		systemArch: '',
+		dockerImage: '',
+		uptime: 0
+	};
+}
 
 export const useNodeStore = defineStore('node',
 {
-	state: () => ({ ...initialState }),
+	state: () => createDefaultState(),
 	
 	actions:
 	{
