@@ -47,6 +47,8 @@ const passphraseErrorMessage: Ref<string> = ref('');
 const findQRCodeLoader: Ref<boolean> = ref(false);
 // Choose connection method open
 const chooseConnectionMethodOpen: Ref<boolean> = ref(false);
+// Connecting to the device is in progress
+const isConnecting: Ref<boolean> = ref(false);
 
 /**
  * On mounted, get the last device
@@ -165,31 +167,43 @@ const tryConnection = async () =>
  */
 const connectLocalNetwork = async (): Promise<void> =>
 {
-	// Get the IP, Port and Token
-	const ip = deviceQrcodeData.value?.ip || null;
-	const port = deviceQrcodeData.value?.apiPort || null;
-	const token = deviceQrcodeData.value?.authToken || null;
-	// Connect to the device using the IP, Port and Token
-	const connected = await NetworkService.connect('api', {
-		ip: ip,
-		port: port,
-		token: token,
-	});
+	// If the connection is in progress
+	if (isConnecting.value)
+		return;
+	isConnecting.value = true;
 	
-	// If connected to the device
-	if(connected)
+	try
 	{
-		// Close the choose connection method
-		chooseConnectionMethodOpen.value = false;
-		// Continue the connection process
-		await connectionToNode();
-		// Disable the keep awake
-		await toggleKeepAwake(false);
+		// Get the IP, Port and Token
+		const ip = deviceQrcodeData.value?.ip || null;
+		const port = deviceQrcodeData.value?.apiPort || null;
+		const token = deviceQrcodeData.value?.authToken || null;
+		// Connect to the device using the IP, Port and Token
+		const connected = await NetworkService.connect('api', {
+			ip: ip,
+			port: port,
+			token: token,
+		});
+		
+		// If connected to the device
+		if(connected)
+		{
+			// Close the choose connection method
+			chooseConnectionMethodOpen.value = false;
+			// Continue the connection process
+			await connectionToNode();
+			// Disable the keep awake
+			await toggleKeepAwake(false);
+		}
+		else
+		{
+			// Set the connecting message
+			errorMessage.value = t('loading.error-message') as string;
+		}
 	}
-	else
+	finally 
 	{
-		// Set the connecting message
-		errorMessage.value = t('loading.error-message') as string;
+		isConnecting.value = false;
 	}
 }
 
@@ -199,25 +213,45 @@ const connectLocalNetwork = async (): Promise<void> =>
  */
 const connectBluetooth = async (): Promise<void> =>
 {
-	// Get the seed
-	const seed = deviceQrcodeData.value?.bluetooth?.seed || null;
-	// Connect to the device using the seed
-	const connected = await NetworkService.connect('bluetooth', {seed: seed});
+	// If the connection is in progress
+	if (isConnecting.value)
+		return;
+	isConnecting.value = true;
 	
-	// If connected to the device
-	if(connected)
+	// Show the connecting message
+	connectingMessage.value = t('loading.wait-connection') as string;
+	errorMessage.value = '';
+	passphraseErrorMessage.value = '';
+	chooseConnectionMethodOpen.value = false;
+	passphraseFormOpen.value = false;
+	chooseConnectionMethodOpen.value = false;
+	
+	try
 	{
-		// Close the choose connection method
-		chooseConnectionMethodOpen.value = false;
-		// Continue the connection process
-		await connectionToNode();
-		// Disable the keep awake
-		await toggleKeepAwake(false);
+		// Get the seed
+		const seed = deviceQrcodeData.value?.bluetooth?.seed || null;
+		// Connect to the device using the seed
+		const connected = await NetworkService.connect('bluetooth', {seed: seed});
+		
+		// If connected to the device
+		if(connected)
+		{
+			// Close the choose connection method
+			chooseConnectionMethodOpen.value = false;
+			// Continue the connection process
+			await connectionToNode();
+			// Disable the keep awake
+			await toggleKeepAwake(false);
+		}
+		else
+		{
+			// Set the connecting message
+			errorMessage.value = t('loading.error-message') as string;
+		}
 	}
-	else
+	finally 
 	{
-		// Set the connecting message
-		errorMessage.value = t('loading.error-message') as string;
+		isConnecting.value = false;
 	}
 }
 
@@ -277,7 +311,8 @@ const openHelpModal = async () =>
  */
 const isLoading = () =>
 {
-	return connectingMessage.value.length > 0
+	return isConnecting.value
+		|| connectingMessage.value.length > 0
 		|| errorMessage.value.length > 0
 		|| passphraseErrorMessage.value.length > 0;
 }
@@ -491,7 +526,7 @@ const submitPassphrase = async () =>
 					<ion-grid>
 						<ion-row>
 							<ion-col size="6">
-								<ion-button expand="block" color="none" @click="connectBluetooth">
+								<ion-button expand="block" color="none" @click="connectBluetooth" :disabled="isConnecting">
 									<div class="content">
 										<div class="button">
 											<ion-icon :icon="bluetoothOutline" />
@@ -502,7 +537,7 @@ const submitPassphrase = async () =>
 								</ion-button>
 							</ion-col>
 							<ion-col size="6">
-								<ion-button expand="block" color="none" @click="connectLocalNetwork">
+								<ion-button expand="block" color="none" @click="connectLocalNetwork" :disabled="isConnecting">
 									<div class="content">
 											<div class="button">
 											<ion-icon :icon="wifiOutline" />
