@@ -1479,7 +1479,7 @@ class BluetoothService
 				// Start notifications for the wallet actions characteristic
 				await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {})
 				// Wait for the notification to be ready
-				const resultPromise = await this.waitForNotification(
+				const resultPromise = this.waitForNotification(
 					charId,
 					(jsonStr: string) =>
 					{
@@ -1588,7 +1588,7 @@ class BluetoothService
 			// Start notifications for the check port characteristic
 			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {});
 			// Wait for the notification to be ready
-			const resultPromise = await this.waitForNotification(
+			const resultPromise = this.waitForNotification(
 				charId,
 				s => s === '2' || s === '3' || s === '-1',
 				120000
