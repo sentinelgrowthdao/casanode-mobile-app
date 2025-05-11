@@ -59,6 +59,14 @@ class ApiService
 	}
 	
 	/**
+	 * Reconnect to the BLE server.
+	 */
+	public reconnect(): boolean
+	{
+		return this.connect(this.apiIp ?? '', this.apiPort ?? 0, this.authToken ?? '');
+	}
+	
+	/**
 	 * Disconnect from the BLE server.
 	 * @returns void
 	 */
@@ -584,16 +592,6 @@ class ApiService
 		return status === '2' ? 'open' : status === '3' ? 'closed' : null;
 	}
 
-
-
-
-
-
-	
-	
-	
-	
-	
 }
 
 export default ApiService.getInstance();

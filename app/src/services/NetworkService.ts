@@ -57,6 +57,22 @@ class NetworkService
 	}
 	
 	/**
+	 * Reconnect to the network
+	 * @returns Promise<boolean>
+	 */
+	public async reconnect(): Promise<boolean>
+	{
+		if(this.useApi)
+		{
+			return ApiService.reconnect();
+		}
+		else
+		{
+			return await BluetoothService.reconnect();
+		}
+	}
+	
+	/**
 	 * Disconnect from the network
 	 * @returns Promise<void>
 	 */

@@ -206,6 +206,16 @@ class BluetoothService
 	}
 	
 	/**
+	 * Reconnect to the BLE server.
+	 * @returns boolean
+	 */
+	public async reconnect(): Promise<boolean>
+	{
+		console.log("Reconnecting to BLE device...");
+		return this.connect(this.BLE_CHARACTERISTIC_SEED!);
+	}
+	
+	/**
 	 * Disconnect from the BLE server.
 	 * @returns void
 	 */
