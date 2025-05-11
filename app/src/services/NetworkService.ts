@@ -585,11 +585,8 @@ class NetworkService
 		else
 		{
 			// Create a wallet via Bluetooth
-			if(await BluetoothService.performWalletAction('create'))
-			{
-				// Read the mnemonic from the Bluetooth device
-				return await BluetoothService.readMnemonic();
-			}
+			const result = await BluetoothService.performWalletAction('create')
+			return typeof result === 'string' ? result : null;
 		}
 		// Return null if the wallet creation failed
 		return null;

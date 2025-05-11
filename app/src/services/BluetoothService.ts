@@ -40,6 +40,16 @@ function decodeDataView(value: DataView): string
 	return new TextDecoder('utf-8').decode(value);
 }
 
+/**
+ * Interface WalletNotification
+ */
+interface WalletNotification
+{
+	status: 'in_progress' | 'success' | 'error'
+	mnemonic?: string			// only present if success
+	message? : string			// only present if error
+}
+
 class BluetoothService
 {
 	private static instance: BluetoothService;
@@ -1478,29 +1488,71 @@ class BluetoothService
 	}
 	
 	/**
-	 * Perform a wallet action on the BLE server.
-	 * @param action string
-	 * @returns Promise<boolean>
+	 * Create or remove the wallet through BLE.
+	 * @param action 'create' | 'remove'
+	 * @returns - `create` Promise<string|null>  (mnemonic ou null)
+	 *          - `remove` Promise<boolean> (succès)
 	 */
-	public async performWalletAction(action: string): Promise<boolean>
+	public async performWalletAction(action: 'create' | 'remove'): Promise<string | boolean | null>
 	{
-		// Check if the action is valid
-		if(action !== 'remove')
-			return false;
+		if(!this.deviceId) return null
+
+		const charId = 'wallet-actions';
+		const uuid   = this.generateUUIDFromSeed(charId);
 		
-		try
+		if(action === 'create')
 		{
-			if(this.deviceId)
+			// Subscribe to notifications
+			await BleClient.startNotifications(this.deviceId, BLE_UUID, uuid, () => {})
+			
+			// Write the action to the BLE device
+			await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('create'), { timeout: 30000 })
+
+			try
 			{
-				await BleClient.write(this.deviceId, BLE_UUID, this.generateUUIDFromSeed('wallet-actions'), encodeDataView(action), {timeout: 30000});
-				return true;
+				// Wait for a notification that indicates success or error
+				const notif = await this.waitForNotification(
+					charId,
+					(jsonStr: string) =>
+					{
+						const data = JSON.parse(jsonStr) as WalletNotification
+						return data.status === 'success' || data.status === 'error'
+					},
+					180000
+				)
+
+				const data = JSON.parse(notif) as WalletNotification
+				if(data.status === 'success' && data.mnemonic)
+					return data.mnemonic
+				
+				console.error('Wallet creation error:', data.message ?? 'unknown')
+				return null
+			}
+			catch(e)
+			{
+				console.error('Wallet creation BLE timeout/error:', e)
+				return null
+			}
+			finally
+			{
+				await BleClient.stopNotifications(this.deviceId, BLE_UUID, uuid)
 			}
 		}
-		catch (error)
+		else if(action === 'remove')
 		{
-			console.error('BLE error:', error);
+			try
+			{
+				await BleClient.write(this.deviceId, BLE_UUID, uuid, encodeDataView('remove'), { timeout: 30000 })
+				return true
+			}
+			catch(e)
+			{
+				console.error('Wallet remove BLE error:', e)
+				return false
+			}
 		}
-		return false;
+
+		return null
 	}
 	
 	/**
